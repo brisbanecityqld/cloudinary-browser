@@ -1,0 +1,25 @@
+{
+  "name": "cloudinary-browser",
+  "authors": [
+    "Cameron Green <cameron.green@brisbane.qld.gov.au>"
+  ],
+  "description": "AngularJS based browser for cloudinary",
+  "main": "app/index.html",
+  "keywords": [
+    "cloudinary"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "cloudinary_ng": "^2.1.1",
+    "angular": "angularjs#^1.6.2",
+    "angular-material": "^1.1.3"
+  }
+}
