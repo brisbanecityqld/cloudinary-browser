@@ -1,4 +1,3 @@
-<h2>{{tag}}</h2>
 <div layout layout-wrap>
     <md-card flex="20" flex-sm="30" flex-xs="45" ng-repeat="image in images">
         <cl-image public-id="{{image.public_id}}" class="thumbnail inline md-card-image" format="{{image.format}}"
@@ -6,19 +5,11 @@
             <cl-transformation height="150" width="150" crop="fill"/>
         </cl-image>
         <md-card-content>
-            <h2>{{image.public_id}}</h2>
+            <h3>{{image.public_id}}.{{image.format}}</h3>
             <md-list>
                 <md-list-item class="md-1-line">
-                    <span>Height</span>
-                    <span class="md-secondary">{{image.height}}</span>
-                </md-list-item>
-                <md-list-item class="md-1-line">
-                    <span>Width</span>
-                    <span class="md-secondary">{{image.width}}</span>
-                </md-list-item>
-                <md-list-item class="md-1-line">
-                    <span>Format</span>
-                    <span class="md-secondary">{{image.format}}</span>
+                    <span>Height/Width</span>
+                    <span class="md-secondary">{{image.height}}/{{image.width}}</span>
                 </md-list-item>
             </md-list>
         </md-card-content>

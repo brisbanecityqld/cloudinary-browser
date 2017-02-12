@@ -7,9 +7,6 @@ angular.module('cloudinaryBrowser').config(['$stateProvider',
       templateUrl: 'dashboard/dashboard.html',
       controller: 'DashboardCtrl'
     });
-  }]).controller('DashboardCtrl', ['$state', 'BCC_CONFIG', function ($state, BCC_CONFIG) {
-  this.bcc = {
-    tags: BCC_CONFIG.tags
-  };
+  }]).controller('DashboardCtrl', [function () {
 }]);
 

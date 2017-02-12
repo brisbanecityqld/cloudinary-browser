@@ -16,12 +16,12 @@
   <link rel="stylesheet" href="app.css">
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
-<body>
+<body ng-controller="MainCtrl as ctrl">
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <md-toolbar ng-controller="MainCtrl as ctrl">
+  <md-toolbar>
     <div class="md-toolbar-tools">
       <h2 md-truncate flex>Cloudinary browser</h2>
       <md-icon class="icon_home" aria-label="Home"></md-icon>
@@ -32,6 +32,7 @@
     </div>
   </md-toolbar>
   <md-content>
+    <tag-list tags="ctrl.bcc.tags"></tag-list>
     <ui-view></ui-view>
   </md-content>
 
