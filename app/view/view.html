@@ -1,15 +1,34 @@
 <h2>{{tag}}</h2>
 <div layout layout-wrap>
     <md-card flex="20" flex-sm="30" flex-xs="45" ng-repeat="image in images">
-        <cl-image public-id="{{image.public_id}}" class="thumbnail inline md-card-image" format="{{image.format}}" type="{{image.type}}">
-            <cl-transformation height="150" width="150" crop="fill" />
+        <cl-image public-id="{{image.public_id}}" class="thumbnail inline md-card-image" format="{{image.format}}"
+                  type="{{image.type}}">
+            <cl-transformation height="150" width="150" crop="fill"/>
         </cl-image>
         <md-card-content>
             <h2>{{image.public_id}}</h2>
-            <p>Card content</p>
+            <md-list>
+                <md-list-item class="md-1-line">
+                    <span>Height</span>
+                    <span class="md-secondary">{{image.height}}</span>
+                </md-list-item>
+                <md-list-item class="md-1-line">
+                    <span>Width</span>
+                    <span class="md-secondary">{{image.width}}</span>
+                </md-list-item>
+                <md-list-item class="md-1-line">
+                    <span>Format</span>
+                    <span class="md-secondary">{{image.format}}</span>
+                </md-list-item>
+            </md-list>
         </md-card-content>
-        <md-card-footer>
-            Card footer
-        </md-card-footer>
+        <md-card-actions layout="row" layout-align="end center">
+            <a ng-href="{{urlBase}}/{{image.type}}/{{transformations}}/{{image.public_id}}.{{image.format}}" target="_self" download="{{image.public_id}}.{{image.format}}">Download</a>
+            <md-input-container>
+                <md-select ng-model="download" placeholder="Size" ng-change="downloadSize(download)">
+                    <md-option ng-value="size" ng-repeat="size in downloadSizes">{{ size }}</md-option>
+                </md-select>
+            </md-input-container>
+        </md-card-actions>
     </md-card>
 </div>

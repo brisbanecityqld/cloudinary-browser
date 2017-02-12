@@ -14,8 +14,18 @@ angular.module('cloudinaryBrowser', [
 
   $urlRouterProvider.otherwise('/dashboard');
 }]).constant("BCC_CONFIG", {
+  'cloud_name': 'brisbanecity',
   'tags': [
       'myphotoalbum',
       'flowers'
+  ],
+  'downloadSizes': [
+    'original',
+    '320x240',
+    '640x480',
+    '800x600',
+    '1024x768',
+    '1280x960',
+    '1600x1200'
   ]
 });
