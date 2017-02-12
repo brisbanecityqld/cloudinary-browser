@@ -1,6 +1,6 @@
 <h2>{{tag}}</h2>
-<div layout>
-    <md-card flex="25" ng-repeat="image in images">
+<div layout layout-wrap>
+    <md-card flex="20" flex-sm="30" flex-xs="45" ng-repeat="image in images">
         <cl-image public-id="{{image.public_id}}" class="thumbnail inline md-card-image" format="{{image.format}}" type="{{image.type}}">
             <cl-transformation height="150" width="150" crop="fill" />
         </cl-image>
