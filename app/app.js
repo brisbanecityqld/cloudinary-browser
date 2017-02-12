@@ -7,7 +7,6 @@ angular.module('cloudinaryBrowser', [
   'ui.router',
   'cloudinary'
 ]).config(['$locationProvider', '$urlRouterProvider', 'cloudinaryProvider', function($locationProvider, $urlRouterProvider, cloudinaryProvider) {
-
   cloudinaryProvider.set('cloud_name', 'brisbanecity');
 
   $locationProvider.hashPrefix('!');
@@ -16,8 +15,8 @@ angular.module('cloudinaryBrowser', [
 }]).constant("BCC_CONFIG", {
   'cloud_name': 'brisbanecity',
   'tags': [
-      'myphotoalbum',
-      'flowers'
+    'myphotoalbum',
+    'flowers'
   ],
   'downloadSizes': [
     'original',

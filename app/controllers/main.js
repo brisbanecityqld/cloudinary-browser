@@ -5,7 +5,8 @@ angular.module('cloudinaryBrowser').controller('MainCtrl', ['$state', 'BCC_CONFI
     $state.go(route);
   };
   this.bcc = {
-    tags: BCC_CONFIG.tags
+    tags: BCC_CONFIG.tags,
+    title: BCC_CONFIG.cloud_name
   };
 }]);
 
