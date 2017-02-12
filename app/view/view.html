@@ -1,0 +1,15 @@
+<h2>{{tag}}</h2>
+<div layout>
+    <md-card flex="25" ng-repeat="image in images">
+        <cl-image public-id="{{image.public_id}}" class="thumbnail inline md-card-image" format="{{image.format}}" type="{{image.type}}">
+            <cl-transformation height="150" width="150" crop="fill" />
+        </cl-image>
+        <md-card-content>
+            <h2>{{image.public_id}}</h2>
+            <p>Card content</p>
+        </md-card-content>
+        <md-card-footer>
+            Card footer
+        </md-card-footer>
+    </md-card>
+</div>

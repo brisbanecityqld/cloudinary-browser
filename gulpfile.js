@@ -1,204 +1,158 @@
-// Generated on 2017-02-08 using generator-angular 0.15.1
-'use strict';
-
 var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
-var openURL = require('open');
+var htmlmin = require('gulp-htmlmin');
+var useref = require('gulp-useref');
+var gulpRename = require('gulp-rename');
+var cacheBuster = require('gulp-cache-bust');
+var connect = require('gulp-connect');
+var ngAnnotate = require('gulp-ng-annotate');
+var uglify = require('gulp-uglify');
+var cssnano = require('gulp-cssnano');
 var lazypipe = require('lazypipe');
-var rimraf = require('rimraf');
-var wiredep = require('wiredep').stream;
-var runSequence = require('run-sequence');
+var sourcemaps = require('gulp-sourcemaps');
+var gulpif = require('gulp-if');
+var autoprefixer = require('gulp-autoprefixer');
+var templateCache = require('gulp-angular-templatecache');
+var del = require('del');
+var rev = require('gulp-rev');
+var revReplace = require('gulp-rev-replace');
+var filter = require('gulp-filter');
+var concat = require('gulp-concat');
+var insert = require('gulp-insert');
+var fs = require('fs');
 
-var yeoman = {
-  app: require('./bower.json').appPath || 'app',
-  dist: 'dist'
-};
+// compressTasks is a sub process used by useRef (below) that
+// compresses (takes out white space etc) the javascript and
+// css files
+var compressTasks = lazypipe()
+    .pipe(sourcemaps.init, { loadMaps: true })
+    .pipe(function() {
+      return gulpif('*.js', ngAnnotate());
+    })
+    .pipe(function() {
+      return gulpif('*.js', uglify());
+    })
+    .pipe(function() {
+      return gulpif('*.css', autoprefixer());
+    })
+    .pipe(function() {
+      return gulpif('*.css', cssnano({
+        zindex: false
+      }));
+    });
 
-var paths = {
-  scripts: [yeoman.app + '/scripts/**/*.js'],
-  styles: [yeoman.app + '/styles/**/*.scss'],
-  test: ['test/spec/**/*.js'],
-  testRequire: [
-    yeoman.app + '/bower_components/angular/angular.js',
-    yeoman.app + '/bower_components/angular-mocks/angular-mocks.js',
-    yeoman.app + '/bower_components/angular-resource/angular-resource.js',
-    yeoman.app + '/bower_components/angular-cookies/angular-cookies.js',
-    yeoman.app + '/bower_components/angular-sanitize/angular-sanitize.js',
-    yeoman.app + '/bower_components/angular-route/angular-route.js',
-    'test/mock/**/*.js',
-    'test/spec/**/*.js'
-  ],
-  karma: 'karma.conf.js',
-  views: {
-    main: yeoman.app + '/index.html',
-    files: [yeoman.app + '/views/**/*.html']
+
+/**
+ * Helper func to fetch main module name regarding first  app.js file
+ * then regarding the ng-app attributes
+ * @return {String} main module name
+ */
+var guessMainModuleName = function () {
+
+  var res,
+      htmlContent,
+      appContent;
+
+  appContent = fs.readFileSync('./app/app.js', { encoding: 'utf-8' });
+
+  res = appContent.match(/angular\.module\(["']([a-z0-9\-_]+)['"]/i);
+
+  if (res) {
+    return res[1];
   }
+
+  htmlContent = fs.readFileSync(
+      fs.exists('./app/index-async.html') ? './app/index-async.html' : './app/index.html',
+      { encoding: 'utf-8' }
+  );
+
+  res = htmlContent.match(/ng-app=\"([a-z0-9\-_]+)\"/i);
+
+  if (res) {
+    return res[1];
+  }
+
+  return "myApp";
 };
 
-////////////////////////
-// Reusable pipelines //
-////////////////////////
 
-var lintScripts = lazypipe()
-  .pipe($.jshint, '.jshintrc')
-  .pipe($.jshint.reporter, 'jshint-stylish');
 
-var styles = lazypipe()
-  .pipe($.sass, {
-    outputStyle: 'expanded',
-    precision: 10
+// remove old dist dir
+gulp.task('cleanup-dist', [], function() {
+  return del([
+    'dist',
+    // we don't want to clean this file though so we negate the pattern
+    '!dist/mobile/deploy.json'
+  ]);
+});
+
+// copy all assets in dist
+gulp.task('cleanup', ['cleanup-dist'], function() {
+  return gulp.src('./app/**/*.*').pipe(gulp.dest('dist'));
+});
+
+/**
+ * Create $templateCache from the html templates
+ * @return {Stream}
+ */
+gulp.task('templateCache', ['cleanup'], function() {
+  return gulp
+      .src('app/**/templates/*.html')
+      .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+      .pipe(templateCache({
+        module: guessMainModuleName(),
+        standalone: false
+      }))
+      .pipe(gulp.dest('app/cache'));
+});
+
+
+gulp.task("useref", ['templateCache'], function() {
+
+  var jsFilter = filter("**/*.js", { restore: true });
+  var cssFilter = filter("**/*.css", { restore: true });
+  var angularTemplateFilter = filter('app/**/templates/*.html', { restore: true });
+  var indexHtmlFilter = filter(['**/*', '!**/index.html'], { restore: true });
+
+  function relativeIfMap(filename) {
+    if (filename.indexOf('.map') > -1) {
+      // console.log(filename);
+      return filename.replace('js/', '').replace('css/', '');
+    }
+    return filename;
+  }
+
+  return gulp.src("app/index.html")
+      .pipe(sourcemaps.init())
+      .pipe(useref({
+            collapseWhitespace: true,
+            removeComments: true
+          },
+          lazypipe().pipe(compressTasks)
+      ))
+      .pipe(gulpif('app/index.html', htmlmin()))
+      .pipe(sourcemaps.write('.'))
+      .pipe(indexHtmlFilter)
+      .pipe(rev()) // Rename the concatenated files (but not index.html)
+      .pipe(indexHtmlFilter.restore)
+      .pipe(revReplace({
+        modifyUnreved: relativeIfMap,
+        modifyReved: relativeIfMap
+      })) // Substitute in new filenames
+      .pipe(gulp.dest('dist'));
+});
+
+gulp.task('serve', function() {
+  connect.server({
+    root: 'app',
+    livereload: true
   })
-  .pipe($.autoprefixer, 'last 1 version')
-  .pipe(gulp.dest, '.tmp/styles');
-
-///////////
-// Tasks //
-///////////
-
-gulp.task('styles', function () {
-  return gulp.src(paths.styles)
-    .pipe(styles());
 });
 
-gulp.task('lint:scripts', function () {
-  return gulp.src(paths.scripts)
-    .pipe(lintScripts());
+gulp.task("default", ['useref'], function () {
+
+  return gulp
+      .src('./dist/index.html')
+      .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+      .pipe(gulp.dest('dist'));
+
 });
-
-gulp.task('clean:tmp', function (cb) {
-  rimraf('./.tmp', cb);
-});
-
-gulp.task('start:client', ['start:server', 'styles'], function () {
-  openURL('http://localhost:9000');
-});
-
-gulp.task('start:server', function() {
-  $.connect.server({
-    root: [yeoman.app, '.tmp'],
-    livereload: true,
-    // Change this to '0.0.0.0' to access the server from outside.
-    port: 9000
-  });
-});
-
-gulp.task('start:server:test', function() {
-  $.connect.server({
-    root: ['test', yeoman.app, '.tmp'],
-    livereload: true,
-    port: 9001
-  });
-});
-
-gulp.task('watch', function () {
-  $.watch(paths.styles)
-    .pipe($.plumber())
-    .pipe(styles())
-    .pipe($.connect.reload());
-
-  $.watch(paths.views.files)
-    .pipe($.plumber())
-    .pipe($.connect.reload());
-
-  $.watch(paths.scripts)
-    .pipe($.plumber())
-    .pipe(lintScripts())
-    .pipe($.connect.reload());
-
-  $.watch(paths.test)
-    .pipe($.plumber())
-    .pipe(lintScripts());
-
-  gulp.watch('bower.json', ['bower']);
-});
-
-gulp.task('serve', function (cb) {
-  runSequence('clean:tmp',
-    ['lint:scripts'],
-    ['start:client'],
-    'watch', cb);
-});
-
-gulp.task('serve:prod', function() {
-  $.connect.server({
-    root: [yeoman.dist],
-    livereload: true,
-    port: 9000
-  });
-});
-
-gulp.task('test', ['start:server:test'], function () {
-  var testToFiles = paths.testRequire.concat(paths.scripts, paths.test);
-  return gulp.src(testToFiles)
-    .pipe($.karma({
-      configFile: paths.karma,
-      action: 'watch'
-    }));
-});
-
-// inject bower components
-gulp.task('bower', function () {
-  return gulp.src(paths.views.main)
-    .pipe(wiredep({
-      directory: yeoman.app + '/bower_components',
-      ignorePath: '..'
-    }))
-  .pipe(gulp.dest(yeoman.app + '/views'));
-});
-
-///////////
-// Build //
-///////////
-
-gulp.task('clean:dist', function (cb) {
-  rimraf('./dist', cb);
-});
-
-gulp.task('client:build', ['html', 'styles'], function () {
-  var jsFilter = $.filter('**/*.js');
-  var cssFilter = $.filter('**/*.css');
-
-  return gulp.src(paths.views.main)
-    .pipe($.useref({searchPath: [yeoman.app, '.tmp']}))
-    .pipe(jsFilter)
-    .pipe($.ngAnnotate())
-    .pipe($.uglify())
-    .pipe(jsFilter.restore())
-    .pipe(cssFilter)
-    .pipe($.minifyCss({cache: true}))
-    .pipe(cssFilter.restore())
-    .pipe($.rev())
-    .pipe($.revReplace())
-    .pipe(gulp.dest(yeoman.dist));
-});
-
-gulp.task('html', function () {
-  return gulp.src(yeoman.app + '/views/**/*')
-    .pipe(gulp.dest(yeoman.dist + '/views'));
-});
-
-gulp.task('images', function () {
-  return gulp.src(yeoman.app + '/images/**/*')
-    .pipe($.cache($.imagemin({
-        optimizationLevel: 5,
-        progressive: true,
-        interlaced: true
-    })))
-    .pipe(gulp.dest(yeoman.dist + '/images'));
-});
-
-gulp.task('copy:extras', function () {
-  return gulp.src(yeoman.app + '/*/.*', { dot: true })
-    .pipe(gulp.dest(yeoman.dist));
-});
-
-gulp.task('copy:fonts', function () {
-  return gulp.src(yeoman.app + '/fonts/**/*')
-    .pipe(gulp.dest(yeoman.dist + '/fonts'));
-});
-
-gulp.task('build', ['clean:dist'], function () {
-  runSequence(['images', 'copy:extras', 'copy:fonts', 'client:build']);
-});
-
-gulp.task('default', ['build']);
