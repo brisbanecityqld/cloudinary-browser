@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Cloudinary Browser Prototype</title>
+  <meta charset="UTF-8">
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
+  <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <header class="flex-center">
+      <div class="app-icon header-button">
+        <i class="fa fa-folder"></i>
+      </div>
+      <div id="breadcrumb"><a class="breadcrumb-item">Root</a><span class="breadcrumb-sep">></span><a class="breadcrumb-item">Folder</a></div>
+      <div id="search" class="flex-center">
+        <input type="text" placeholder="Search...">
+        <div class="button"><i class="fas fa-search"></i></div>
+      </div>
+      <div class="button header-button expand"><i class="fas fa-image"></i></div>
+      <div class="button header-button expand"><i class="fas fa-list"></i></div>
+      <div class="button header-button expand"><i class="fas fa-cog"></i></div>
+    </header>
+    <div id="sorting"></div>
+    <main>
+      <div class="file flex-center">
+        <div class="checkbox"><div class="checkbox-outline"></div></div>
+        <div class="file-icon"><i class="fas fa-folder"></i></div>
+        <div class="file-name">Site images</div>
+        <div class="file-upload">-</div>
+        <div class="file-tags">
+          <span class="expand">folder</span>
+          <span class="col3 expand">bcc-website</span>
+        </div>
+        <div class="file-actions">
+          <div class="button expand"><i class="fas fa-cloud-download-alt"></i></div>
+        </div>
+      </div>
+      <div class="file flex-center">
+        <div class="checkbox"><div class="checkbox-outline"></div></div>
+        <div class="file-icon"><i class="fas fa-image"></i></div>
+        <div class="file-name">Sample.png</div>
+        <div class="file-upload">2018-01-18</div>
+        <div class="file-tags">
+          <span class="expand">files</span>
+          <span class="col2 expand">testing</span>
+        </div>
+        <div class="file-actions">
+          <div class="button expand"><i class="fas fa-cloud-download-alt"></i></div>
+        </div>
+      </div>
+      <div class="file flex-center">
+        <div class="checkbox"><div class="checkbox-outline"></div></div>
+        <div class="file-icon"><i class="fas fa-image"></i></div>
+        <div class="file-name">test image.jpg</div>
+        <div class="file-upload">2018-01-18</div>
+        <div class="file-tags">
+          <span class="col2 expand">testing</span>
+        </div>
+        <div class="file-actions">
+          <div class="button expand"><i class="fas fa-cloud-download-alt"></i></div>
+        </div>
+      </div>
+      <div class="file flex-center">
+        <div class="checkbox"><div class="checkbox-outline"></div></div>
+        <div class="file-icon"><i class="fas fa-image"></i></div>
+        <div class="file-name">bcc_logo@2x.png</div>
+        <div class="file-upload">2015-01-01</div>
+        <div class="file-tags">
+          <span class="col3 expand">bcc-website</span>
+        </div>
+        <div class="file-actions">
+          <div class="button expand"><i class="fas fa-cloud-download-alt"></i></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
