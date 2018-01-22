@@ -1,0 +1,15 @@
+.main {
+  composes: flexItem from '../../styles/layout.css';
+}
+
+.crumb {
+  color: white;
+  text-decoration: none;
+}
+.crumb:hover {
+  text-decoration: underline;
+}
+
+.separator {
+  margin: 0 .75rem;
+}

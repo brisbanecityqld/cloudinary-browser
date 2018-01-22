@@ -1,0 +1,19 @@
+/* Flex layouts */
+.flexCenter {
+  display: flex;
+  align-items: center;
+}
+.flexItem {
+  flex: 1 0 0;
+}
+
+/* Grid layouts */
+.gridCenter {
+  display: grid;
+  align-items: center;
+}
+
+/* Misc. styles */
+.roundedCorners {
+  border-radius: .2rem;
+}

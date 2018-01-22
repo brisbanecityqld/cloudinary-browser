@@ -1,21 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import styles from './App.css';
 
-class App extends React.Component {
+// Components
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import Header from './components/header/header.jsx'
+import Browser from './components/browser/browser.jsx'
+import Viewer from './components/viewer/viewer.jsx'
+
+// Styles
+// import styles from './App.css';
+
+// Init FontAwesome library
+import fontawesome from '@fortawesome/fontawesome'
+import faSolid from '@fortawesome/fontawesome-free-solid'
+fontawesome.library.add(faSolid)
+
+export default class App extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      viewmode: 'list'
+    }
+  }
+
   render() {
     return (
-      <div className={styles.main}>
-        <header className={styles.header}>
-          <img src={logo} className={styles.logo} alt="logo" />
-          <h1 className={styles.title}>Welcome to React</h1>
-        </header>
-        <p className={styles.intro}>
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Router>
+        <div>
+          <Route path="/" component={Header} />
+          <Route path="/browse" component={Browser} />
+          <Route path="/view" component={Viewer} />
+        </div>
+      </Router>
     );
   }
 }
-
-export default App;

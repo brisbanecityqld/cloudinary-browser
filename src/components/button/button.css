@@ -1,0 +1,24 @@
+.base {
+  border-radius: .2rem;
+  padding: .5rem;
+  cursor: pointer;
+  width: 2.25rem;
+  height: 2.25rem;
+  composes: fast from '../../styles/transitions.css';
+}
+.base:hover {
+  transform: scale(1.1);
+}
+.base:active {
+  transform: scale(.9);
+}
+
+.main {
+  composes: base;
+  composes: textAccent bgWhite from '../../styles/colours.css';
+}
+
+.invert {
+  composes: base;
+  composes: texWhite bgAccent from '../../styles/colours.css';
+}

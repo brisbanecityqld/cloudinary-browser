@@ -3,7 +3,23 @@
   color: white;
 }
 
+.textAccent {
+  color: #106DB2;
+}
+
+.textGrey {
+  color: #333;
+}
+
 /* Background colours */
+.bgWhite {
+  background-color: white;
+}
+
 .bgGrey {
   background-color: #222;
+}
+
+.bgAccent {
+  background-color: #106DB2;
 }
