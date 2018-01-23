@@ -19,11 +19,11 @@ const CONFIG = require('./config')
 Cloudinary.config(CONFIG)
 
 // Set up Express server
-const app = express()
+const app = Express()
 
 // Add endpoints
 app.get('/folder', (req, res) => {
-
+  res.sendStatus(200)
 })
 
 // Start server
