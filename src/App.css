@@ -1,5 +1,7 @@
 .main {
-  composes: alignCenter from './styles/typography.css';
+  width: 100vw;
+  height: 100vh;
+  composes: flexColumn from './styles/layout.css';
 }
 
 .logo {

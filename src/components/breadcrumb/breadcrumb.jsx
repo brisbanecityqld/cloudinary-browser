@@ -1,20 +1,23 @@
 import React from 'react'
 
+// Components
+import { Link } from 'react-router-dom'
+
+// Libraries
+import location from '../../lib/location.js'
+
 // Styles
 import styles from './breadcrumb.css'
 
-const ROOT_FOLDER = 'Brisbane City Council'
+// Constants
+const BROWSE_BASE = 'browse'
+const BROWSE_BASE_NAME = 'Brisbane City Council'
 
 // Functions
-function makeTrail (pathArray, index) {
-  return '/' + pathArray.slice(0, index + 1).join('/')
-}
-
-function makeTrailCrumb (pathArray, index) {
-  const href = makeTrail(pathArray, index)
-  const name = pathArray[index]
-
-  return <a key={index} className={styles.crumb} href={href}>{name}</a>
+function makeTrailCrumb (route, index) {
+  const name = route[index]
+  const partial = location.getPartialRoute(route, index + 1)
+  return <Link key={index} to={partial}><span className={styles.crumb}>{name}</span></Link>
 }
 
 function makeTrailSeparator (index) {
@@ -24,19 +27,22 @@ function makeTrailSeparator (index) {
 // Functional component
 export default function Breadcrumb (props) {
   // Create breadcrumb HTML
-  const path = props.path.split('/').slice(1)
-  const length = path.length
+  const trail = []
 
-  let trail = []
-  for (let i = 0; i < length; i++) {
-    // Add folder to trail
-    trail.push(makeTrailSeparator(i))
-    trail.push(makeTrailCrumb(path, i))
+  const route = location.splitRoute(props.path)
+  const len = route.length
+
+  if (route[0] === BROWSE_BASE) {
+    // Breadcrumb trail for browsing
+    for (let i = 1; i < len; i++) {
+      trail.push(makeTrailSeparator(i))
+      trail.push(makeTrailCrumb(route, i))
+    }
   }
 
   return (
     <div className={styles.main}>
-      <a className={styles.crumb} href="/">{ROOT_FOLDER}</a>
+      <Link to={`/${BROWSE_BASE}`}><span className={styles.crumb}>{BROWSE_BASE_NAME}</span></Link>
       {trail}
     </div>
   )

@@ -1,3 +1,8 @@
+.main {
+  position: relative;
+  composes: flexItem from '../../styles/layout.css';
+}
+
 .main h1 {
   color: #106db2;
 }

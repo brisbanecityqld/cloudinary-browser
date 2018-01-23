@@ -1,13 +1,14 @@
 import React from 'react';
 
 // Components
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect, withRouter } from 'react-router-dom'
+
 import Header from './components/header/header.jsx'
 import Browser from './components/browser/browser.jsx'
 import Viewer from './components/viewer/viewer.jsx'
 
 // Styles
-// import styles from './App.css';
+import styles from './App.css'
 
 // Init FontAwesome library
 import fontawesome from '@fortawesome/fontawesome'
@@ -24,12 +25,18 @@ export default class App extends React.Component {
   }
 
   render() {
+    const RoutedHeader = withRouter(props => <Header {...props} />)
+    const browser = props => <Browser viewmode={this.state.viewmode} {...props} />
+
     return (
       <Router>
-        <div>
-          <Route path="/" component={Header} />
-          <Route path="/browse" component={Browser} />
-          <Route path="/view" component={Viewer} />
+        <div className={styles.main}>
+          <RoutedHeader />
+          <Switch>
+            <Route path="/browse" component={browser} />
+            <Route path="/view" component={Viewer} />
+            <Redirect exact from="/*" to="/browse" />
+          </Switch>
         </div>
       </Router>
     );

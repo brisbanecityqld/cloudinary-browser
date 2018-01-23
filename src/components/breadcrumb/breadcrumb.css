@@ -2,6 +2,10 @@
   composes: flexItem from '../../styles/layout.css';
 }
 
+.main > a {
+  text-decoration: none;
+}
+
 .crumb {
   color: white;
   text-decoration: none;
