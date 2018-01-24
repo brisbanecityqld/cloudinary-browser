@@ -1,11 +1,14 @@
 /* Flex layouts */
-.flexCenter {
+.flexRow {
   display: flex;
-  align-items: center;
 }
 .flexColumn {
   display: flex;
   flex-direction: column;
+}
+.flexCenter {
+  display: flex;
+  align-items: center;
 }
 
 .flexItem {

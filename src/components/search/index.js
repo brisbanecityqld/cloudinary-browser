@@ -1,10 +1,10 @@
 import React from 'react'
 
 // Components
-import Button from '../button/button.jsx'
+import Button from '../button'
 
 // Styles
-import styles from './search.css'
+import styles from './style.css'
 
 export default class Search extends React.Component {
   constructor (props) {

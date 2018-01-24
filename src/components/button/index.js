@@ -4,7 +4,7 @@ import React from 'react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
 // Styles
-import styles from './button.css'
+import styles from './style.css'
 
 // Functional component
 export default function Button (props) {

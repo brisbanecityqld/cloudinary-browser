@@ -24,6 +24,11 @@ function getRoute (routeArray) {
   return ROUTE_SEP + routeArray.join(ROUTE_SEP)
 }
 
+function getAPIRoute (routeArray) {
+  if (routeArray.length === 1) { return '' }
+  return routeArray.slice(1).join(ROUTE_SEP)
+}
+
 // Gets the first n parts of a route
 function getPartialRoute (routeArray, n) {
   return ROUTE_SEP + routeArray.slice(0, n).join(ROUTE_SEP)
@@ -40,5 +45,6 @@ export default {
   getRouteBase,
   getRoute,
   getPartialRoute,
+  getAPIRoute,
   matches
 }

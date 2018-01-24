@@ -1,0 +1,7 @@
+.main {
+  position: relative;
+  width: 20rem;
+  overflow-y: auto;
+
+  composes: bgLightGrey from '../../styles/colours.css'
+}

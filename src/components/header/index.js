@@ -1,15 +1,15 @@
 import React from 'react'
 
 // Components
-import Breadcrumb from '../breadcrumb/breadcrumb.jsx'
-import Search from '../search/search.jsx'
-import Button from '../button/button.jsx'
+import Breadcrumb from '../breadcrumb'
+import Search from '../search'
+import Button from '../button'
 
 // Images
 import BCC_logo from '../../images/bcc_logo.png'
 
 // Styles
-import styles from './header.css'
+import styles from './style.css'
 
 // Functional component
 export default function Header (props) {
@@ -20,6 +20,7 @@ export default function Header (props) {
       <Search />
       <Button icon="image" className={styles.button} />
       <Button icon="list" className={styles.button} />
+      <Button icon="sync-alt" className={styles.button} />
       <Button icon="cog" className={styles.button} />
     </header>
   )

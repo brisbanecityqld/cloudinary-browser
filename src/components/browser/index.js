@@ -1,16 +1,16 @@
 import React from 'react'
 
 // Components
-import Spinner from '../spinner/spinner.jsx'
-import ListView from '../listview/listview.jsx'
-import GridView from '../gridview/gridview.jsx'
+import Spinner from '../spinner'
+import ListView from '../listview'
+import GridView from '../gridview'
 
 // Libraries
 import location from '../../lib/location.js'
-import API from '../../lib/api.js'
+import api from '../../lib/api.js'
 
 // Styles
-import styles from './browser.css'
+import styles from './style.css'
 
 // Functional component
 export default class Browser extends React.Component {
@@ -22,9 +22,9 @@ export default class Browser extends React.Component {
       files: []
     }
 
+    this.update = this.update.bind(this)
     this.addFiles = this.addFiles.bind(this)
-    this.showError = this.showError.bind(this)
-    this.updateFolder = this.updateFolder.bind(this)
+    this.setError = this.setError.bind(this)
   }
 
   addFiles (files) {
@@ -36,13 +36,13 @@ export default class Browser extends React.Component {
     console.dir(files)
   }
 
-  showError (err) {
-    this.setState({
-      error: err.message
-    })
+  // Shows an error if file loading failed
+  setError (error) {
+    console.error(error.message)
+    this.setState({ error })
   }
 
-  updateFolder () {
+  update (props = this.props) {
     // Reset state
     this.setState({
       error: null,
@@ -50,23 +50,24 @@ export default class Browser extends React.Component {
     })
 
     // Request folder from API
-    const route = location.splitRoute(this.props.location.pathname)
-    const folderPath = location.getRoute(route.slice(1, route.length))
-    API.getFolder(folderPath)
-      .then(this.addFiles)
-      .catch(this.showError)
+    const route = location.splitRoute(props.location.pathname)
+    const folderPath = location.getAPIRoute(route)
+    // api.getFiles(folderPath)
+    //   .then(this.addFiles)
+    //   .catch(this.setError)
   }
 
   // Lifecycle hooks
   componentWillMount () {
-    this.updateFolder()
+    this.update()
   }
   componentWillReceiveProps (nextProps) {
+    // Check if moving to a new folder
     const match = location.matches(this.props.location.pathname, nextProps.location.pathname)
     const error = this.state.error !== null
-    if (error || !match) {
-      this.updateFolder()
-    }
+
+    // Force component update
+    if (error || !match) { this.update(nextProps) }
   }
 
   render () {

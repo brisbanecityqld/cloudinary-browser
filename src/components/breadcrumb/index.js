@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import location from '../../lib/location.js'
 
 // Styles
-import styles from './breadcrumb.css'
+import styles from './style.css'
 
 // Constants
 const BROWSE_BASE = 'browse'

@@ -3,9 +3,10 @@ import React from 'react';
 // Components
 import { BrowserRouter as Router, Switch, Route, Redirect, withRouter } from 'react-router-dom'
 
-import Header from './components/header/header.jsx'
-import Browser from './components/browser/browser.jsx'
-import Viewer from './components/viewer/viewer.jsx'
+import Header from './components/header'
+import FolderTree from './components/foldertree'
+import Browser from './components/browser'
+import Viewer from './components/viewer'
 
 // Styles
 import styles from './App.css'
@@ -20,14 +21,35 @@ export default class App extends React.Component {
     super(props)
 
     this.state = {
-      viewmode: 'list'
+      viewmode: 'list',
+      folders: [{
+        name: 'browse',
+        path: 'browse',
+        files: null,
+        subfolders: null
+      }]
     }
+
+    this.updateFolders = this.updateFolders.bind(this)
+  }
+
+  // Updates in-memory folder cache
+  updateFolders (newFolders) {
+    this.setState({
+      folders: newFolders
+    })
   }
 
   render() {
     const RoutedHeader = withRouter(props => <Header {...props} />)
-    const browser = props => <Browser viewmode={this.state.viewmode} {...props} />
+    const browser = props => (
+      <div className={styles.content}>
+        <FolderTree folders={this.state.folders} updateFolders={folders => this.updateFolders(folders)} {...props} />
+        <Browser viewmode={this.state.viewmode} {...props} />
+      </div>
+    )
 
+    // Folders loaded
     return (
       <Router>
         <div className={styles.main}>
@@ -39,6 +61,6 @@ export default class App extends React.Component {
           </Switch>
         </div>
       </Router>
-    );
+    )
   }
 }
