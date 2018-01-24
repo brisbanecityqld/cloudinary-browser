@@ -8,76 +8,48 @@ import api from '../../lib/api.js'
 import location from '../../lib/location.js'
 
 // Styles
-import styles from './foldertree.css'
+import styles from './style.css'
 
 export default class FolderTree extends React.Component {
   constructor (props, context) {
     super(props, context)
 
     this.state = {
+      folders: [],
       error: null
     }
 
-    this.folderIsDownloaded = this.folderIsDownloaded.bind(this)
+    this.subfoldersAreDownloaded = this.subfoldersAreDownloaded.bind(this)
     this.update = this.update.bind(this)
     this.setError = this.setError.bind(this)
   }
 
   // Returns true if folders has been checked for subfolders already
-  folderIsDownloaded (route) {
+  subfoldersAreDownloaded (route) {
     let folders = this.props.folders
+
     let currentFolder = folders
-
-    const length = route.length
-    const target = route[length - 1]
-
-    if (length === 1) {
-      return
-    }
     let nextIndex
 
-    route.forEach(folder => {
-      nextIndex = currentFolder.findIndex(_ => _.name === folder)
+    const length = route.length
+    for (let i = 0; i < length - 1; i++) {
+      // Find next folder in path
+      nextIndex = currentFolder.findIndex(_ => _.name === route[i])
 
-      // Can't find next folder, or
-      // next folder's subfolders aren't downloaded yet
-      if (nextIndex === -1 || currentFolder[nextIndex].subfolders === null) {
+      if (nextIndex > -1 || currentFolder[nextIndex].subfolders === null) {
+        // Folder along path can't be found, or
+        // folder was found and contains no subfolders
         return false
       }
 
+      // Move into next folder
       currentFolder = currentFolder[nextIndex].subfolders
-    })
+    }
 
-    // Folder is already downloaded
     return true
   }
 
   updateFolders (route, newFolders) {
-    let folders = this.props.folders
-
-    if (route.length === 1) {
-      // Handle base folder
-      return folders[0].subfolders !== null
-    } else {
-      // Traverse folder tree to desired subfolder
-      // Add more if we can't continue
-      const path = route.slice(0, route.length - 1)
-      const target = route[route.length - 1]
-
-      let currentFolder = folders
-      let nextIndex
-
-      path.forEach(folder => {
-        nextIndex = currentFolder.findIndex(_ => _.name === folder)
-        if (nextIndex > -1) {
-          // Found the next folder
-          currentFolder = currentFolder[nextIndex].subfolders
-        } else {
-          // Folder doesn't exist in path, create it
-
-        }
-      })
-    }
   }
 
   // Sets error if something went wrong with request
@@ -94,6 +66,9 @@ export default class FolderTree extends React.Component {
     const route = location.splitRoute(props.location.pathname)
 
     // Check if subfolders already downloaded
+    if (this.subfoldersAreDownloaded(route)) {
+
+    }
     api.getFolders(location.getAPIRoute(route))
       .then(folders => {
         // Parse and update folders
