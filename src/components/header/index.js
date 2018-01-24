@@ -16,7 +16,7 @@ export default function Header (props) {
   return (
     <header className={styles.main}>
       <div className={styles.icon}><img src={BCC_logo} alt="logo" /></div>
-      <Breadcrumb path={props.location.pathname} />
+      <Breadcrumb route={props.route} />
       <Search />
       <Button icon="image" className={styles.button} />
       <Button icon="list" className={styles.button} />

@@ -14,10 +14,11 @@ const BROWSE_BASE = 'browse'
 const BROWSE_BASE_NAME = 'Brisbane City Council'
 
 // Functions
-function makeTrailCrumb (route, index) {
-  const name = route[index]
-  const partial = location.getPartialRoute(route, index + 1)
-  return <Link key={index} to={partial}><span className={styles.crumb}>{name}</span></Link>
+function makeTrailCrumb (name, route, isLink) {
+  if (!isLink) {
+    return <span key={route}>{name}</span>
+  }
+  return <Link key={route} to={route}><span className={styles.crumb}>{name}</span></Link>
 }
 
 function makeTrailSeparator (index) {
@@ -29,14 +30,17 @@ export default function Breadcrumb (props) {
   // Create breadcrumb HTML
   const trail = []
 
-  const route = location.splitRoute(props.path)
+  const route = props.route
   const len = route.length
 
   if (route[0] === BROWSE_BASE) {
     // Breadcrumb trail for browsing
     for (let i = 1; i < len; i++) {
+      const name = route[i]
+      const partial = location.getPartialRoute(route, i + 1)
+
       trail.push(makeTrailSeparator(i))
-      trail.push(makeTrailCrumb(route, i))
+      trail.push(makeTrailCrumb(name, partial, i !== len - 1))
     }
   }
 
