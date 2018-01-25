@@ -14,6 +14,9 @@
 .flexItem {
   flex: 1 0 0;
 }
+.noFlex {
+  flex: 0 0 auto;
+}
 
 /* Grid layouts */
 .gridCenter {

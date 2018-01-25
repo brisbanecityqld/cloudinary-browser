@@ -1,9 +1,16 @@
 .main {
+  padding-right: 1rem;
   composes: flexItem from '../../styles/layout.css';
 }
 
-.main > a {
-  text-decoration: none;
+.truncate {
+  white-space: nowrap;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+
+  composes: main
 }
 
 .crumb {

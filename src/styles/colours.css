@@ -2,13 +2,14 @@
 .textWhite {
   color: white;
 }
-
 .textAccent {
   color: #106DB2;
 }
-
 .textGrey {
   color: #333;
+}
+.textRed {
+  color: #f00;
 }
 
 /* Background colours */

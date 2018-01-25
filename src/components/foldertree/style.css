@@ -1,7 +1,16 @@
 .main {
   position: relative;
-  width: 20rem;
-  overflow-y: auto;
+  width: 300px;
+  margin-right: 1px;
+
+  min-width: 8rem;
+  max-width: 35rem;
 
   composes: bgLightGrey from '../../styles/colours.css'
+}
+
+.scrolling {
+  height: 100%;
+  overflow-y: auto;
+  clear: both;
 }

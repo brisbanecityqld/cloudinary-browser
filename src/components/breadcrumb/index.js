@@ -4,7 +4,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 // Libraries
-import location from '../../lib/location.js'
+import { location } from '../../lib'
 
 // Styles
 import styles from './style.css'
@@ -26,28 +26,73 @@ function makeTrailSeparator (index) {
 }
 
 // Functional component
-export default function Breadcrumb (props) {
-  // Create breadcrumb HTML
-  const trail = []
+export default class Breadcrumb extends React.Component {
+  constructor (props) {
+    super(props)
 
-  const route = props.route
-  const len = route.length
+    this.state = {
+      needsUpdate: true,
+      truncate: false
+    }
 
-  if (route[0] === BROWSE_BASE) {
-    // Breadcrumb trail for browsing
-    for (let i = 1; i < len; i++) {
-      const name = route[i]
-      const partial = location.getPartialRoute(route, i + 1)
+    this.makeTrail = this.makeTrail.bind(this)
+  }
 
-      trail.push(makeTrailSeparator(i))
-      trail.push(makeTrailCrumb(name, partial, i !== len - 1))
+  makeTrail () {
+    // Create breadcrumb HTML
+    const trail = []
+
+    const route = this.props.route
+    const len = route.length
+
+    if (route[0] === BROWSE_BASE) {
+      // Breadcrumb trail for browsing
+      for (let i = 1; i < len; i++) {
+        const name = route[i]
+        const partial = location.getPartialRoute(route, i + 1)
+
+        trail.push(makeTrailSeparator(i))
+        trail.push(makeTrailCrumb(name, partial, i !== len - 1))
+      }
+    }
+
+    return trail
+  }
+
+  componentWillUpdate () {
+    if (this.state.needsUpdate) {
+      this.setState({ needsUpdate: false })
+
+      // On route change, check if our trail has wrapped onto multiple lines
+      const baseH = this.base.getBoundingClientRect().height
+      const currentH = this.main.getBoundingClientRect().height
+      if (currentH > baseH) {
+        console.log('hit this code!')
+        this.setState({ truncate: true })
+      }
     }
   }
 
-  return (
-    <div className={styles.main}>
-      <Link to={`/${BROWSE_BASE}`}><span className={styles.crumb}>{BROWSE_BASE_NAME}</span></Link>
-      {trail}
-    </div>
-  )
+  componentWillReceiveProps (newProps) {
+    if (!location.matches(this.props.route, newProps.route)) {
+      this.setState({
+        needsUpdate: true,
+        truncate: false
+      })
+    }
+  }
+
+  render () {
+    const trail = this.makeTrail()
+    const css = (this.state.truncate ? styles.truncate : styles.main)
+
+    return (
+      <div ref={elem => this.main = elem} className={css}>
+        <Link to={`/${BROWSE_BASE}`}>
+          <span ref={elem => this.base = elem} className={styles.crumb}>{BROWSE_BASE_NAME}</span>
+        </Link>
+        {trail}
+      </div>
+    )
+  }
 }

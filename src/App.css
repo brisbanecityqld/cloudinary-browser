@@ -1,10 +1,12 @@
 .main {
   width: 100vw;
   height: 100vh;
+
   composes: flexColumn from './styles/layout.css';
 }
 
 .content {
   position: relative;
+  overflow: hidden;
   composes: flexItem flexRow from './styles/layout.css';
 }

@@ -1,7 +1,6 @@
 // Simple backend for cloudinary-browser.
 // Performs Cloudinary API requests and caches to a local DB.
 
-const path = require('path')
 const Express = require('express')
 const Cloudinary = require('cloudinary')
 

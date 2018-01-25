@@ -6,7 +6,8 @@ body, * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Nunito, Arial, sans-serif;
+  font-family: 'Open Sans', Arial, sans-serif;
+  text-decoration: none;
 }
 
 :global(.svg-inline--fa) {
