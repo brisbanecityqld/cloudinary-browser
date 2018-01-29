@@ -20,8 +20,8 @@ export default function Browser (props) {
     : <GridView children={resources} />
 
   return (
-    <CloudinaryContext cloudName={props.cloudName}>
-      <div className={styles.main}>{view}</div>
-    </CloudinaryContext>
+    <div className={styles.main}>
+      <CloudinaryContext cloudName={props.cloudName}>{view}</CloudinaryContext>
+    </div>
   )
 }

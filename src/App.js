@@ -2,6 +2,7 @@ import React from 'react';
 
 // Components
 import { Switch, Route, Redirect } from 'react-router-dom'
+import DocumentTitle from 'react-document-title'
 
 import Header from './components/header'
 import FolderTree from './components/foldertree'
@@ -30,7 +31,6 @@ export default class App extends React.Component {
 
       folders: [],
       currentFolders: [],
-
       favourites: [],
 
       loadedRoutes: [],
@@ -46,6 +46,7 @@ export default class App extends React.Component {
 
     // Cloudinary cloud name
     this.CLOUD_NAME = 'rosies'
+    this.TITLE_SUFFIX = ' | BCC Image Browser'
 
     // Method bindings
     this.saveAppState = this.saveAppState.bind(this)
@@ -78,7 +79,7 @@ export default class App extends React.Component {
   getCurrentFiles (array = this.state.files) {
     const route = location.getAPIPath(this.state.currentRoute)
     return this.state.files.filter(file => {
-      return file.public_id.replace(route, '').indexOf('/') === -1
+      return file.folder === route
     })
   }
 
@@ -302,9 +303,13 @@ export default class App extends React.Component {
       )
     }
 
+    const route = location.getAPIPath(this.state.currentRoute)
+    const title = (route === '' ? 'Browse' : route) + this.TITLE_SUFFIX
+
     // Folders loaded
     return (
       <div className={styles.main}>
+        <DocumentTitle title={title} />
         <Header route={this.state.currentRoute} />
         {this.state.loading ? (<Spinner />) : null}
         <Switch>

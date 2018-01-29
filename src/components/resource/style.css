@@ -1,3 +1,11 @@
+.list {
+  composes: flexCenter from '../../styles/layout.css';
+}
+
+.list .title {
+  font-weight: bold;
+}
+
 .image {
   width: 100px;
   height: 80px;

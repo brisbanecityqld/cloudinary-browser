@@ -1,8 +1,6 @@
 .main {
   position: relative;
-  composes: flexItem from '../../styles/layout.css';
-}
+  overflow-y: auto;
 
-.main h1 {
-  color: #106db2;
+  composes: flexItem from '../../styles/layout.css';
 }

@@ -14,8 +14,10 @@ Cloudinary.config(CONFIG)
 // Set up Express server
 const app = Express()
 app.use((req, res, next) => {
-  res.header('Content-Type', 'application/json')
-  res.header('Access-Control-Allow-Origin', '*')
+  if (req.path !== '/') {
+    res.header('Content-Type', 'application/json')
+    res.header('Access-Control-Allow-Origin', '*')
+  }
   next()
 })
 
@@ -32,6 +34,9 @@ const log = msg => {
 
   console.log(`[ ${yr}-${mth}-${day} ${hr}:${min}:${sec} ] ${msg}`)
 }
+
+// Serve prod
+// app.use(Express.static('build'))
 
 // Add endpoints
 app.get('/resources', (req, res) => {
