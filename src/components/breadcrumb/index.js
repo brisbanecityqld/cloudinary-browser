@@ -67,7 +67,6 @@ export default class Breadcrumb extends React.Component {
       const baseH = this.base.getBoundingClientRect().height
       const currentH = this.main.getBoundingClientRect().height
       if (currentH > baseH) {
-        console.log('hit this code!')
         this.setState({ truncate: true })
       }
     }

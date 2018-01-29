@@ -11,6 +11,11 @@
   height: 3rem;
   line-height: 3rem;
   text-align: center;
+  user-select: none;
+  cursor: pointer;
+  padding: 0 .5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   composes: flexItem from '../../styles/layout.css';
 }

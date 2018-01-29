@@ -14,3 +14,7 @@
   overflow-y: auto;
   clear: both;
 }
+
+.message {
+  padding: 1rem;
+}

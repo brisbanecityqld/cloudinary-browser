@@ -30,6 +30,8 @@ export default class FolderTree extends React.Component {
     this.onDrag = this.onDrag.bind(this)
     this.onDragEnd = this.onDragEnd.bind(this)
 
+    this.isFavourite = this.isFavourite.bind(this)
+
     this.handleTabChange = this.handleTabChange.bind(this)
   }
 
@@ -42,24 +44,21 @@ export default class FolderTree extends React.Component {
     localStorage.setItem(this.storageKey, JSON.stringify(this.state))
   }
 
-  // Create list of Folder components from props
-  makeFolders (folders, deletable = false) {
-    return folders.map(folder => (
-      <Folder key={folder.path}
-              path={folder.path}
-              name={folder.name}
-              deletable={deletable}
-              isFavourite={this.props.favourites.indexOf(folder.path) > -1}
-              updateFavourites={this.props.updateFavourites} />
-    ))
+  isFavourite (folder) {
+    return this.props.favourites.findIndex(favourite => favourite.path === folder.path) > -1
   }
 
-  makeFavourites (folders) {
-    const favourites = folders.filter(folder => {
-      return this.props.favourites.indexOf(folder.path) > -1
+  // Create list of Folder components from props
+  makeFolders (folders, deletable = false) {
+    return folders.map(folder => {
+      const isFavourite = this.isFavourite(folder)
+      return <Folder key={folder.path}
+                     path={folder.path}
+                     name={folder.name}
+                     deletable={deletable}
+                     isFavourite={isFavourite}
+                     onClick={() => this.props.updateFavourites({ ...folder }, !isFavourite)} />
     })
-
-    return this.makeFolders(favourites, true)
   }
 
   onDrag (offset) {
@@ -97,19 +96,30 @@ export default class FolderTree extends React.Component {
     }
   }
 
+  displayMessage (text) {
+    return <div className={styles.message}>{text}</div>
+  }
+
   render () {
     const inline = {
       width: toPx(this.state.width)
     }
 
     const folders = this.makeFolders(this.props.folders)
-    const favourites = this.makeFavourites(this.props.folders)
-    const shown = (this.activeTab === 'Folders' ? folders : favourites)
+    const favourites = this.makeFolders(this.props.favourites, true)
+    let tabContent = ''
+    if (this.activeTab === 'Folders' && !this.props.loading) {
+      tabContent = (folders.length > 0 ? folders : this.displayMessage('This folder has no subfolders.'))
+    } else if (this.activeTab === 'Favourites') {
+      tabContent = (favourites.length > 0 ? favourites : this.displayMessage('You haven\'t added any favourites yet.'))
+    }
+
+
 
     return (
       <aside className={styles.main} style={inline} ref={elem => this.elem = elem}>
         <Tabs tabs={this.state.tabs} onChange={tab => this.handleTabChange(tab)}/>
-        <div className={styles.scrolling}>{shown}</div>
+        <div className={styles.scrolling}>{tabContent}</div>
         <Draggable onDrag={this.onDrag} onDragEnd={this.onDragEnd} />
       </aside>
     )

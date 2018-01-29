@@ -10,7 +10,6 @@ const PORT = 8000
 // Set up Cloudinary
 const CONFIG = require('./config')
 Cloudinary.config(CONFIG)
-const API = Cloudinary.v2.api
 
 // Set up Express server
 const app = Express()
@@ -34,29 +33,30 @@ const log = msg => {
   console.log(`[ ${yr}-${mth}-${day} ${hr}:${min}:${sec} ] ${msg}`)
 }
 
-function sendResult (res, err, result) {
-  if (err) {
-    res.send(JSON.stringify(err))
-  } else {
-    res.send(JSON.stringify(result.folders))
-  }
-}
-
 // Add endpoints
-app.get('/files', (req, res) => {
-  log('User requested files')
-  res.sendStatus(200)
+app.get('/resources', (req, res) => {
+  const folder = req.query.path
+  const expression = `folder="${folder}"`
+  const max_results = req.query.max_results
+
+  log(`User requested ${max_results} files at /${folder}`)
+
+  new Cloudinary.v2.search()
+    .expression(expression)
+    .max_results(max_results)
+    .execute((err, result) => res.send(err || result))
 })
 
 app.get('/folders', (req, res) => {
   const path = req.query.path
   const endpoint = path === '' ? 'root_folders' : 'sub_folders'
 
-  log(`User requested folders at path /${path}`)
+  log(`User requested folders at /${path}`)
 
-  API[endpoint](path, (err, result) => {
-    sendResult(res, err, result)
-  })
+  Cloudinary.v2.api[endpoint](
+    path,
+    (err, result) => res.send(err || result)
+  )
 })
 
 // Start server

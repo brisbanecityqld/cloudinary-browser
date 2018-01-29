@@ -40,12 +40,13 @@ function getFolders (path) {
 }
 
 // Endpoint: list all files in a directory
-function getFiles (path) {
-  const url = URL('/files', { path })
+function getResources (path) {
+  const max_results = 50
+  const url = URL('/resources', { path, max_results })
   return respond(url)
 }
 
 export default {
   getFolders,
-  getFiles
+  getResources
 }

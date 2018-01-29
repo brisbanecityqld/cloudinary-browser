@@ -1,25 +1,27 @@
 import React from 'react'
 
 // Components
+import { CloudinaryContext } from 'cloudinary-react'
 import ListView from '../listview'
 import GridView from '../gridview'
+import Resource from '../resource'
 
 // Styles
 import styles from './style.css'
 
 // Functional component
 export default function Browser (props) {
-  let inner
-  if (props.viewmode === 'list') {
-    inner = <ListView files={props.files} />
-  } else {
-    inner = <GridView files={props.files} />
-  }
+  const resources = props.files.map(file => (
+    <Resource key={file.public_id} data={file} viewmode={props.viewmode} />
+  ))
+
+  const view = props.viewmode === 'list'
+    ? <ListView children={resources} />
+    : <GridView children={resources} />
 
   return (
-    <div className={styles.main}>
-      {inner}
-      <div>{props.location.pathname}</div>
-    </div>
+    <CloudinaryContext cloudName={props.cloudName}>
+      <div className={styles.main}>{view}</div>
+    </CloudinaryContext>
   )
 }

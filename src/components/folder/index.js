@@ -11,10 +11,10 @@ import { location } from '../../lib'
 // Styles
 import styles from './style.css'
 
-// Update favourites list
+// Handle click
 function handleClick (event, props) {
   event.preventDefault()
-  props.updateFavourites(props.path, !props.isFavourite)
+  props.onClick()
 }
 
 export default function Folder (props) {
