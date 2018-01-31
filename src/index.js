@@ -5,7 +5,10 @@ import App from './App'
 import { BrowserRouter as Router, withRouter } from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
 
-// Import only the icons we need
+// Cloudinary
+import Cloudinary from 'cloudinary'
+
+// Import FontAwesome icons
 import fontawesome from '@fortawesome/fontawesome'
 
 // Solid icons
@@ -32,6 +35,9 @@ fontawesome.library.add(
   fasTimes,
   farStar
 )
+
+// Configure Cloudinary
+Cloudinary.config({ cloud_name: 'rosies' })
 
 const RoutedApp = withRouter(props => <App {...props} />)
 

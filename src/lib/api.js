@@ -15,18 +15,32 @@ function URL (endpoint, params = null) {
 // Create query string from params object
 const QS = params => '?' + Object.keys(params).map(k => `${k}=${params[k]}`).join('&')
 
+const parseJSON = data => {
+  // Handle already-parsed data
+  if (typeof data === 'object') {
+    return data
+  }
+
+  // Parse JSON, or fail as custom error
+  try {
+    return JSON.parse(data)
+  } catch (e) {
+    return { message: data }
+  }
+}
+
 // Handle API responses
 function respond (url) {
   return new Promise((resolve, reject) => {
     request(url).then(resp => {
-      const json = JSON.parse(resp)
+      const json = parseJSON(resp)
       if (json.hasOwnProperty('http_code') && json.http_code !== 200) {
         reject(json)
       } else {
         resolve(json)
       }
     }).catch(err => {
-      reject(JSON.parse(err))
+      reject(parseJSON(err))
     })
   })
 }

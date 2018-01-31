@@ -1,7 +1,6 @@
 import React from 'react'
 
 // Components
-import { CloudinaryContext } from 'cloudinary-react'
 import ListView from '../listview'
 import GridView from '../gridview'
 import Resource from '../resource'
@@ -20,8 +19,6 @@ export default function Browser (props) {
     : <GridView children={resources} />
 
   return (
-    <div className={styles.main}>
-      <CloudinaryContext cloudName={props.cloudName}>{view}</CloudinaryContext>
-    </div>
+    <div className={styles.main}>{view}</div>
   )
 }
