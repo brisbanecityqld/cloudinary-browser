@@ -1,9 +1,10 @@
 .base {
-  border-radius: .2rem;
   padding: .5rem;
   cursor: pointer;
   width: 2.25rem;
   height: 2.25rem;
+
+  composes: corners from '../../styles/ui.css';
   composes: fast from '../../styles/transitions.css';
 }
 .base:hover {

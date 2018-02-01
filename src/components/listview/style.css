@@ -1,0 +1,4 @@
+.main {
+  grid-template-columns: auto auto 1fr 9rem 16rem auto;
+  grid-column-gap: 1.5rem;
+}

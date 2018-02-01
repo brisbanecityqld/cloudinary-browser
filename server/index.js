@@ -49,6 +49,7 @@ app.get('/resources', (req, res) => {
   new Cloudinary.v2.search()
     .expression(expression)
     .max_results(max_results)
+    .with_field('tags')
     .execute((err, result) => res.send(err || result))
 })
 

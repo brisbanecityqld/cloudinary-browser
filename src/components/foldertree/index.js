@@ -108,13 +108,11 @@ export default class FolderTree extends React.Component {
     const folders = this.makeFolders(this.props.folders)
     const favourites = this.makeFolders(this.props.favourites, true)
     let tabContent = ''
-    if (this.activeTab === 'Folders' && !this.props.loading) {
+    if (this.activeTab === 'Folders') {
       tabContent = (folders.length > 0 ? folders : this.displayMessage('This folder has no subfolders.'))
     } else if (this.activeTab === 'Favourites') {
       tabContent = (favourites.length > 0 ? favourites : this.displayMessage('You haven\'t added any favourites yet.'))
     }
-
-
 
     return (
       <aside className={styles.main} style={inline} ref={elem => this.elem = elem}>

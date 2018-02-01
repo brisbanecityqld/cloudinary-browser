@@ -16,6 +16,16 @@ function handleClick (event, props) {
 export default function Button (props) {
   let css = props.invert ? styles.invert : styles.main
 
+  // Get icon
+  let icon
+  if (props.icon) {
+    icon = (
+      <span className={styles.icon}>
+        <FontAwesomeIcon icon={props.icon}/>
+      </span>
+    )
+  }
+
   let text
   if (props.text) {
     text = <span className={styles.label}>{props.text}</span>
@@ -29,8 +39,7 @@ export default function Button (props) {
 
   return (
     <div className={css} onClick={event => handleClick(event, props)}>
-      <span className={styles.icon}><FontAwesomeIcon icon={props.icon}/></span>
-      {text}
+      {icon}{text}
     </div>
   )
 }
