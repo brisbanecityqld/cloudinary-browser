@@ -5,6 +5,10 @@ import App from './App'
 import { BrowserRouter as Router, withRouter } from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
 
+// Redux
+import { createStore } from 'redux'
+import FileBrowser from './reducers'
+
 // Cloudinary
 import Cloudinary from 'cloudinary'
 
@@ -34,6 +38,12 @@ fontawesome.library.add(
   fasSearch,
   fasTimes,
   farStar
+)
+
+// Redux store
+const store = createStore(
+  FileBrowser,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 
 // Configure Cloudinary

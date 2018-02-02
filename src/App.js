@@ -24,7 +24,6 @@ export default class App extends React.Component {
       viewmode: 'list',
       loading: false,
       currentRoute: location.splitRoute(this.props.location.pathname),
-      doRouteUpdate: false,
 
       files: [],
       currentFiles: [],
@@ -308,8 +307,7 @@ export default class App extends React.Component {
     if (!match) {
       // console.log('Route changed from', this.props.location.pathname, 'to', nextProps.location.pathname)
       this.setState({
-        currentRoute: location.splitRoute(nextProps.location.pathname),
-        doRouteUpdate: true
+        currentRoute: location.splitRoute(nextProps.location.pathname)
       }, this.loadCurrentFolder)
     }
   }
