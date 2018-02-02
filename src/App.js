@@ -55,8 +55,10 @@ export default class App extends React.Component {
 
     this.getCurrentFiles = this.getCurrentFiles.bind(this)
     this.getCurrentFolders = this.getCurrentFolders.bind(this)
+    this.removeRouteItems = this.removeRouteItems.bind(this)
 
     this.loadCurrentFolder = this.loadCurrentFolder.bind(this)
+    this.forceReload = this.loadCurrentFolder.bind(this, true)
     this.markAsLoaded = this.markAsLoaded.bind(this)
 
     this.addResources = this.addResources.bind(this)
@@ -93,6 +95,27 @@ export default class App extends React.Component {
     })
   }
 
+  // Remove all files and subfolders in a folder (for re-download)
+  removeRouteItems (path) {
+    this.setState((prevState, props) => {
+      const newFolders = prevState.folders.filter(folder => {
+        return (
+          folder.path.indexOf(path) !== 0 &&                    // Folders not on path
+          folder.path.replace(path, '').split('/').length !== 1 // Folders in direct subfolder
+        )
+      })
+
+      const newFiles = prevState.files.filter(file => {
+        return file.folder.indexOf(path) !== path
+      })
+
+      return {
+        files: newFiles,
+        folders: newFolders
+      }
+    })
+  }
+
   // Sets the current files, folders and favourites to pass to children
   update () {
     this.setState((prevState, props) => ({
@@ -110,15 +133,27 @@ export default class App extends React.Component {
   addResources (data) {
     // TODO: Handle next_cursor value somehow
 
-    // Add images
+    // Add resources, while handling merges
     const resources = data.resources
     if (resources.length > 0) {
-      this.setState((prevState, props) => ({
-        files: [
-          ...prevState.files.slice(),
-          ...resources
-        ]
-      }))
+      this.setState((prevState, props) => {
+        // Create new file list
+        const newFiles = prevState.files.slice()
+
+        for (let res of resources) {
+          const fIndex = newFiles.findIndex(f => f.public_id === res.public_id)
+
+          // Handle either merging or adding the file
+          fIndex === -1
+            ? newFiles.push(res)
+            : Object.assign(newFiles[fIndex], res)
+        }
+
+        // Update state
+        return {
+          files: newFiles
+        }
+      })
     }
   }
 
@@ -140,9 +175,19 @@ export default class App extends React.Component {
     this.setLoading()
 
     const route = this.state.currentRoute
+    const routeStr = location.getRoute(route)
+
+    // If forced, remove all currently downloaded files & subfolders
+    if (force) {
+      this.removeRouteItems(routeStr)
+    }
 
     // Is this folder already downloaded?
-    if (this.state.loadedRoutes.indexOf(location.getRoute(route)) > -1 && !force) {
+    const nextCursor = (this.state.loadedRoutes.hasOwnProperty(routeStr))
+      ? this.state.loadedRoutes[routeStr]
+      : null
+
+    if (this.state.loadedRoutes.indexOf(routeStr) > -1 && !force) {
       this.setLoading(false)
       this.update()
     } else {
@@ -310,7 +355,9 @@ export default class App extends React.Component {
     return (
       <div className={styles.main}>
         <DocumentTitle title={title} />
-        <Header route={this.state.currentRoute} />
+        <Header
+          route={this.state.currentRoute}
+          reload={this.forceReload} />
         {this.state.loading ? (<Spinner />) : null}
         <Switch>
           <Route path="/browse" component={RoutedBrowser} />

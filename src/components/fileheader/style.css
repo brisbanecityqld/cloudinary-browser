@@ -1,0 +1,28 @@
+.main {
+  height: 3rem;
+  padding: 0 .75rem 0 1.5rem;
+  grid-template-columns: inherit;
+  grid-column-gap: inherit;
+
+  composes: bgMedGrey from '../../styles/colours.css';
+  composes: gridCenter from '../../styles/layout.css';
+}
+
+.checkbox > div {
+  width: 1rem;
+  height: 1rem;
+  border-radius: .2rem;
+  border: 2px solid #333;
+  cursor: pointer;
+}
+
+.image {
+  width: 3rem;
+}
+
+.checkbox { grid-column: 1 / 2; }
+.image    { grid-column: 2 / 3; }
+.title    { grid-column: 3 / 4; }
+.upload   { grid-column: 4 / 5; }
+.tags     { grid-column: 5 / 6; }
+.actions  { grid-column: 6 / 7; }

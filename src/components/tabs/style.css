@@ -1,8 +1,8 @@
 .container {
   width: 100%;
   height: 3rem;
-  background-color: #ccc;
 
+  composes: bgMedGrey from '../../styles/colours.css';
   composes: flexRow from '../../styles/layout.css';
 }
 

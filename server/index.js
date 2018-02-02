@@ -43,14 +43,25 @@ app.get('/resources', (req, res) => {
   const folder = req.query.path
   const expression = `folder="${folder}"`
   const max_results = req.query.max_results
+  const next_cursor = req.query.hasOwnProperty('next_cursor')
+    ? req.query.next_cursor
+    : null
 
-  log(`User requested ${max_results} files at /${folder}`)
+  log(`User requested ${max_results}${next_cursor ? ' more' : ''} files at /${folder}`)
 
-  new Cloudinary.v2.search()
+  // Build search query
+  const search = new Cloudinary.v2.search()
     .expression(expression)
     .max_results(max_results)
-    .with_field('tags')
-    .execute((err, result) => res.send(err || result))
+    .with_field('tags');
+
+  // For requesting next page of results
+  if (next_cursor) {
+    search.next_cursor(next_cursor)
+  }
+
+  // Execute search
+  search.execute((err, result) => res.send(err || result))
 })
 
 app.get('/folders', (req, res) => {

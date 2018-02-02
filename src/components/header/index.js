@@ -20,7 +20,7 @@ export default function Header (props) {
       <Search />
       <Button icon="image" className={styles.button} />
       <Button icon="list" className={styles.button} />
-      <Button icon="sync-alt" className={styles.button} />
+      <Button icon="sync-alt" className={styles.button} onClick={props.reload} />
       <Button icon="cog" className={styles.button} />
     </header>
   )
