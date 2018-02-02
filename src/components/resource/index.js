@@ -2,43 +2,87 @@ import React from 'react'
 
 // Components
 import Cloudinary from 'cloudinary'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
 // Styles
 import styles from './style.css'
 
-export default function File (props) {
-  const data = props.data
-  const style = props.viewmode === 'list'
-    ? styles.list
-    : styles.grid
+export default class File extends React.Component {
+  constructor (props) {
+    super(props)
 
-  // Create filename
-  const filename = data.filename + '.' + data.format
+    this.state = {
+      imageLoaded: false
+    }
 
-  // Get file URL
-  const url = Cloudinary.url(data.public_id, { width: 48, height: 36, crop: 'fill' })
+    this.img = null
 
-  // Parse upload date in form: 2018-01-01T00:00:00
-  const dateRegex = /(\d+)-(\d+)-(\d+)T(\d+:\d+)/
-  const [,year,month,day,time] = dateRegex.exec(data.uploaded_at)
+    // Parse upload date in form: 2018-01-01T00:00:00
+    this.dateRegex = /(\d+)-(\d+)-(\d+)T(\d+:\d+)/
 
-  // Generate tags
-  let tags = (data.tags.length > 0)
-    ? data.tags.map(tag => (<span className={styles.tag} key={tag}>{tag}</span>))
-    : undefined
+    this.parseData = this.parseData.bind(this)
+    this.handleImageLoaded = this.handleImageLoaded.bind(this)
+  }
 
-  return (
-    <div className={style}>
-      <div className={styles.checkbox}>
-        <div></div>
+  // Returns image data in a useable format
+  parseData () {
+    const data = this.props.data
+
+    // Create filename
+    const filename = data.filename + '.' + data.format
+
+    // Get file URL
+    const url = Cloudinary.url(data.public_id, { width: 48, height: 36, crop: 'fill' })
+
+    const [,year,month,day,time] = this.dateRegex.exec(data.uploaded_at)
+    const uploaded = `${day}/${month}/${year} ${time}`
+
+    // Generate tags
+    let tags = (data.tags.length > 0)
+      ? data.tags.map(tag => (<span className={styles.tag} key={tag}>{tag}</span>))
+      : undefined
+
+    return {
+      filename,
+      url,
+      uploaded,
+      tags
+    }
+  }
+
+  handleImageLoaded () {
+    this.setState({
+      imageLoaded: true
+    })
+  }
+
+  render () {
+    const style = this.props.viewmode === 'list'
+      ? styles.list
+      : styles.grid
+
+    const { filename, url, uploaded, tags } = this.parseData()
+    const imageStyle = this.state.imageLoaded
+      ? undefined
+      : styles.imageHidden
+
+    return (
+      <div className={style}>
+        <div className={styles.checkbox}>
+          <div></div>
+        </div>
+        <div className={styles.image}>
+          <img className={imageStyle}
+               onLoad={this.handleImageLoaded}
+               src={url}
+               alt={filename} />
+          <FontAwesomeIcon icon="image" />
+        </div>
+        <div className={styles.title}>{filename}</div>
+        <div className={styles.upload}>{uploaded}</div>
+        <div className={styles.tags}>{tags}</div>
+        <div className={styles.actions}></div>
       </div>
-      <div className={styles.image}>
-        <img src={url} alt={filename} />
-      </div>
-      <div className={styles.title}>{filename}</div>
-      <div className={styles.upload}>{`${day}/${month}/${year} ${time}`}</div>
-      <div className={styles.tags}>{tags}</div>
-      <div className={styles.actions}></div>
-    </div>
-  )
+    )
+  }
 }

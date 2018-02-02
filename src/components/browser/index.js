@@ -21,12 +21,18 @@ function sortAlphabetical (a, b) {
 
 // Functional component
 export default function Browser (props) {
-  const resources = props.files
-    .sort(sortAlphabetical)
-    .map(file => (
-      <Resource key={file.public_id} data={file} viewmode={props.viewmode} />
-    ))
+  var resources = []
 
+  if (props.files.length > 0) {
+    // Create array of resource components
+    resources = props.files
+      .sort(sortAlphabetical)
+      .map(file => (
+        <Resource key={file.public_id} data={file} viewmode={props.viewmode} />
+      ))
+  }
+
+  // Create a browser view
   const view = props.viewmode === 'list'
     ? <ListView children={resources} />
     : <GridView children={resources} />

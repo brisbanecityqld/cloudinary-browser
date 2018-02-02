@@ -77,3 +77,9 @@
   composes: bgAccent from '../../styles/colours.css';
   composes: corners from '../../styles/ui.css';
 }
+
+/* Handle image loading */
+.imageHidden {
+  position: absolute;
+  opacity: 0;
+}

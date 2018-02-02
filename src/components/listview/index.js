@@ -22,9 +22,13 @@ export default class ListView extends React.Component {
   }
 
   render () {
+    const inner = (this.props.children.length > 0)
+      ? this.props.children
+      : <div className={styles.empty}>There are no resources in this folder.</div>
+
     return <div className={styles.main}>
       <FileHeader onColResize={this.handleColResize} />
-      {this.props.children}
+      <div className={styles.scrollArea}>{inner}</div>
     </div>
   }
 }

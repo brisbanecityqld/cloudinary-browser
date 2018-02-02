@@ -21,7 +21,7 @@ export default function Button (props) {
   if (props.icon) {
     icon = (
       <span className={styles.icon}>
-        <FontAwesomeIcon icon={props.icon}/>
+        <FontAwesomeIcon icon={props.icon} />
       </span>
     )
   }

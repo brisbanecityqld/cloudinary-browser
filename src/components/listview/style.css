@@ -1,4 +1,19 @@
 .main {
+  overflow: hidden;
   grid-template-columns: auto auto 1fr 9rem 16rem auto;
   grid-column-gap: 1.5rem;
+
+  composes: flexItem flexColumn from '../../styles/layout.css';
+}
+
+.scrollArea {
+  overflow-y: auto;
+  grid-template-columns: inherit;
+  grid-column-gap: inherit;
+
+  composes: flexItem from '../../styles/layout.css';
+}
+
+.empty {
+  padding: 1rem;
 }
