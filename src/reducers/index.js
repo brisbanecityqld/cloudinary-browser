@@ -1,7 +1,16 @@
-import actions from '../actions'
+import {
+  SET_VIEW_MODE,
+  SET_CURRENT_ROUTE,
+  ADD_RESOURCES,
+  ADD_FOLDERS,
+  UPDATE_FAVOURITE,
+  MARK_AS_LOADED,
+  UNLOAD_FOLDER,
+  VIEW_MODES
+} from '../actions'
 
 const DEFAULT_STATE = {
-  viewmode: actions.VIEW_MODES.LIST,
+  viewmode: VIEW_MODES.LIST,
   currentRoute: [],
 
   files: [],
@@ -34,7 +43,7 @@ function merge (source, newItems, comparisonKey) {
 // Actions
 const ACTIONS = {
   // Set view mode
-  [actions.SET_VIEW_MODE] (state, data) {
+  [SET_VIEW_MODE] (state, data) {
     return {
       ...state,
       viewmode: data.viewmode
@@ -42,7 +51,7 @@ const ACTIONS = {
   },
 
   // Set the current app route
-  [actions.SET_CURRENT_ROUTE] (state, data) {
+  [SET_CURRENT_ROUTE] (state, data) {
     return {
       ...state,
       currentRoute: data.currentRoute
@@ -50,21 +59,21 @@ const ACTIONS = {
   },
 
   // Add (or overwrite) resources
-  [actions.ADD_RESOURCES] (state, data) {
+  [ADD_RESOURCES] (state, data) {
     return (data.resources.length > 0)
       ? { ...state, files: merge(state.resources, data.resources, 'public_id') }
       : state
   },
 
   // Add (or overwrite) folders
-  [actions.ADD_FOLDERS] (state, data) {
+  [ADD_FOLDERS] (state, data) {
     return (data.folders.length > 0)
       ? { ...state, folders: merge(state.folders, data.folders, 'path') }
       : state
   },
 
   // Add or remove a favourite folder
-  [actions.UPDATE_FAVOURITE] (state, data) {
+  [UPDATE_FAVOURITE] (state, data) {
     const i = state.favourites.findIndex(fav => fav.path === data.path)
 
     // Create updated favourites list
@@ -82,6 +91,43 @@ const ACTIONS = {
 
     // No change
     return state
+  },
+
+  // Adds a folder to the loaded folders array
+  // TODO handle next_cursor
+  [MARK_AS_LOADED] (state, data) {
+    if (state.loadedRoutes.indexOf(data.route) > -1) {
+      return {
+        ...state,
+        loadedRoutes: [
+          ...state.loadedRoutes,
+          data.route
+        ]
+      }
+    }
+
+    // No change
+    return state
+  },
+
+  // Unloads all files and subfolders in a folder
+  [UNLOAD_FOLDER] (state, data) {
+    // Filter out subfolders in folder
+    const folders = state.folders.filter(folder => {
+      return (
+        folder.path.indexOf(data.path) !== 0 &&
+        folder.path.replace(data.path, '').split('/').length !== 1
+      )
+    })
+
+    // Filter out files in folder
+    const files = state.files.filter(file => file.path !== data.path)
+
+    return {
+      ...state,
+      files,
+      folders
+    }
   }
 }
 

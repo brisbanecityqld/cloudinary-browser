@@ -21,26 +21,8 @@ export default class App extends React.Component {
     super(props)
 
     this.state = {
-      viewmode: 'list',
       loading: false,
-      currentRoute: location.splitRoute(this.props.location.pathname),
-
-      files: [],
-      currentFiles: [],
-
-      folders: [],
-      currentFolders: [],
-      favourites: [],
-
-      loadedRoutes: [],
-
       loadError: false
-    }
-
-    // State keys
-    this.storageKeys = {
-      favourites: 'app_state_favourites',
-      viewmode: 'ui_viewmode'
     }
 
     // Cloudinary cloud name
@@ -52,19 +34,8 @@ export default class App extends React.Component {
 
     this.setLoading = this.setLoading.bind(this)
 
-    this.getCurrentFiles = this.getCurrentFiles.bind(this)
-    this.getCurrentFolders = this.getCurrentFolders.bind(this)
-    this.removeRouteItems = this.removeRouteItems.bind(this)
-
     this.loadCurrentFolder = this.loadCurrentFolder.bind(this)
     this.forceReload = this.loadCurrentFolder.bind(this, true)
-    this.markAsLoaded = this.markAsLoaded.bind(this)
-
-    this.addResources = this.addResources.bind(this)
-    this.addFolders = this.addFolders.bind(this)
-
-    this.update = this.update.bind(this)
-    this.updateFavourites = this.updateFavourites.bind(this)
 
     this.handleAPIError = this.handleAPIError.bind(this)
   }
@@ -76,97 +47,9 @@ export default class App extends React.Component {
     })
   }
 
-  // Find all files that belong in current folder
-  getCurrentFiles (array = this.state.files) {
-    const route = location.getAPIPath(this.state.currentRoute)
-    return this.state.files.filter(file => {
-      return file.folder === route
-    })
-  }
-
-  // Find all subfolders that belong in current folder
-  getCurrentFolders (array = this.state.folders) {
-    let route = location.getAPIPath(this.state.currentRoute)
-    if (route !== '') { route += '/' }
-
-    return array.filter(folder => {
-      return folder.path === `${route}${folder.name}`
-    })
-  }
-
-  // Remove all files and subfolders in a folder (for re-download)
-  removeRouteItems (path) {
-    this.setState((prevState, props) => {
-      const newFolders = prevState.folders.filter(folder => {
-        return (
-          folder.path.indexOf(path) !== 0 &&                    // Folders not on path
-          folder.path.replace(path, '').split('/').length !== 1 // Folders in direct subfolder
-        )
-      })
-
-      const newFiles = prevState.files.filter(file => {
-        return file.folder.indexOf(path) !== path
-      })
-
-      return {
-        files: newFiles,
-        folders: newFolders
-      }
-    })
-  }
-
-  // Sets the current files, folders and favourites to pass to children
-  update () {
-    this.setState((prevState, props) => ({
-      currentFiles: this.getCurrentFiles(prevState.files),
-      currentFolders: this.getCurrentFolders(prevState.folders)
-    }))
-  }
-
   // Mark for reload
   setLoading (loading = true) {
     this.setState({ loading })
-  }
-
-  // Adds uploaded images to app state
-  addResources (data) {
-    // TODO: Handle next_cursor value somehow
-
-    // Add resources, while handling merges
-    const resources = data.resources
-    if (resources.length > 0) {
-      this.setState((prevState, props) => {
-        // Create new file list
-        const newFiles = prevState.files.slice()
-
-        for (let res of resources) {
-          const fIndex = newFiles.findIndex(f => f.public_id === res.public_id)
-
-          // Handle either merging or adding the file
-          fIndex === -1
-            ? newFiles.push(res)
-            : Object.assign(newFiles[fIndex], res)
-        }
-
-        // Update state
-        return {
-          files: newFiles
-        }
-      })
-    }
-  }
-
-  // Adds more folders to app state
-  addFolders (data) {
-    const folders = data.folders
-    if (folders.length > 0) {
-      this.setState((prevState, props) => ({
-        folders: [
-          ...prevState.folders.slice(),
-          ...folders
-        ]
-      }))
-    }
   }
 
   // Pulls the current folder from the API
@@ -188,7 +71,6 @@ export default class App extends React.Component {
 
     if (this.state.loadedRoutes.indexOf(routeStr) > -1 && !force) {
       this.setLoading(false)
-      this.update()
     } else {
       try {
         // Download files and subfolders
@@ -203,9 +85,8 @@ export default class App extends React.Component {
         if (!force) { this.markAsLoaded(route) }
 
         // Add files and folders to memory
-        this.addResources(resources)
-        this.addFolders(folders)
-        this.update()
+        // this.addResources(resources)
+        // this.addFolders(folders)
       } catch (error) {
         console.error(error.message)
 
@@ -214,47 +95,6 @@ export default class App extends React.Component {
         this.handleAPIError(error)
       }
     }
-  }
-
-  // Mark a folder as having been loaded into memory already
-  markAsLoaded (routeArray) {
-    const route = location.getRoute(routeArray)
-
-    // Append new path to loaded paths
-    this.setState((prevState, props) => ({
-      loadedRoutes: [
-        ...prevState.loadedRoutes.slice(),
-        route
-      ]
-    }))
-  }
-
-  // Updates favourites list of folders
-  updateFavourites (folder, add = true) {
-    this.setState((prevState, props) => {
-      let newFavourites
-      const favIndex = prevState.favourites.findIndex(fav => fav.path === folder.path)
-
-      if (add && favIndex === -1) {
-        // Add a favourite
-        newFavourites = [
-          ...prevState.favourites.slice(),
-          folder
-        ]
-      } else if (!add && favIndex > -1) {
-        // Remove a favourite
-        newFavourites = [
-          ...prevState.favourites.slice(0, favIndex),
-          ...prevState.favourites.slice(favIndex + 1)
-        ]
-      }
-
-      // Save favourites to localStorage
-      localStorage.setItem(this.storageKeys.favourites, JSON.stringify(newFavourites))
-
-      // Update state
-      return { favourites: newFavourites }
-    })
   }
 
   // Handles some API errors
@@ -274,29 +114,11 @@ export default class App extends React.Component {
   // Used for updating files and folders, and app state
   componentWillMount () {
     this.loadCurrentFolder()
-
-    // Load app state
-    let newState = {}
-    Object.entries(this.storageKeys).forEach(([ key, value ]) => {
-      const saved = localStorage.getItem(value)
-      if (saved) {
-        try {
-          newState[key] = JSON.parse(saved)
-        } catch (e) {
-          console.error(`localStorage item ${value} is corrupt. Deleting...`)
-          localStorage.removeItem(value)
-        }
-      }
-    })
-
-    this.setState(newState)
   }
   componentDidUpdate () {
     // Reset loading error
     if (this.state.loadError) {
-      this.setState({
-        loadError: false
-      })
+      this.setState({ loadError: false })
     }
   }
   componentWillReceiveProps (nextProps) {
@@ -305,10 +127,7 @@ export default class App extends React.Component {
 
     // Mark route update
     if (!match) {
-      // console.log('Route changed from', this.props.location.pathname, 'to', nextProps.location.pathname)
-      this.setState({
-        currentRoute: location.splitRoute(nextProps.location.pathname)
-      }, this.loadCurrentFolder)
+      this.props.updateRoute().then(this.loadCurrentFolder)
     }
   }
 

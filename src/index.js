@@ -1,11 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App from './App'
+import App from './containers/app'
 import { BrowserRouter as Router, withRouter } from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
 
 // Redux
+import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import FileBrowser from './reducers'
 
@@ -51,5 +52,15 @@ Cloudinary.config({ cloud_name: 'rosies' })
 
 const RoutedApp = withRouter(props => <App {...props} />)
 
-ReactDOM.render(<Router><RoutedApp /></Router>, document.getElementById('root'))
+ReactDOM.render(
+  (
+    <Provider store={store}>
+      <Router>
+        <RoutedApp />
+      </Router>
+    </Provider>
+  ),
+  document.getElementById('root')
+)
+
 registerServiceWorker()

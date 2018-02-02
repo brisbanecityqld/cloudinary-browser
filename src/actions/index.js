@@ -2,64 +2,55 @@
  * Action types
  */
 
-const actions = {
-  SET_VIEW_MODE: 'set_view_mode',
-  SET_CURRENT_ROUTE: 'set_current_route',
-  ADD_RESOURCES: 'add_resources',
-  ADD_FOLDERS: 'add_folders',
-  UPDATE_FAVOURITE: 'update_favourites',
-  MARK_AS_LOADED: 'mark_as_loaded'
-}
+export const SET_VIEW_MODE = 'set_view_mode'
+export const SET_CURRENT_ROUTE = 'set_current_route'
+export const ADD_RESOURCES = 'add_resources'
+export const ADD_FOLDERS = 'add_folders'
+export const UPDATE_FAVOURITE = 'update_favourites'
+export const MARK_AS_LOADED = 'mark_as_loaded'
+export const UNLOAD_FOLDER = 'unload_folder'
 
 /**
  * Other constants
  */
 
-const constants = {
-  VIEW_MODES: {
-    LIST: 'list',
-    GRID: 'grid'
-  }
+export const VIEW_MODES = {
+  LIST: 'list',
+  GRID: 'grid'
 }
 
 /**
  * Action creators
  */
 
-const creators = {
-  setViewMode: function (mode) {
-    const viewmode = constants.VIEW_MODES.hasOwnProperty(mode)
-      ? constants.VIEW_MODES[mode]
-      : constants.VIEW_MODES.LIST
+export function setViewMode (mode) {
+  const viewmode = VIEW_MODES.hasOwnProperty(mode)
+    ? VIEW_MODES[mode]
+    : VIEW_MODES.LIST
 
-    return { type: actions.SET_VIEW_MODE, viewmode }
-  },
-
-  setCurrentRoute: function (route) {
-    return { type: actions.SET_CURRENT_ROUTE, route }
-  },
-
-  addResources: function (resources) {
-    return { type: actions.ADD_RESOURCES, resources }
-  },
-
-  addFolders: function (folders) {
-    return { type: actions.ADD_FOLDERS, folders }
-  },
-
-  updateFavourite: function (favourite, add = true) {
-    return { type: actions.UPDATE_FAVOURITE, favourite, add }
-  },
-
-  markAsLoaded: function (folder, nextCursor = null) {
-    return { type: actions.MARK_AS_LOADED, folder, nextCursor }
-  }
+  return { type: SET_VIEW_MODE, viewmode }
 }
 
+export function setCurrentRoute (route) {
+  return { type: SET_CURRENT_ROUTE, route }
+}
 
-// Export everything
-export default {
-  ...actions,
-  ...constants,
-  ...creators
+export function addResources (resources) {
+  return { type: ADD_RESOURCES, resources }
+}
+
+export function addFolders (folders) {
+  return { type: ADD_FOLDERS, folders }
+}
+
+export function updateFavourite (path, add = true) {
+  return { type: UPDATE_FAVOURITE, path, add }
+}
+
+export function markAsLoaded (path, nextCursor = null) {
+  return { type: MARK_AS_LOADED, path, nextCursor }
+}
+
+export function unloadFolder (path) {
+  return { type: UNLOAD_FOLDER, path }
 }
