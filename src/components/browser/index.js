@@ -32,10 +32,15 @@ export default function Browser (props) {
       ))
   }
 
+  const childProps = {
+    children: resources,
+    onScrollToBottom: props.onScrollToBottom
+  }
+
   // Create a browser view
   const view = props.viewmode === 'list'
-    ? <ListView children={resources} />
-    : <GridView children={resources} />
+    ? <ListView { ...childProps } />
+    : <GridView { ...childProps } />
 
   return (
     <div className={styles.main}>{view}</div>

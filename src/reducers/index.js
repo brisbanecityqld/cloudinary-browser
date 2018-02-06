@@ -97,21 +97,27 @@ const ACTIONS = {
     return state
   },
 
-  // Adds a folder to the loaded folders array
-  // TODO handle next_cursor
+  // Adds a folder to the loaded folders array,
+  // or updates a folder's nextCursor value
   [MARK_AS_LOADED] (state, action) {
-    if (state.loadedRoutes.indexOf(action.route) === -1) {
-      return {
-        ...state,
-        loadedRoutes: [
-          ...state.loadedRoutes,
-          action.route
-        ]
-      }
+    const newRoutes = state.loadedRoutes.slice()
+    const i = state.loadedRoutes.findIndex(route => route.path === action.path)
+
+    if (i === -1) {
+      // Add new route
+      newRoutes.push({
+        path: action.path,
+        nextCursor: action.nextCursor
+      })
+    } else {
+      // Update existing route
+      newRoutes[i].nextCursor = action.nextCursor
     }
 
-    // No change
-    return state
+    return {
+      ...state,
+      loadedRoutes: newRoutes
+    }
   },
 
   // Unloads all files and subfolders in a folder
@@ -131,6 +137,9 @@ const ACTIONS = {
 
     // Filter out files in folder
     const files = state.files.filter(file => file.folder !== action.path)
+
+    // Remove from loaded routes
+    // const loadedRoutes = state.loadedRoutes.filter(route => route.path !== action.path)
 
     return {
       ...state,

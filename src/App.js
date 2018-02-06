@@ -33,6 +33,9 @@ export default class App extends React.Component {
     this.saveAppState = this.saveAppState.bind(this)
     this.setLoading = this.setLoading.bind(this)
     this.loadFolder = this.loadFolder.bind(this)
+    this.loadMore = this.loadMore.bind(this)
+
+    this.getRouteObject = this.getRouteObject.bind(this)
 
     this.handleAPIError = this.handleAPIError.bind(this)
   }
@@ -49,49 +52,72 @@ export default class App extends React.Component {
     this.setState({ loading })
   }
 
+  getRouteObject (path) {
+    return this.props.loadedRoutes.find(item => item.path === path)
+  }
+
   // Pulls the current folder from the API
   async loadFolder (route, force = false) {
     // Update route in store
     this.props.updateRoute(route)
-
-    // Show loading indicator
-    this.setLoading()
 
     // If forced, remove all currently downloaded files & subfolders
     if (force) {
       this.props.unloadFolder(route)
     }
 
-    // Is this folder already downloaded?
-    const nextCursor = (this.props.loadedRoutes.hasOwnProperty(route))
-      ? this.state.loadedRoutes[route]
-      : null
+    const path = location.getAPIPath(route)
+    const loaded = this.getRouteObject(path) !== undefined
 
-    if (this.props.loadedRoutes.indexOf(route) > -1 && !force) {
-      this.setLoading(false)
-    } else {
+    // Route not yet loaded
+    if (!loaded || force) {
+      this.setLoading()
+
       try {
-        // Download files and subfolders
-        const path = location.getAPIPath(route)
         const [ resources, folders ] = await Promise.all([
           api.getResources(path),
           api.getFolders(path)
         ])
 
-        // Hide loading indicator
-        this.setLoading(false)
-        if (!force) { this.props.markAsLoaded(route) }
-
-        // Add files and folders to memory
-        this.props.addResources(resources)
+        // Add folders and resources to store
         this.props.addFolders(folders)
-      } catch (error) {
-        console.error(error.message)
+        this.props.addResources(resources)
 
-        // Hide loading indicator and handle error
-        this.setLoading(false)
-        this.handleAPIError(error)
+        this.props.markAsLoaded(path, resources.next_cursor)
+      } catch (e) {
+        // Handle load errors
+        console.error(e)
+        this.handleAPIError(e)
       }
+
+      this.setLoading(false)
+    }
+  }
+
+  // Loads more resources for a given folder, if there are any
+  async loadMore (route) {
+    const path = location.getAPIPath(route)
+    const thisRoute = this.getRouteObject(path)
+
+    // Silently fail if the route isn't already loaded
+    if (!thisRoute) { return }
+
+    if (thisRoute.nextCursor !== null) {
+      this.setLoading()
+
+      try {
+        const resources = await api.getResources(path, thisRoute.nextCursor)
+        this.props.addResources(resources)
+
+        // Update nextCursor
+        this.props.markAsLoaded(path, resources.next_cursor)
+      } catch (e) {
+        // Handle load errors
+        console.error(e)
+        this.handleAPIError(e)
+      }
+
+      this.setLoading(false)
     }
   }
 
@@ -120,10 +146,17 @@ export default class App extends React.Component {
     }
   }
   componentWillReceiveProps (nextProps) {
-    // Update if we need to.
+    // Update if we need to
     if (!location.matches(this.props.location.pathname, nextProps.location.pathname)) {
       this.loadFolder(nextProps.location.pathname)
     }
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    // Probably a veeeery bad idea
+    return (this.state.loading)
+      ? !nextState.loading
+      : true
   }
 
   render() {
@@ -133,7 +166,15 @@ export default class App extends React.Component {
       return <Redirect to="/browse" />
     }
 
-    const path = location.getAPIPath(this.props.location.pathname)
+    const route = this.props.location.pathname
+    const path = location.getAPIPath(route)
+    const thisRoute = this.getRouteObject(path)
+
+    const browser = () => (
+      <Browser onScrollToBottom={() => this.loadMore(path)}
+               canLoadMore={thisRoute && thisRoute.nextCursor !== null} />
+    )
+
     const title = (path === '' ? 'Browse' : path) + this.TITLE_SUFFIX
 
     // Folders loaded
@@ -145,7 +186,7 @@ export default class App extends React.Component {
           reload={() => this.loadFolder(this.props.location.pathname, true)} />
         {this.state.loading ? (<Spinner />) : null}
         <Switch>
-          <Route path="/browse" component={Browser} />
+          <Route path="/browse" component={browser} />
           <Route path="/view" component={Viewer} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>

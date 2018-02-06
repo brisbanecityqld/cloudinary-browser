@@ -53,6 +53,7 @@ app.get('/resources', (req, res) => {
   const search = new Cloudinary.v2.search()
     .expression(expression)
     .max_results(max_results)
+    .sort_by('public_id', 'asc') //TODO: custom sorting
     .with_field('tags');
 
   // For requesting next page of results

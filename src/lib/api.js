@@ -54,9 +54,14 @@ function getFolders (path) {
 }
 
 // Endpoint: list all files in a directory
-function getResources (path) {
+function getResources (path, nextCursor = null) {
   const max_results = 50
-  const url = URL('/resources', { path, max_results })
+  const options = { path, max_results }
+  if (nextCursor) {
+    options.next_cursor = nextCursor
+  }
+
+  const url = URL('/resources', options)
   return respond(url)
 }
 

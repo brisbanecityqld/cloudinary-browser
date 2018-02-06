@@ -14,7 +14,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     updateRoute: route => dispatch(setCurrentRoute(route)),
-    markAsLoaded: route => dispatch(markAsLoaded(route)),
+    markAsLoaded: (path, nextCursor) => dispatch(markAsLoaded(path, nextCursor)),
     addResources: files => dispatch(addResources(files)),
     addFolders: folders => dispatch(addFolders(folders)),
     unloadFolder: route => dispatch(unloadFolder(location.getAPIPath(route)))
