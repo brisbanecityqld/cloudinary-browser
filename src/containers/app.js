@@ -1,17 +1,29 @@
 import { connect } from 'react-redux'
-import { setCurrentRoute } from '../actions'
+import { setCurrentRoute, markAsLoaded, addResources, addFolders, unloadFolder } from '../actions'
 import App from '../App.js'
 
-import location from '../lib/location.js'
+import { location } from '../lib'
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapStateToProps = state => {
   return {
-    updateRoute: () => {
-      const newRoute = location.splitRoute(ownProps.location.pathname)
-      return dispatch(setCurrentRoute(newRoute))
-    }
+    route: state.currentRoute,
+    loadedRoutes: state.loadedRoutes
   }
 }
 
-const WrappedApp = connect(null, mapDispatchToProps)(App)
+const mapDispatchToProps = dispatch => {
+  return {
+    updateRoute: route => dispatch(setCurrentRoute(route)),
+    markAsLoaded: route => dispatch(markAsLoaded(route)),
+    addResources: files => dispatch(addResources(files)),
+    addFolders: folders => dispatch(addFolders(folders)),
+    unloadFolder: route => dispatch(unloadFolder(location.getAPIPath(route)))
+  }
+}
+
+const WrappedApp = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
+
 export default WrappedApp

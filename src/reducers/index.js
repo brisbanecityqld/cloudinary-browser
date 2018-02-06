@@ -11,13 +11,15 @@ import {
 
 const DEFAULT_STATE = {
   viewmode: VIEW_MODES.LIST,
-  currentRoute: [],
+  currentRoute: window.location.pathname,
 
   files: [],
   folders: [],
   favourites: [],
 
-  loadedRoutes: []
+  loadedRoutes: [],
+
+  cloudName: 'rosies'
 }
 
 // Helpers
@@ -43,46 +45,48 @@ function merge (source, newItems, comparisonKey) {
 // Actions
 const ACTIONS = {
   // Set view mode
-  [SET_VIEW_MODE] (state, data) {
+  [SET_VIEW_MODE] (state, action) {
     return {
       ...state,
-      viewmode: data.viewmode
+      viewmode: action.viewmode
     }
   },
 
   // Set the current app route
-  [SET_CURRENT_ROUTE] (state, data) {
+  [SET_CURRENT_ROUTE] (state, action) {
     return {
       ...state,
-      currentRoute: data.currentRoute
+      currentRoute: action.route
     }
   },
 
   // Add (or overwrite) resources
-  [ADD_RESOURCES] (state, data) {
-    return (data.resources.length > 0)
-      ? { ...state, files: merge(state.resources, data.resources, 'public_id') }
+  [ADD_RESOURCES] (state, action) {
+    const files = action.payload.resources
+    return (files.length > 0)
+      ? { ...state, files: merge(state.files, files, 'public_id') }
       : state
   },
 
   // Add (or overwrite) folders
-  [ADD_FOLDERS] (state, data) {
-    return (data.folders.length > 0)
-      ? { ...state, folders: merge(state.folders, data.folders, 'path') }
+  [ADD_FOLDERS] (state, action) {
+    const folders = action.payload.folders
+    return (folders.length > 0)
+      ? { ...state, folders: merge(state.folders, folders, 'path') }
       : state
   },
 
   // Add or remove a favourite folder
-  [UPDATE_FAVOURITE] (state, data) {
-    const i = state.favourites.findIndex(fav => fav.path === data.path)
+  [UPDATE_FAVOURITE] (state, action) {
+    const i = state.favourites.findIndex(fav => fav.path === action.path)
 
     // Create updated favourites list
-    if (data.add && i === -1) {
+    if (action.add && i === -1) {
       return {
         ...state,
-        favourites: [ ...state.favourites.slice(), data.path ]
+        favourites: [ ...state.favourites.slice(), action.path ]
       }
-    } else if (!data.add && i > -1) {
+    } else if (!action.add && i > -1) {
       return {
         ...state,
         favourites: [ ...state.favourites.slice(0, i), ...state.favourites.slice(i + 1) ]
@@ -95,13 +99,13 @@ const ACTIONS = {
 
   // Adds a folder to the loaded folders array
   // TODO handle next_cursor
-  [MARK_AS_LOADED] (state, data) {
-    if (state.loadedRoutes.indexOf(data.route) > -1) {
+  [MARK_AS_LOADED] (state, action) {
+    if (state.loadedRoutes.indexOf(action.route) === -1) {
       return {
         ...state,
         loadedRoutes: [
           ...state.loadedRoutes,
-          data.route
+          action.route
         ]
       }
     }
@@ -111,17 +115,22 @@ const ACTIONS = {
   },
 
   // Unloads all files and subfolders in a folder
-  [UNLOAD_FOLDER] (state, data) {
+  [UNLOAD_FOLDER] (state, action) {
     // Filter out subfolders in folder
     const folders = state.folders.filter(folder => {
-      return (
-        folder.path.indexOf(data.path) !== 0 &&
-        folder.path.replace(data.path, '').split('/').length !== 1
-      )
+      return (folder.path.indexOf(action.path) === -1)
+        // Allow folders not on path
+        ? true
+        // Handle folders on path
+        : (action.path === '')
+        // Allow subfolders of base folder
+        ? (folder.path.indexOf('/') > -1)
+        // Allow subfolders
+        : (folder.path.replace(action.path, '').split('/').length > 2)
     })
 
     // Filter out files in folder
-    const files = state.files.filter(file => file.path !== data.path)
+    const files = state.files.filter(file => file.folder !== action.path)
 
     return {
       ...state,

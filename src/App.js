@@ -5,10 +5,10 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import DocumentTitle from 'react-document-title'
 
 import Header from './components/header'
-import FolderTree from './components/foldertree'
-import Browser from './components/browser'
 import Viewer from './components/viewer'
 import Spinner from './components/spinner'
+
+import Browser from './containers/browser'
 
 // Libraries
 import { api, location } from './lib'
@@ -31,11 +31,8 @@ export default class App extends React.Component {
 
     // Method bindings
     this.saveAppState = this.saveAppState.bind(this)
-
     this.setLoading = this.setLoading.bind(this)
-
-    this.loadCurrentFolder = this.loadCurrentFolder.bind(this)
-    this.forceReload = this.loadCurrentFolder.bind(this, true)
+    this.loadFolder = this.loadFolder.bind(this)
 
     this.handleAPIError = this.handleAPIError.bind(this)
   }
@@ -53,23 +50,24 @@ export default class App extends React.Component {
   }
 
   // Pulls the current folder from the API
-  async loadCurrentFolder (force = false) {
-    this.setLoading()
+  async loadFolder (route, force = false) {
+    // Update route in store
+    this.props.updateRoute(route)
 
-    const route = this.state.currentRoute
-    const routeStr = location.getRoute(route)
+    // Show loading indicator
+    this.setLoading()
 
     // If forced, remove all currently downloaded files & subfolders
     if (force) {
-      this.removeRouteItems(routeStr)
+      this.props.unloadFolder(route)
     }
 
     // Is this folder already downloaded?
-    const nextCursor = (this.state.loadedRoutes.hasOwnProperty(routeStr))
-      ? this.state.loadedRoutes[routeStr]
+    const nextCursor = (this.props.loadedRoutes.hasOwnProperty(route))
+      ? this.state.loadedRoutes[route]
       : null
 
-    if (this.state.loadedRoutes.indexOf(routeStr) > -1 && !force) {
+    if (this.props.loadedRoutes.indexOf(route) > -1 && !force) {
       this.setLoading(false)
     } else {
       try {
@@ -82,11 +80,11 @@ export default class App extends React.Component {
 
         // Hide loading indicator
         this.setLoading(false)
-        if (!force) { this.markAsLoaded(route) }
+        if (!force) { this.props.markAsLoaded(route) }
 
         // Add files and folders to memory
-        // this.addResources(resources)
-        // this.addFolders(folders)
+        this.props.addResources(resources)
+        this.props.addFolders(folders)
       } catch (error) {
         console.error(error.message)
 
@@ -113,7 +111,7 @@ export default class App extends React.Component {
   // Lifecycle hooks
   // Used for updating files and folders, and app state
   componentWillMount () {
-    this.loadCurrentFolder()
+    this.loadFolder(this.props.location.pathname)
   }
   componentDidUpdate () {
     // Reset loading error
@@ -122,12 +120,9 @@ export default class App extends React.Component {
     }
   }
   componentWillReceiveProps (nextProps) {
-    // Check if moving to a new folder
-    const match = location.matches(this.props.location.pathname, nextProps.location.pathname)
-
-    // Mark route update
-    if (!match) {
-      this.props.updateRoute().then(this.loadCurrentFolder)
+    // Update if we need to.
+    if (!location.matches(this.props.location.pathname, nextProps.location.pathname)) {
+      this.loadFolder(nextProps.location.pathname)
     }
   }
 
@@ -138,46 +133,19 @@ export default class App extends React.Component {
       return <Redirect to="/browse" />
     }
 
-    const RoutedBrowser = props => {
-      // Define props to inject
-      const moreProps = {
-        ...props,
-        cloudName: this.CLOUD_NAME,
-        route: this.state.currentRoute,
-        loading: this.state.loading
-      }
-
-      // Return app inner structure
-      return (
-        <div className={styles.content}>
-          <FolderTree
-            folders={this.state.currentFolders}
-            favourites={this.state.favourites}
-            updateFavourites={this.updateFavourites}
-            {...moreProps}
-          />
-          <Browser
-            files={this.state.currentFiles}
-            viewmode={this.state.viewmode}
-            {...moreProps}
-          />
-        </div>
-      )
-    }
-
-    const route = location.getAPIPath(this.state.currentRoute)
-    const title = (route === '' ? 'Browse' : route) + this.TITLE_SUFFIX
+    const path = location.getAPIPath(this.props.location.pathname)
+    const title = (path === '' ? 'Browse' : path) + this.TITLE_SUFFIX
 
     // Folders loaded
     return (
       <div className={styles.main}>
         <DocumentTitle title={title} />
         <Header
-          route={this.state.currentRoute}
-          reload={this.forceReload} />
+          route={this.props.location.pathname}
+          reload={() => this.loadFolder(this.props.location.pathname, true)} />
         {this.state.loading ? (<Spinner />) : null}
         <Switch>
-          <Route path="/browse" component={RoutedBrowser} />
+          <Route path="/browse" component={Browser} />
           <Route path="/view" component={Viewer} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>

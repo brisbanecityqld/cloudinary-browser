@@ -35,20 +35,20 @@ export function setCurrentRoute (route) {
   return { type: SET_CURRENT_ROUTE, route }
 }
 
-export function addResources (resources) {
-  return { type: ADD_RESOURCES, resources }
+export function addResources (payload) {
+  return { type: ADD_RESOURCES, payload }
 }
 
-export function addFolders (folders) {
-  return { type: ADD_FOLDERS, folders }
+export function addFolders (payload) {
+  return { type: ADD_FOLDERS, payload }
 }
 
 export function updateFavourite (path, add = true) {
   return { type: UPDATE_FAVOURITE, path, add }
 }
 
-export function markAsLoaded (path, nextCursor = null) {
-  return { type: MARK_AS_LOADED, path, nextCursor }
+export function markAsLoaded (route, nextCursor = null) {
+  return { type: MARK_AS_LOADED, route, nextCursor }
 }
 
 export function unloadFolder (path) {

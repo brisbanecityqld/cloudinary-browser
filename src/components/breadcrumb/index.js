@@ -42,7 +42,7 @@ export default class Breadcrumb extends React.Component {
     // Create breadcrumb HTML
     const trail = []
 
-    const route = this.props.route
+    const route = location.splitRoute(this.props.route)
     const len = route.length
 
     if (route[0] === BROWSE_BASE) {
@@ -72,8 +72,8 @@ export default class Breadcrumb extends React.Component {
     }
   }
 
-  componentWillReceiveProps (newProps) {
-    if (!location.matches(this.props.route, newProps.route)) {
+  componentWillReceiveProps (nextProps) {
+    if (!location.matches(this.props.route, nextProps.route)) {
       this.setState({
         needsUpdate: true,
         truncate: false
