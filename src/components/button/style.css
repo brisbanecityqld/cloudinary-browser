@@ -1,8 +1,8 @@
 .base {
-  padding: .5rem;
+  padding: .5em;
   cursor: pointer;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.25em;
+  height: 2.25em;
 
   composes: corners from '../../styles/ui.css';
   composes: fast from '../../styles/transitions.css';
@@ -32,14 +32,14 @@
 }
 
 .label {
-  padding-left: .5rem;
-  font-size: 1rem;
-  line-height: 1.2rem;
+  padding-left: .5em;
+  font-size: 1em;
+  line-height: 1.2em;
   pointer-events: none;
 }
 
 .icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.25em;
+  height: 1.25em;
   pointer-events: none;
 }

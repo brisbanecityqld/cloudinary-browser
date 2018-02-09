@@ -1,14 +1,13 @@
 .list {
   overflow: hidden;
-  grid-template-columns: auto auto 40rem 9rem 16rem auto 1fr;
-  grid-column-gap: 1.5rem;
+  grid-template-columns: auto auto 1fr 9em 16em auto;
+  grid-column-gap: 1.5em;
 
   composes: flexItem flexColumn from '../../styles/layout.css';
 }
 
 .grid {
-  overflow-y: auto;
-
+  overflow: hidden;
   composes: flexItem from '../../styles/layout.css';
 }
 
@@ -20,20 +19,22 @@
 }
 
 .grid .scrollArea {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin: 1rem;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 2em;
+  padding: 2em;
+  height: 100%;
+  overflow-y: auto;
+  justify-items: center;
 }
 
 .empty {
-  padding: 1rem;
+  padding: 1em;
 }
 
 .loadMore {
   width: 100%;
-  height: 3rem;
-  line-height: 3rem;
+  height: 3em;
+  line-height: 3em;
   text-align: center;
 }

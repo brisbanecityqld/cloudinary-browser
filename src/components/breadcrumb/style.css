@@ -1,5 +1,5 @@
 .main {
-  padding-right: 1rem;
+  padding-right: 1em;
   composes: flexItem from '../../styles/layout.css';
 }
 
@@ -22,5 +22,5 @@
 }
 
 .separator {
-  margin: 0 .75rem;
+  margin: 0 .75em;
 }

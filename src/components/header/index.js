@@ -21,8 +21,8 @@ export default function Header (props) {
       <div className={styles.icon}><img src={BCC_logo} alt="logo" /></div>
       <Breadcrumb route={props.route} />
       <Search />
-      <Button icon="image" className={styles.button} onClick={() => props.setViewMode(VIEW_MODES.GRID)} />
       <Button icon="list" className={styles.button} onClick={() => props.setViewMode(VIEW_MODES.LIST)} />
+      <Button icon="image" className={styles.button} onClick={() => props.setViewMode(VIEW_MODES.GRID)} />
       <Button icon="sync-alt" className={styles.button} onClick={props.reload} />
     </header>
   )

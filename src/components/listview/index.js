@@ -41,6 +41,8 @@ export default class ListView extends React.Component {
   handleScrollEnd (event) {
     const target = event.target
 
+    console.log(target.scrollTop,'out of',target.scrollTopMax)
+
     // Handle scrolling to bottom of container
     if (
       target.scrollTop &&

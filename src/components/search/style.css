@@ -1,5 +1,5 @@
 .main {
-  width: 16rem;
+  width: 16em;
   position: relative;
 
   composes: flexCenter from '../../styles/layout.css';
@@ -8,11 +8,11 @@
 .input {
   flex: auto;
   border: none;
-  height: 2.25rem;
-  line-height: 2.25rem;
-  padding: 0 2.25rem 0 .6rem;
+  height: 2.25em;
+  line-height: 2.25em;
+  padding: 0 2.25em 0 .6em;
   background-color: white;
-  font-size: 1rem;
+  font-size: 1em;
 
   composes: textGrey from '../../styles/colours.css';
   composes: roundedCorners from '../../styles/layout.css';

@@ -22,28 +22,69 @@ export default class App extends React.Component {
 
     this.state = {
       loading: false,
-      loadError: false
+      loadError: false,
+
+      uiSizes: {
+        folderTree: 300,
+        browser: window.innerWidth - 300
+      },
+
+      windowSize: {
+        width: window.innerWidth,
+        height: window.innerHeight
+      }
     }
 
     // Cloudinary cloud name
     this.CLOUD_NAME = 'rosies'
     this.TITLE_SUFFIX = ' | BCC Image Browser'
 
+    this.storageKeys = {
+      'ui_column_widths': 'uiSizes'
+    }
+
     // Method bindings
+    this.saveAppKey = this.saveAppKey.bind(this)
     this.saveAppState = this.saveAppState.bind(this)
+    this.loadAppState = this.loadAppState.bind(this)
+
     this.setLoading = this.setLoading.bind(this)
     this.loadFolder = this.loadFolder.bind(this)
     this.loadMore = this.loadMore.bind(this)
+
+    // Handle UI resizing
+    this.handleWindowResize = this.handleWindowResize.bind(this)
+    this.handleFoldersResize = this.handleFoldersResize.bind(this)
+    this.handleFoldersResizeEnd = this.handleFoldersResizeEnd.bind(this)
 
     this.getRouteObject = this.getRouteObject.bind(this)
 
     this.handleAPIError = this.handleAPIError.bind(this)
   }
 
+  // Save a specific app key
+  saveAppKey (key) {
+    localStorage.setItem(key, JSON.stringify(this.state[this.storageKeys[key]]))
+  }
+
+  // Save select parts of app state to localStorage
   saveAppState () {
-    // Save select parts of app state to localStorage
+    Object.keys(this.storageKeys).forEach(key => this.saveAppKey)
+  }
+
+  loadAppState () {
     Object.entries(this.storageKeys).forEach(([ key, value ]) => {
-      localStorage.setItem(key, JSON.stringify(this.state[value]))
+      const val = localStorage.getItem(key)
+      if (val) {
+        try {
+          this.setState({
+            value: JSON.parse(val)
+          })
+        } catch (e) {
+          console.log(`Error parsing stored key ${key}, deleting...`)
+          localStorage.removeItem(key)
+        }
+      }
     })
   }
 
@@ -54,6 +95,29 @@ export default class App extends React.Component {
 
   getRouteObject (path) {
     return this.props.loadedRoutes.find(item => item.path === path)
+  }
+
+  // UI resizing
+  handleWindowResize () {
+    this.setState({
+      windowSize: {
+        width: window.innerWidth,
+        height: window.innerHeight
+      }
+    })
+  }
+  handleFoldersResize (newSize) {
+    this.setState((prevState, props) => {
+      return {
+        uiSizes: {
+          folderTree: newSize,
+          browser: prevState.windowSize.width - newSize
+        }
+      }
+    })
+  }
+  handleFoldersResizeEnd () {
+    this.saveAppKey(this.storageKeys.ui_column_widths)
   }
 
   // Pulls the current folder from the API
@@ -137,7 +201,12 @@ export default class App extends React.Component {
   // Lifecycle hooks
   // Used for updating files and folders, and app state
   componentWillMount () {
+    this.loadAppState()
     this.loadFolder(this.props.location.pathname)
+  }
+  componentDidMount () {
+    // Bind resize listeners
+    window.addEventListener('resize', this.handleWindowResize)
   }
   componentDidUpdate () {
     // Reset loading error
@@ -159,10 +228,13 @@ export default class App extends React.Component {
       : true
   }
 
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.handleWindowResize)
+  }
+
   render() {
-    // Handle load error
+    // Handle load error - redirect to /browse root
     if (this.state.loadError) {
-      // Redirect home
       return <Redirect to="/browse" />
     }
 
@@ -172,7 +244,10 @@ export default class App extends React.Component {
 
     const browser = () => (
       <Browser onScrollToBottom={() => this.loadMore(path)}
-               canLoadMore={thisRoute && thisRoute.nextCursor !== null} />
+               canLoadMore={thisRoute && thisRoute.nextCursor !== null}
+               uiSizes={this.state.uiSizes}
+               onFoldersResize={this.handleFoldersResize}
+               onFoldersResizeEnd={this.handleFoldersResizeEnd} />
     )
 
     const title = (path === '' ? 'Browse' : path) + this.TITLE_SUFFIX

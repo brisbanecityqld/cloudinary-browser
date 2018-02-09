@@ -13,10 +13,9 @@ const toPx = n => `${n}px`
 export default class FolderTree extends React.Component {
   constructor (props) {
     super (props)
+    console.dir(props)
 
     this.state = {
-      baseWidth: 300,
-      width: 300,
       tabs: [
         { name: 'Folders', active: true },
         { name: 'Favourites', active: false }

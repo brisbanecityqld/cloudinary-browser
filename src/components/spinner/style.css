@@ -9,17 +9,17 @@
 
 .main {
   margin: auto auto;
-  width: 4.5rem;
-  height: 1rem;
+  width: 4.5em;
+  height: 1em;
   text-align: center;
 
   composes: positioning;
 }
 
 .dot {
-  width: 1rem;
-  height: 1rem;
-  margin: 0 .25rem;
+  width: 1em;
+  height: 1em;
+  margin: 0 .25em;
   border-radius: 50%;
   display: inline-block;
   animation: bounce 1.4s infinite ease-in-out both;

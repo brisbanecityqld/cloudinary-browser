@@ -4,8 +4,8 @@
   flex-basis: 300px;
   margin-right: 1px;
 
-  min-width: 8rem;
-  max-width: 35rem;
+  min-width: 8em;
+  max-width: 35em;
 
   composes: bgLightGrey from '../../styles/colours.css'
 }
@@ -17,5 +17,5 @@
 }
 
 .message {
-  padding: 1rem;
+  padding: 1em;
 }

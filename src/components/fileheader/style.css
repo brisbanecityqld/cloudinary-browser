@@ -1,6 +1,6 @@
 .main {
-  height: 3rem;
-  padding: 0 .75rem 0 1.5rem;
+  height: 3em;
+  padding: 0 .75em 0 1.5em;
   grid-template-columns: inherit;
   grid-column-gap: inherit;
 
@@ -9,15 +9,15 @@
 }
 
 .checkbox > div {
-  width: 1rem;
-  height: 1rem;
-  border-radius: .2rem;
+  width: 1em;
+  height: 1em;
+  border-radius: .2em;
   border: 2px solid #333;
   cursor: pointer;
 }
 
 .image {
-  width: 3rem;
+  width: 3em;
 }
 
 .checkbox { grid-column: 1 / 2; }
