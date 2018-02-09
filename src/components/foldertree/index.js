@@ -102,7 +102,7 @@ export default class FolderTree extends React.Component {
 
   render () {
     const inline = {
-      width: toPx(this.state.width)
+      flexBasis: toPx(this.state.width)
     }
 
     const folders = this.makeFolders(this.props.folders)

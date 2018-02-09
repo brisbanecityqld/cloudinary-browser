@@ -183,6 +183,7 @@ export default class App extends React.Component {
         <DocumentTitle title={title} />
         <Header
           route={this.props.location.pathname}
+          setViewMode={this.props.setViewMode}
           reload={() => this.loadFolder(this.props.location.pathname, true)} />
         {this.state.loading ? (<Spinner />) : null}
         <Switch>

@@ -1,8 +1,7 @@
 import React from 'react'
 
 // Components
-import ListView from '../listview'
-import GridView from '../gridview'
+import FileView from '../listview'
 import Resource from '../resource'
 
 // Styles
@@ -33,16 +32,15 @@ export default function Browser (props) {
   }
 
   const childProps = {
+    viewmode: props.viewmode,
     children: resources,
-    onScrollToBottom: props.onScrollToBottom
+    onScrollToBottom: props.onScrollToBottom,
+    canLoadMore: props.nextCursor !== null
   }
 
-  // Create a browser view
-  const view = props.viewmode === 'list'
-    ? <ListView { ...childProps } />
-    : <GridView { ...childProps } />
-
   return (
-    <div className={styles.main}>{view}</div>
+    <div className={styles.main}>
+      <FileView { ...childProps } />
+    </div>
   )
 }

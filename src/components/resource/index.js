@@ -4,6 +4,9 @@ import React from 'react'
 import Cloudinary from 'cloudinary'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
+// Actions
+import { VIEW_MODES } from '../../actions'
+
 // Styles
 import styles from './style.css'
 
@@ -32,7 +35,7 @@ export default class File extends React.Component {
     const filename = data.filename + '.' + data.format
 
     // Get file URL
-    const url = Cloudinary.url(data.public_id, { width: 48, height: 36, crop: 'fill' })
+    const url = Cloudinary.url(data.public_id, { width: 240, height: 180, crop: 'fill' })
 
     const [,year,month,day,time] = this.dateRegex.exec(data.uploaded_at)
     const uploaded = `${day}/${month}/${year} ${time}`
@@ -57,7 +60,7 @@ export default class File extends React.Component {
   }
 
   render () {
-    const style = this.props.viewmode === 'list'
+    const style = this.props.viewmode === VIEW_MODES.LIST
       ? styles.list
       : styles.grid
 
@@ -78,6 +81,7 @@ export default class File extends React.Component {
                alt={filename} />
           <FontAwesomeIcon icon="image" />
         </div>
+        {}
         <div className={styles.title}>{filename}</div>
         <div className={styles.upload}>{uploaded}</div>
         <div className={styles.tags}>{tags}</div>

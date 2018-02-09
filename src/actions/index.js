@@ -23,11 +23,7 @@ export const VIEW_MODES = {
  * Action creators
  */
 
-export function setViewMode (mode) {
-  const viewmode = VIEW_MODES.hasOwnProperty(mode)
-    ? VIEW_MODES[mode]
-    : VIEW_MODES.LIST
-
+export function setViewMode (viewmode) {
   return { type: SET_VIEW_MODE, viewmode }
 }
 

@@ -5,6 +5,7 @@ const getCurrentRoute = state => location.getAPIPath(state.currentRoute)
 const getResources = state => state.files
 const getFolders = state => state.folders
 const getFavouritePaths = state => state.favourites
+const getLoadedRoutes = state => state.loadedRoutes
 
 // Get all files in current folder
 export const getCurrentFiles = createSelector(
@@ -24,4 +25,14 @@ export const getCurrentFolders = createSelector(
 export const getFavourites = createSelector(
   [ getFolders, getFavouritePaths ],
   (folders, paths) => folders.filter(f => paths.indexOf(f.path) > -1)
+)
+
+export const getNextCursor = createSelector(
+  [ getCurrentRoute, getLoadedRoutes ],
+  (path, routes) => {
+    const current = routes.find(route => route.path === path)
+    return current
+      ? current.nextCursor
+      : null
+  }
 )

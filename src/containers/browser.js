@@ -5,7 +5,7 @@ import FolderTree from '../components/foldertree'
 import Browser from '../components/browser'
 
 // Selectors
-import { getCurrentFiles, getCurrentFolders, getFavourites } from '../selectors'
+import { getCurrentFiles, getCurrentFolders, getFavourites, getNextCursor } from '../selectors'
 
 // Styles
 import styles from '../App.css'
@@ -15,7 +15,8 @@ const mapStateToProps = (state) => {
     viewmode: state.viewmode,
     files: getCurrentFiles(state),
     folders: getCurrentFolders(state),
-    favourites: getFavourites(state)
+    favourites: getFavourites(state),
+    nextCursor: getNextCursor(state)
   }
 }
 

@@ -1,6 +1,14 @@
 import { connect } from 'react-redux'
-import { setCurrentRoute, markAsLoaded, addResources, addFolders, unloadFolder } from '../actions'
 import App from '../App.js'
+
+import {
+  setViewMode,
+  setCurrentRoute,
+  markAsLoaded,
+  addResources,
+  addFolders,
+  unloadFolder
+} from '../actions'
 
 import { location } from '../lib'
 
@@ -13,6 +21,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    setViewMode: mode => dispatch(setViewMode(mode)),
     updateRoute: route => dispatch(setCurrentRoute(route)),
     markAsLoaded: (path, nextCursor) => dispatch(markAsLoaded(path, nextCursor)),
     addResources: files => dispatch(addResources(files)),

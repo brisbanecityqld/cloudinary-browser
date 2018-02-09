@@ -1,6 +1,7 @@
 .main {
   position: relative;
-  width: 300px;
+  flex: 0 0;
+  flex-basis: 300px;
   margin-right: 1px;
 
   min-width: 8rem;

@@ -47,6 +47,18 @@
 /* Image (or thumbnail) */
 .image {
   composes: overflow;
+  position: relative;
+}
+
+.image img {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+}
+
+.image svg {
+  position: absolute;
+  z-index: 0;
 }
 
 .list .image {
@@ -82,4 +94,28 @@
 .imageHidden {
   position: absolute;
   opacity: 0;
+}
+
+/* Grid view */
+
+.grid {
+  width: 14em;
+  height: 16.8em;
+  margin: 1rem;
+}
+
+.grid .image {
+  width: 100%;
+  height: 10.5em;
+}
+
+.grid .title,
+.grid .upload {
+  height: 1.5em;
+  line-height: 1.5em;
+}
+
+.grid .tags {
+  height: 3.3em;
+  line-height: 1.65em;
 }
