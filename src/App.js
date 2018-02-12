@@ -60,6 +60,7 @@ export default class App extends React.Component {
     this.getRouteObject = this.getRouteObject.bind(this)
 
     this.handleAPIError = this.handleAPIError.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
   }
 
   // Save a specific app key
@@ -198,6 +199,10 @@ export default class App extends React.Component {
     }
   }
 
+  handleSearch (term, nameSearch = true) {
+    console.log('Searching', nameSearch?'names':'tags', 'for', term)
+  }
+
   // Lifecycle hooks
   // Used for updating files and folders, and app state
   componentWillMount () {
@@ -259,7 +264,8 @@ export default class App extends React.Component {
         <Header
           route={this.props.location.pathname}
           setViewMode={this.props.setViewMode}
-          reload={() => this.loadFolder(this.props.location.pathname, true)} />
+          reload={() => this.loadFolder(this.props.location.pathname, true)}
+          onSearchSubmit={this.handleSearch} />
         {this.state.loading ? (<Spinner />) : null}
         <Switch>
           <Route path="/browse" component={browser} />

@@ -13,7 +13,6 @@ const toPx = n => `${n}px`
 export default class FolderTree extends React.Component {
   constructor (props) {
     super (props)
-    console.dir(props)
 
     this.state = {
       tabs: [

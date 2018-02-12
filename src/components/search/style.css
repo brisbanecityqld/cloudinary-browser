@@ -1,8 +1,24 @@
+.base {
+  position: relative;
+  composes: flexCenter from '../../styles/layout.css';
+}
+
 .main {
   width: 16em;
-  position: relative;
+  composes: base;
+}
 
-  composes: flexCenter from '../../styles/layout.css';
+.main .toggle {
+  display: none;
+}
+
+.focused {
+  flex: 1;
+  composes: base;
+}
+
+.focused .toggle {
+  display: block;
 }
 
 .input {
