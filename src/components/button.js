@@ -7,7 +7,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import styles from '../styles/button.css'
 
 function handleClick (event, props) {
-  if (props.hasOwnProperty('onClick')) {
+  if (typeof props.onClick === 'function') {
     props.onClick(event)
   }
 }

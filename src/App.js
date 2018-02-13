@@ -5,10 +5,10 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import DocumentTitle from 'react-document-title'
 
 import Header from './components/header'
-import Viewer from './components/viewer'
 import Spinner from './components/spinner'
 
 import Browser from './containers/browser'
+import Viewer from './containers/viewer'
 
 // Libraries
 import { api, location } from './lib'
@@ -22,7 +22,6 @@ export default class App extends React.Component {
 
     this.state = {
       loading: false,
-      loadError: false,
 
       uiSizes: {
         folderTree: 300,
@@ -56,6 +55,8 @@ export default class App extends React.Component {
     this.handleWindowResize = this.handleWindowResize.bind(this)
     this.handleFoldersResize = this.handleFoldersResize.bind(this)
     this.handleFoldersResizeEnd = this.handleFoldersResizeEnd.bind(this)
+
+    this.viewResource = this.viewResource.bind(this)
 
     this.getRouteObject = this.getRouteObject.bind(this)
 
@@ -186,13 +187,16 @@ export default class App extends React.Component {
     }
   }
 
+  // Reroute to file viewer
+  viewResource (publicId) {
+    this.props.history.push('/view/' + publicId, { canGoBack: true })
+  }
+
   // Handles some API errors
   handleAPIError (error) {
     if (error.hasOwnProperty('http_code') && error.http_code === 404) {
       // Handle attempting to load a non-existant folder
-      this.setState({
-        loadError: true
-      })
+      this.props.history.replace('/browse')
     } else {
       // Other errors
       console.error(error.message)
@@ -207,48 +211,41 @@ export default class App extends React.Component {
   // Used for updating files and folders, and app state
   componentWillMount () {
     this.loadAppState()
-    this.loadFolder(this.props.location.pathname)
+    if (this.props.location.pathname.indexOf('/browse') === 0) {
+      this.loadFolder(this.props.location.pathname)
+    }
   }
   componentDidMount () {
     // Bind resize listeners
     window.addEventListener('resize', this.handleWindowResize)
   }
-  componentDidUpdate () {
-    // Reset loading error
-    if (this.state.loadError) {
-      this.setState({ loadError: false })
-    }
-  }
   componentWillReceiveProps (nextProps) {
     // Update if we need to
-    if (!location.matches(this.props.location.pathname, nextProps.location.pathname)) {
+    if (
+      nextProps.location.pathname.indexOf('/browse') === 0 &&
+      !location.matches(this.props.location.pathname, nextProps.location.pathname)
+    ) {
       this.loadFolder(nextProps.location.pathname)
     }
   }
-
   shouldComponentUpdate (nextProps, nextState) {
     // Probably a veeeery bad idea
     return (this.state.loading)
       ? !nextState.loading
       : true
   }
-
   componentWillUnmount () {
     window.removeEventListener('resize', this.handleWindowResize)
   }
 
   render() {
-    // Handle load error - redirect to /browse root
-    if (this.state.loadError) {
-      return <Redirect to="/browse" />
-    }
-
     const route = this.props.location.pathname
     const path = location.getAPIPath(route)
     const thisRoute = this.getRouteObject(path)
 
     const browser = () => (
       <Browser onScrollToBottom={() => this.loadMore(path)}
+               onResourceClick={this.viewResource}
                canLoadMore={thisRoute && thisRoute.nextCursor !== null}
                uiSizes={this.state.uiSizes}
                onFoldersResize={this.handleFoldersResize}
@@ -269,7 +266,7 @@ export default class App extends React.Component {
         {this.state.loading ? (<Spinner />) : null}
         <Switch>
           <Route path="/browse" component={browser} />
-          <Route path="/view" component={Viewer} />
+          <Route path="/view/:public_id" component={Viewer} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>
       </div>

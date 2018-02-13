@@ -1,9 +1,9 @@
 import api from './api.js'
-import filehelper from './filehelper.js'
+import fileparser from './fileparser.js'
 import location from './location.js'
 
 export {
   api,
-  filehelper,
+  fileparser,
   location
 }

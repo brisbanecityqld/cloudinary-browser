@@ -27,7 +27,11 @@ export default function Browser (props) {
     resources = props.files
       .sort(sortAlphabetical)
       .map(file => (
-        <Resource key={file.public_id} data={file} viewmode={props.viewmode} />
+        <Resource
+          key={file.public_id}
+          data={file}
+          viewmode={props.viewmode}
+          onClick={() => props.onResourceClick(file.public_id)} />
       ))
   }
 

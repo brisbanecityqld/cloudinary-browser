@@ -22,7 +22,7 @@
   height: 3em;
   padding: .85em;
   margin-left: -.85em;
-  background: none;
+  background: none !important;
 }
 
 .star {

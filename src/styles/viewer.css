@@ -1,0 +1,79 @@
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 4em 1fr;
+  grid-column-gap: 2em;
+  grid-row-gap: 1em;
+  overflow: hidden;
+
+  composes: flexItem from './shared/layout.css';
+}
+
+.header {
+  height: 4em;
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+
+  composes: noFlex flexCenter from './shared/layout.css';
+}
+
+.title {
+  composes: flexItem from './shared/layout.css';
+  composes: clip from './shared/typography.css';
+}
+
+.close {
+  width: 4em;
+  padding: .5em;
+
+  composes: noFlex from './shared/layout.css';
+}
+
+.closeButton {
+  width: 3em;
+  height: 3em;
+}
+
+.content {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  overflow: hidden;
+}
+
+.image {
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  overflow: hidden;
+  position: relative;
+
+  composes: bgLightGrey from './shared/colours.css';
+}
+
+.image img {
+  max-width: 100%;
+  max-height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto auto;
+}
+
+.details {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.tags {
+  margin: .5em 0;
+  line-height: 2.5em;
+}
+
+.tag {
+  composes: tag from './tag.css';
+}

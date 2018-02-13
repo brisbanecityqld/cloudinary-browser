@@ -76,27 +76,7 @@
 }
 
 .tag {
-  display: inline-block;
-  height: 2em;
-  line-height: 2em;
-  padding: 0 .5em;
-  margin-right: .5em;
-  cursor: pointer;
-
-  composes: textWhite from './shared/colours.css';
-  composes: bgAccent from './shared/colours.css';
-  composes: corners from './shared/ui.css';
-}
-
-.tag:hover {
-  background-color: #ffd200;
-  color: #000;
-}
-
-/* Handle image loading */
-.imageHidden {
-  position: absolute;
-  opacity: 0;
+  composes: tag from './tag.css';
 }
 
 /* Grid view */
