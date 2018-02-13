@@ -3,6 +3,7 @@
   padding: 0 .75em 0 1.5em;
   grid-template-columns: inherit;
   grid-column-gap: inherit;
+  flex-shrink: 0;
 
   composes: bgMedGrey from '../../styles/colours.css';
   composes: gridCenter from '../../styles/layout.css';

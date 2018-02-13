@@ -1,18 +1,38 @@
-.list {
-  overflow: hidden;
-  grid-template-columns: auto auto 1fr 9em 16em auto;
-  grid-column-gap: 1.5em;
-
-  composes: flexItem flexColumn from '../../styles/layout.css';
-}
-
-.grid {
+.base {
   overflow: hidden;
   composes: flexItem from '../../styles/layout.css';
 }
 
-.list .scrollArea {
+.overflow {
   overflow-y: auto;
+}
+
+.list {
+  grid-template-columns: auto auto 1fr 9em 16em auto;
+  grid-column-gap: 1.5em;
+
+  composes: base;
+  composes: flexColumn from '../../styles/layout.css';
+}
+
+.grid {
+  composes: base;
+}
+
+.listWrap {
+  grid-template-columns: inherit;
+  grid-column-gap: inherit;
+
+  composes: overflow;
+}
+
+.gridWrap {
+  height: 100%;
+
+  composes: overflow;
+}
+
+.list .scrollArea {
   flex: 1;
   grid-template-columns: inherit;
   grid-column-gap: inherit;
@@ -20,11 +40,9 @@
 
 .grid .scrollArea {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
   grid-gap: 2em;
   padding: 2em;
-  height: 100%;
-  overflow-y: auto;
   justify-items: center;
 }
 

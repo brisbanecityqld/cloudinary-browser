@@ -88,6 +88,11 @@
   composes: corners from '../../styles/ui.css';
 }
 
+.tag:hover {
+  background-color: #ffd200;
+  color: #000;
+}
+
 /* Handle image loading */
 .imageHidden {
   position: absolute;

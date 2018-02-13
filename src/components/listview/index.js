@@ -41,8 +41,6 @@ export default class ListView extends React.Component {
   handleScrollEnd (event) {
     const target = event.target
 
-    console.log(target.scrollTop,'out of',target.scrollTopMax)
-
     // Handle scrolling to bottom of container
     if (
       target.scrollTop &&
@@ -64,17 +62,19 @@ export default class ListView extends React.Component {
 
   render () {
     const isList = this.props.viewmode === VIEW_MODES.LIST
-    const style = isList ? styles.list : styles.grid
 
     const inner = (this.props.children.length > 0)
       ? this.props.children
       : <div className={styles.empty}>There are no resources in this folder.</div>
 
-    return <div className={style}>
+    return <div className={isList ? styles.list : styles.grid}>
       {isList && <FileHeader onColResize={this.handleColResize} />}
-      <div ref={div => this.scrollableArea = div} className={styles.scrollArea}>
-        {inner}
-        {this.props.canLoadMore && <div className={styles.loadMore}>Load more...</div>}
+      <div
+        ref={div => this.scrollableArea = div}
+        className={isList ? styles.listWrap : styles.gridWrap}>
+        <div className={styles.scrollArea}>
+          {inner}
+        </div>
       </div>
     </div>
   }
