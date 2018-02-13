@@ -1,0 +1,26 @@
+.container {
+  width: 100%;
+  height: 3em;
+
+  composes: bgMedGrey from './shared/colours.css';
+  composes: flexRow from './shared/layout.css';
+}
+
+.tab {
+  width: 0;
+  height: 3em;
+  line-height: 3em;
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  padding: 0 .5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  composes: flexItem from './shared/layout.css';
+}
+
+.activeTab {
+  composes: tab;
+  composes: bgLightGrey textAccent from './shared/colours.css';
+}

@@ -1,0 +1,60 @@
+.main {
+  width: 100%;
+  height: 3em;
+  padding-left: .75em;
+  cursor: pointer;
+  overflow: hidden;
+
+  composes: textGrey from './shared/colours.css';
+  composes: flexCenter from './shared/layout.css';
+}
+
+.main:hover {
+  background-color: #eee;
+}
+
+.folder {
+  width: 1.25em;
+}
+
+.starBase {
+  width: 3em;
+  height: 3em;
+  padding: .85em;
+  margin-left: -.85em;
+  background: none;
+}
+
+.star {
+  display: none;
+
+  composes: starBase;
+  composes: textGrey from './shared/colours.css';
+}
+.main:hover .star {
+  display: block;
+}
+
+.starSelected {
+  composes: starBase;
+}
+
+.delete {
+  display: none;
+  composes: starBase;
+  composes: textRed from './shared/colours.css';
+}
+.main:hover .delete {
+  display: block;
+}
+
+.label {
+  width: 0;
+  padding: 0 .75em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: .9em;
+
+  composes: flexItem from './shared/layout.css';
+}

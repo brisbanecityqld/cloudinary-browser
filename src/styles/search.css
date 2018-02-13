@@ -1,0 +1,42 @@
+.base {
+  position: relative;
+  composes: flexCenter from './shared/layout.css';
+}
+
+.main {
+  width: 16em;
+  composes: base;
+}
+
+.main .toggle {
+  display: none;
+}
+
+.focused {
+  flex: 1;
+  composes: base;
+}
+
+.focused .toggle {
+  display: block;
+}
+
+.input {
+  flex: auto;
+  border: none;
+  height: 2.25em;
+  line-height: 2.25em;
+  padding: 0 2.25em 0 .6em;
+  background-color: white;
+  font-size: 1em;
+
+  composes: textGrey from './shared/colours.css';
+  composes: roundedCorners from './shared/layout.css';
+}
+
+.button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+}

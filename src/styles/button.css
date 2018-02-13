@@ -1,0 +1,45 @@
+.base {
+  padding: .5em;
+  cursor: pointer;
+  width: 2.25em;
+  height: 2.25em;
+
+  composes: corners from './shared/ui.css';
+  composes: fast from './shared/transitions.css';
+}
+.base:hover {
+  transform: scale(1.1);
+}
+.base:active {
+  transform: scale(.9);
+}
+
+.main {
+  composes: base;
+  composes: textAccent bgWhite from './shared/colours.css';
+}
+
+.invert {
+  composes: base;
+  composes: texWhite bgAccent from './shared/colours.css';
+}
+
+.text {
+  width: auto;
+  justify-content: center;
+
+  composes: flexCenter from './shared/layout.css';
+}
+
+.label {
+  padding-left: .5em;
+  font-size: 1em;
+  line-height: 1.2em;
+  pointer-events: none;
+}
+
+.icon {
+  width: 1.25em;
+  height: 1.25em;
+  pointer-events: none;
+}

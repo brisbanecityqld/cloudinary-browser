@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import App from '../App.js'
+import App from '../App'
 
 import {
   setViewMode,

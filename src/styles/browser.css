@@ -1,0 +1,6 @@
+.main {
+  position: relative;
+  overflow: hidden;
+
+  composes: flexItem flexColumn from './shared/layout.css';
+}
