@@ -26,6 +26,8 @@
   width: 3em;
   height: 3em;
   margin: 0 1em 0 .625em;
+
+  composes: noFlex from './shared/layout.css';
 }
 
 .icon img {
@@ -34,6 +36,14 @@
   height: 100%;
 }
 
+.spacer {
+  composes: flexItem from './shared/layout.css';
+}
+
 .button {
   margin-left: .875em;
+}
+
+.buttonRight {
+  margin-right: .875em;
 }

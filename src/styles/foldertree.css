@@ -7,13 +7,15 @@
   min-width: 8em;
   max-width: 35em;
 
-  composes: bgLightGrey from './shared/colours.css'
+  composes: bgLightGrey from './shared/colours.css';
+  composes: flexColumn from './shared/layout.css';
 }
 
 .scrolling {
-  height: 100%;
   overflow-y: auto;
   clear: both;
+
+  composes: flexItem from './shared/layout.css';
 }
 
 .message {

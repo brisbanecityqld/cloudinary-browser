@@ -51,11 +51,21 @@ function matches (routeA, routeB) {
   return a === b
 }
 
+function goBackTo (target, location, history) {
+  (
+    location.state &&
+    location.state.canGoBack
+  )
+    ? history.goBack(false)
+    : history.push(target)
+}
+
 export default {
   splitRoute,
   getRoute,
   getPartialRoute,
   getAPIPath,
   APIToRoute,
-  matches
+  matches,
+  goBackTo
 }

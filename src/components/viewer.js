@@ -5,7 +5,7 @@ import Spinner from './spinner'
 import Button from './button'
 
 // Libraries
-import { fileparser } from '../lib'
+import { fileparser, location } from '../lib'
 
 // Styles
 import styles from '../styles/viewer.css'
@@ -30,12 +30,7 @@ export default class Viewer extends React.Component {
 
   // Handle "closing" the viewer
   handleClose () {
-    (
-      this.props.location.state &&
-      this.props.location.state.canGoBack
-    )
-      ? this.props.history.goBack(false)
-      : this.props.history.push('/browse')
+    location.goBackTo('/browse', this.props.location, this.props.history)
   }
 
   // Load file to display on component mount
@@ -56,17 +51,15 @@ export default class Viewer extends React.Component {
 
     return (
       <div className={styles.main}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>{filename}</h1>
-          <div className={styles.close}>
-            <Button className={styles.closeButton} onClick={this.handleClose} icon="times" />
-          </div>
-        </div>
         <div className={styles.image}>
           {data && <img src={data.url} alt={data.filename} onLoad={this.handleImageLoaded} />}
           {!this.state.imageLoaded && <Spinner />}
         </div>
         <div className={styles.details}>
+          <div className={styles.header}>
+            <h1 className={styles.title}>{filename}</h1>
+            <Button className={styles.closeButton} onClick={this.handleClose} icon="times" />
+          </div>
           {data && <div>Uploaded: <span className={styles.bold}>{data.uploaded}</span></div>}
           <div className={styles.tags}>
             {data && data.tags.map(tag => (<span className={styles.tag} key={tag}>{tag}</span>))}

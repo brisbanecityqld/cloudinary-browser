@@ -259,8 +259,8 @@ export default class App extends React.Component {
       <div className={styles.main}>
         <DocumentTitle title={title} />
         <Header
-          route={this.props.location.pathname}
-          setViewMode={this.props.setViewMode}
+          { ...this.props }
+          window={this.state.windowSize}
           reload={() => this.loadFolder(this.props.location.pathname, true)}
           onSearchSubmit={this.handleSearch} />
         {this.state.loading ? (<Spinner />) : null}

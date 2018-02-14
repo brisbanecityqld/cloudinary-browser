@@ -24,6 +24,7 @@ export default class Search extends React.Component {
     this.handleFocus = this.handleFocus.bind(this)
     this.handleBlur = this.handleBlur.bind(this)
 
+    this._manualFocus = this._manualFocus.bind(this)
     this._submit = this._submit.bind(this)
   }
 
@@ -47,30 +48,40 @@ export default class Search extends React.Component {
   }
 
   _submit () {
-    if (this.props.onSubmit) {
+    console.log('temp')
+    if (typeof this.props.onSubmit === 'function') {
       const type = this.state.searchType === 'name'
       this.props.onSubmit(this.state.value, type)
     }
   }
 
+  _manualFocus () {
+    setTimeout(() => this.input.focus(), 1)
+  }
+
   handleFocus () {
     this.setState({ focused: true })
+
     // Call focus prop if it exists
-    if (this.props.onFocus) {
+    if (typeof this.props.onFocus === 'function') {
       this.props.onFocus()
     }
   }
 
-  handleBlur () {
+  handleBlur (event) {
     this.setState({ focused: false })
+
     // Call blur prop if it exists
-    if (this.props.onBlur) {
+    if (typeof this.props.onBlur === 'function') {
       this.props.onBlur()
     }
   }
 
   render () {
-    const mainStyle = this.state.focused ? styles.focused : styles.main
+    let mainStyle = this.props.isMobile ? styles.mobile : styles.main
+    if (this.state.focused) {
+      mainStyle += ' ' + styles.focused
+    }
 
     return (
       <div className={mainStyle}>
@@ -84,10 +95,11 @@ export default class Search extends React.Component {
           onKeyDown={this.handleKeyDown}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur} />
-        <Button
-          icon="search"
-          className={styles.button}
-          onClick={this._submit} />
+        <Button icon="search" className={styles.buttonNoBg} onMouseDown={this._submit} />
+        {
+          (this.props.isMobile && !this.state.focused) &&
+          <Button icon="search" className={styles.button} onClick={this._manualFocus} />
+        }
       </div>
     )
   }

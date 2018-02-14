@@ -3,7 +3,7 @@
   height: 3em;
 
   composes: bgMedGrey from './shared/colours.css';
-  composes: flexRow from './shared/layout.css';
+  composes: flexRow noFlex from './shared/layout.css';
 }
 
 .tab {

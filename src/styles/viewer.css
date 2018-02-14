@@ -1,48 +1,36 @@
 .main {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 4em 1fr;
-  grid-column-gap: 2em;
-  grid-row-gap: 1em;
+  grid-template-rows: 1fr 1fr;
   overflow: hidden;
 
   composes: flexItem from './shared/layout.css';
 }
 
 .header {
-  height: 4em;
-  grid-column: 2 / 3;
-  grid-row: 1 / 2;
+  margin-bottom: 1em;
 
   composes: noFlex flexCenter from './shared/layout.css';
 }
 
 .title {
+  line-height: 1.5em;
+  white-space: nowrap;
+
   composes: flexItem from './shared/layout.css';
-  composes: clip from './shared/typography.css';
-}
-
-.close {
-  width: 4em;
-  padding: .5em;
-
-  composes: noFlex from './shared/layout.css';
+  composes: title clip from './shared/typography.css';
 }
 
 .closeButton {
   width: 3em;
   height: 3em;
-}
-
-.content {
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
-  overflow: hidden;
+  display: none;
 }
 
 .image {
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
   overflow: hidden;
   position: relative;
 
@@ -61,8 +49,12 @@
 }
 
 .details {
-  grid-column: 2 / 3;
+  grid-column: 1 / 3;
   grid-row: 2 / 3;
+  padding: 1em;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: scroll;
 }
 
 .bold {
@@ -72,8 +64,31 @@
 .tags {
   margin: .5em 0;
   line-height: 2.5em;
+
+  composes: clip from './shared/typography.css';
 }
 
 .tag {
   composes: tag from './tag.css';
+}
+
+@media screen and (min-width: 1280px) {
+  .header {
+    padding-left: 0;
+  }
+
+  .image {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+  }
+
+  .details {
+    position: relative;
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+  }
+
+  .closeButton {
+    display: block;
+  }
 }

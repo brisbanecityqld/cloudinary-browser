@@ -12,6 +12,12 @@ function handleClick (event, props) {
   }
 }
 
+function handleMouseDown (event, props) {
+  if (typeof props.onMouseDown === 'function') {
+    props.onMouseDown(event)
+  }
+}
+
 // Functional component
 export default function Button (props) {
   let css = props.invert ? styles.invert : styles.main
@@ -38,7 +44,10 @@ export default function Button (props) {
   }
 
   return (
-    <div className={css} onClick={event => handleClick(event, props)}>
+    <div
+      className={css}
+      onClick={event => handleClick(event, props)}
+      onMouseDown={event => handleMouseDown(event, props)}>
       {icon}{text}
     </div>
   )

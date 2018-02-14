@@ -12,9 +12,29 @@
   display: none;
 }
 
+.mobile {
+  width: 2.25em;
+
+  composes: base;
+}
+
+.mobile .input {
+  width: 0;
+  overflow: hidden;
+}
+
+.mobile:not(.focused) .input {
+  padding: 0;
+  flex: none;
+}
+
 .focused {
   flex: 1;
   composes: base;
+}
+
+.mobile.focused {
+  flex: 1000;
 }
 
 .focused .toggle {
@@ -22,7 +42,6 @@
 }
 
 .input {
-  flex: auto;
   border: none;
   height: 2.25em;
   line-height: 2.25em;
@@ -30,6 +49,7 @@
   background-color: white;
   font-size: 1em;
 
+  composes: flexItem from './shared/layout.css';
   composes: textGrey from './shared/colours.css';
   composes: roundedCorners from './shared/layout.css';
 }
@@ -38,5 +58,10 @@
   position: absolute;
   top: 0;
   right: 0;
-  background: none;
+}
+
+.buttonNoBg {
+  background: none !important;
+
+  composes: button;
 }

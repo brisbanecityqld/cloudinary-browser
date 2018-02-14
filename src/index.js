@@ -25,6 +25,7 @@ import fasStar from '@fortawesome/fontawesome-free-solid/faStar'
 import fasFolder from '@fortawesome/fontawesome-free-solid/faFolder'
 import fasSearch from '@fortawesome/fontawesome-free-solid/faSearch'
 import fasTimes from '@fortawesome/fontawesome-free-solid/faTimes'
+import fasArrowLeft from '@fortawesome/fontawesome-free-solid/faArrowLeft'
 
 // Regular icons
 import farStar from '@fortawesome/fontawesome-free-regular/faStar'
@@ -38,6 +39,7 @@ fontawesome.library.add(
   fasFolder,
   fasSearch,
   fasTimes,
+  fasArrowLeft,
   farStar
 )
 

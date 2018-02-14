@@ -14,6 +14,7 @@ import { location } from '../lib'
 
 const mapStateToProps = state => {
   return {
+    viewmode: state.viewmode,
     route: state.currentRoute,
     loadedRoutes: state.loadedRoutes
   }
