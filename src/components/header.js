@@ -1,6 +1,7 @@
 import React from 'react'
 
 // Components
+import { Link } from 'react-router-dom'
 import Breadcrumb from './breadcrumb'
 import Search from './search'
 import Button from './button'
@@ -59,30 +60,36 @@ export default class Header extends React.Component {
 
     return (
       <header className={styles.main}>
-        <div className={styles.icon}><img src={BCC_logo} alt="logo" /></div>
-        {
-          breadcrumbVisibility
-            ? (<Breadcrumb route={this.props.location.pathname} />)
-            : (<div className={styles.spacer}></div>)
-        }
+        <div className={styles.icon}>
+          <Link to="/browse"><img src={BCC_logo} alt="logo" /></Link>
+        </div>
+        {/* Breadcrumb trail */}
+        {breadcrumbVisibility && (<Breadcrumb route={this.props.location.pathname} />)}
+        {/* Conditional header spacer */}
+        {!(breadcrumbVisibility || this.state.searchFocused) && <div className={styles.spacer}></div>}
+        {/* Folder toggle button */}
         {
           !isViewer && this.isMobile && !this.state.searchFocused &&
           <Button icon="folder" className={styles.buttonRight} />
         }
+        {/* Search area */}
         <Search
           isMobile={this.isMobile}
           onFocus={this.handleSearchFocus}
           onBlur={this.handleSearchBlur}
           onSubmit={this.props.onSearchSubmit} />
+        {/* View mode switcher */}
         {
           !isViewer &&
           buttonVisibility &&
           <Button icon={vmIcon} className={styles.button} onClick={() => this.props.setViewMode(vmNext)} />
         }
+        {/* Force refresh button */}
         {
           buttonVisibility &&
           <Button icon="sync-alt" className={styles.button} onClick={this.props.reload} />
         }
+        {/* Mobile viewer close button */}
         {
           isViewer && this.isMobile &&
           <Button icon="times" className={styles.button} onClick={this.handleViewerClose} />

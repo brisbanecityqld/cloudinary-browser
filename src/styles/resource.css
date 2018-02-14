@@ -101,6 +101,14 @@
   composes: bgLightGrey from './shared/colours.css';
 }
 
+.gridImage {
+  composes: slow from './shared/transitions.css';
+}
+
+.grid:hover .gridImage {
+  transform: scale(1.05);
+}
+
 .grid .image {
   width: 100%;
   height: 11.25em;
@@ -125,10 +133,10 @@
 
 /* Media queries */
 
-@value bp-mobile from "./shared/breakpoints.css";
+@value bp-tablet from "./shared/breakpoints.css";
 @value bp-medium from "./shared/breakpoints.css";
 
-@media screen and (min-width: bp-mobile) {
+@media screen and (min-width: bp-tablet) {
   .list {
     padding-left: 1.5em;
   }

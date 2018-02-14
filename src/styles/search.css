@@ -33,10 +33,6 @@
   composes: base;
 }
 
-.mobile.focused {
-  flex: 1000;
-}
-
 .focused .toggle {
   display: block;
 }
