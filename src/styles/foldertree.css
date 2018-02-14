@@ -1,11 +1,8 @@
 .main {
-  position: relative;
-  flex: 0 0;
-  flex-basis: 300px;
-  margin-right: 1px;
-
-  min-width: 8em;
-  max-width: 35em;
+  position: absolute;
+  width: 80vw;
+  left: calc(-80vw - 1px);
+  z-index: 1;
 
   composes: bgLightGrey from './shared/colours.css';
   composes: flexColumn from './shared/layout.css';
@@ -20,4 +17,22 @@
 
 .message {
   padding: 1em;
+}
+
+/* Media queries */
+
+@value bp-mobile from "./shared/breakpoints.css";
+
+@media screen and (min-width: bp-mobile) {
+  .main {
+    position: relative;
+    left: 0;
+    width: auto;
+    flex: 0 0;
+    flex-basis: 300px;
+    margin-right: 1px;
+
+    min-width: 8em;
+    max-width: 35em;
+  }
 }

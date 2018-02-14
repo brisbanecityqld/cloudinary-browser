@@ -67,7 +67,7 @@ export default class Header extends React.Component {
         }
         {
           !isViewer && this.isMobile && !this.state.searchFocused &&
-          <Button icon="arrow-left" className={styles.buttonRight} />
+          <Button icon="folder" className={styles.buttonRight} />
         }
         <Search
           isMobile={this.isMobile}

@@ -31,13 +31,14 @@ export default function Browser (props) {
           key={file.public_id}
           data={file}
           viewmode={props.viewmode}
-          onClick={() => props.onResourceClick(file.public_id)} />
+          onClick={() => props.onResourceClick(encodeURIComponent(file.public_id))} />
       ))
   }
 
   const childProps = {
-    viewmode: props.viewmode,
     children: resources,
+    viewmode: props.viewmode,
+    prevFolder: props.prevFolder,
     onScrollToBottom: props.onScrollToBottom,
     canLoadMore: props.nextCursor !== null
   }

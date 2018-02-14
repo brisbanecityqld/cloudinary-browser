@@ -1,6 +1,6 @@
 .main {
   height: 3em;
-  padding: 0 .75em 0 1.5em;
+  padding: 0 .75em 0 1em;
   grid-template-columns: inherit;
   grid-column-gap: inherit;
   flex-shrink: 0;
@@ -27,3 +27,28 @@
 .upload   { grid-column: 4 / 5; }
 .tags     { grid-column: 5 / 6; }
 .actions  { grid-column: 6 / 7; }
+
+.upload,
+.tags,
+.actions {
+  display: none;
+}
+
+/* Media queries */
+
+@value bp-mobile from "./shared/breakpoints.css";
+@value bp-medium from "./shared/breakpoints.css";
+
+@media screen and (min-width: bp-mobile) {
+  .main {
+    padding-left: 1.5rem;
+  }
+}
+
+@media screen and (min-width: bp-medium) {
+  .upload,
+  .tags,
+  .actions {
+    display: block;
+  }
+}

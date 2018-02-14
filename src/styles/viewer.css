@@ -72,7 +72,11 @@
   composes: tag from './tag.css';
 }
 
-@media screen and (min-width: 1280px) {
+/* Media queries */
+
+@value bp-medium from "./shared/breakpoints.css";
+
+@media screen and (min-width: bp-medium) {
   .header {
     padding-left: 0;
   }

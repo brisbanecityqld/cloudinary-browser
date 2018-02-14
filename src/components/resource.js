@@ -49,10 +49,11 @@ export default class File extends React.Component {
           <div></div>
         </div>
         <div className={styles.image}>
-          <img className={this.state.imageLoaded ? undefined : styles.imageHidden}
-               onLoad={this.handleImageLoaded}
-               src={url}
-               alt={filename} />
+          <img
+            className={this.state.imageLoaded ? undefined : styles.imageHidden}
+            onLoad={this.handleImageLoaded}
+            src={url}
+            alt={filename} />
           <FontAwesomeIcon icon="image" />
         </div>
         {}

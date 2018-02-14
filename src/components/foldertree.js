@@ -48,15 +48,32 @@ export default class FolderTree extends React.Component {
 
   // Create list of Folder components from props
   makeFolders (folders, deletable = false) {
-    return folders.map(folder => {
+    const subfolders = folders.map(folder => {
       const isFavourite = this.isFavourite(folder)
-      return <Folder key={folder.path}
-                     path={folder.path}
-                     name={folder.name}
-                     deletable={deletable}
-                     isFavourite={isFavourite}
-                     onClick={() => this.props.updateFavourites({ ...folder }, !isFavourite)} />
+      return <Folder
+        key={folder.path}
+        path={folder.path}
+        name={folder.name}
+        deletable={deletable}
+        isFavourite={isFavourite}
+        onClick={() => this.props.updateFavourites({ ...folder }, !isFavourite)} />
     })
+
+    const folderActions = []
+    if (this.props.prevFolder !== null && this.activeTab === 'Folders') {
+      folderActions.push(
+        <Folder
+          key={this.props.prevFolder}
+          path={this.props.prevFolder}
+          name="Go back"
+          linkOnly />
+      )
+    }
+
+    return [
+      ...folderActions,
+      ...subfolders
+    ]
   }
 
   onDrag (offset) {
@@ -72,6 +89,10 @@ export default class FolderTree extends React.Component {
     this.setState({
       baseWidth: this.elem.clientWidth
     }, this.saveState)
+  }
+
+  displayMessage (text) {
+    return <div className={styles.message}>{text}</div>
   }
 
   handleTabChange (newTab) {
@@ -94,10 +115,6 @@ export default class FolderTree extends React.Component {
     }
   }
 
-  displayMessage (text) {
-    return <div className={styles.message}>{text}</div>
-  }
-
   render () {
     const inline = {
       flexBasis: toPx(this.state.width)
@@ -105,12 +122,11 @@ export default class FolderTree extends React.Component {
 
     const folders = this.makeFolders(this.props.folders)
     const favourites = this.makeFolders(this.props.favourites, true)
-    let tabContent = ''
-    if (this.activeTab === 'Folders') {
-      tabContent = (folders.length > 0 ? folders : this.displayMessage('This folder has no subfolders.'))
-    } else if (this.activeTab === 'Favourites') {
-      tabContent = (favourites.length > 0 ? favourites : this.displayMessage('You haven\'t added any favourites yet.'))
-    }
+    const tabContent = (this.activeTab === 'Folders')
+      ? (folders.length > 0 ? folders : this.displayMessage('This folder has no subfolders.'))
+      : (this.activeTab === 'Favourites')
+      ? (favourites.length > 0 ? favourites : this.displayMessage('You haven\'t added any favourites yet.'))
+      : ''
 
     return (
       <aside className={styles.main} style={inline} ref={elem => this.elem = elem}>

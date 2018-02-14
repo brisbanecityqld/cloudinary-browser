@@ -22,6 +22,7 @@ export default class App extends React.Component {
 
     this.state = {
       loading: false,
+      prevFolder: null,
 
       uiSizes: {
         folderTree: 300,
@@ -227,7 +228,19 @@ export default class App extends React.Component {
     ) {
       this.loadFolder(nextProps.location.pathname)
     }
+
+    // Set previous folder (for going back)
+    const path = location.splitRoute(nextProps.location.pathname)
+    const prevFolder = path.length > 1
+      ? location.getAPIPath(path.slice(0, path.length - 1))
+      : null
+
+    if (this.state.prevFolder !== prevFolder) {
+      console.log(prevFolder)
+      this.setState({ prevFolder })
+    }
   }
+
   shouldComponentUpdate (nextProps, nextState) {
     // Probably a veeeery bad idea
     return (this.state.loading)
@@ -243,13 +256,15 @@ export default class App extends React.Component {
     const path = location.getAPIPath(route)
     const thisRoute = this.getRouteObject(path)
 
-    const browser = () => (
-      <Browser onScrollToBottom={() => this.loadMore(path)}
-               onResourceClick={this.viewResource}
-               canLoadMore={thisRoute && thisRoute.nextCursor !== null}
-               uiSizes={this.state.uiSizes}
-               onFoldersResize={this.handleFoldersResize}
-               onFoldersResizeEnd={this.handleFoldersResizeEnd} />
+    const browser = props => (
+      <Browser
+        prevFolder={this.state.prevFolder}
+        onScrollToBottom={() => this.loadMore(path)}
+        onResourceClick={this.viewResource}
+        canLoadMore={thisRoute && thisRoute.nextCursor !== null}
+        uiSizes={this.state.uiSizes}
+        onFoldersResize={this.handleFoldersResize}
+        onFoldersResizeEnd={this.handleFoldersResizeEnd} />
     )
 
     const title = (path === '' ? 'Browse' : path) + this.TITLE_SUFFIX

@@ -28,7 +28,7 @@ export default function Folder (props) {
     iconRight = 'times'
     css = styles.delete
   } else {
-    iconLeft = 'folder'
+    iconLeft = (props.linkOnly ? 'arrow-left' : 'folder')
     iconRight = (props.isFavourite ? 'star' : ['far', 'star'])
     css = (props.isFavourite ? styles.starSelected : styles.star)
   }
@@ -38,7 +38,7 @@ export default function Folder (props) {
       <div className={styles.main}>
         <div className={styles.folder}><FontAwesomeIcon icon={iconLeft} /></div>
         <div className={styles.label}>{props.name}</div>
-        <Button className={css} icon={iconRight} onClick={event => handleClick(event, props)} />
+        {!props.linkOnly && <Button className={css} icon={iconRight} onClick={event => handleClick(event, props)} />}
       </div>
     </Link>
   )

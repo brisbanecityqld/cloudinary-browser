@@ -4,7 +4,7 @@ import Viewer from '../components/viewer'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    resource: state.files.find(file => file.public_id === ownProps.match.params.public_id)
+    resource: state.files.find(file => file.public_id === decodeURIComponent(ownProps.match.params.public_id))
   }
 }
 
