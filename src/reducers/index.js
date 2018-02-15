@@ -11,7 +11,7 @@ import {
 
 const DEFAULT_STATE = {
   viewmode: VIEW_MODES.LIST,
-  currentRoute: window.location.pathname,
+  currentRoute: '',
 
   files: [],
   folders: [],

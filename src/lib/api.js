@@ -53,6 +53,12 @@ function getFolders (path) {
   return respond(url)
 }
 
+// Endpoint: get a single resource
+function getResource (public_id) {
+  const url = URL('/resource', { public_id })
+  return respond(url)
+}
+
 // Endpoint: list all files in a directory
 function getResources (path, nextCursor = null) {
   const max_results = 50
@@ -67,5 +73,6 @@ function getResources (path, nextCursor = null) {
 
 export default {
   getFolders,
+  getResource,
   getResources
 }

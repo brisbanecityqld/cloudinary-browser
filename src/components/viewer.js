@@ -30,19 +30,11 @@ export default class Viewer extends React.Component {
 
   // Handle "closing" the viewer
   handleClose () {
-    location.goBackTo('/browse', this.props.location, this.props.history)
-  }
-
-  // Load file to display on component mount
-  componentWillMount () {
-    if (!this.props.match.params.public_id) {
-      // Check that a resource was requested
-      console.warn('Malformed /view URL')
-      this.props.history.replace('/browse')
-    } else if (this.props.resource === undefined) {
-      // Resource hasn't been downloaded, do so
-      // TODO: download resource
-    }
+    location.goBackTo(
+      location.getRouteFromPublicId(this.props.publicId),
+      this.props.location,
+      this.props.history
+    )
   }
 
   render () {
@@ -52,7 +44,14 @@ export default class Viewer extends React.Component {
     return (
       <div className={styles.main}>
         <div className={styles.image}>
-          {data && <img src={data.url} alt={data.filename} onLoad={this.handleImageLoaded} />}
+          {
+            data &&
+            <img
+              src={data.url}
+              alt={data.filename}
+              onLoad={this.handleImageLoaded}
+              onClick={() => window.open(data.url)} />
+          }
           {!this.state.imageLoaded && <Spinner />}
         </div>
         <div className={styles.details}>

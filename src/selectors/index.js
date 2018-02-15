@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect'
-import location from '../lib/location.js'
 
-const getCurrentRoute = state => location.getAPIPath(state.currentRoute)
+const getCurrentRoute = state => state.currentRoute
 const getResources = state => state.files
 const getFolders = state => state.folders
 const getFavouritePaths = state => state.favourites
@@ -17,7 +16,7 @@ export const getCurrentFiles = createSelector(
 export const getCurrentFolders = createSelector(
   [ getCurrentRoute, getFolders ],
   (path, folders) => folders.filter(f => (
-    f.path === `${path ? path + '/' : path}${f.name}`
+    f.path === (path ? path + '/' + f.name : f.name)
   ))
 )
 

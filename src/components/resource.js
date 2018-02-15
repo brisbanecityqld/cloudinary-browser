@@ -41,6 +41,10 @@ export default class File extends React.Component {
       ? styles.list
       : styles.grid
 
+    const imgStyle = this.state.imageLoaded
+      ? (this.props.viewmode === VIEW_MODES.GRID ? styles.gridImage : undefined)
+      : styles.imageHidden
+
     const { filename, url, uploaded, tags } = fileparser.parseResource(this.props.data, 240, 180)
 
     return (
@@ -50,7 +54,7 @@ export default class File extends React.Component {
         </div>
         <div className={styles.image}>
           <img
-            className={this.props.viewmode === VIEW_MODES.GRID ? styles.gridImage : undefined}
+            className={imgStyle}
             onLoad={this.handleImageLoaded}
             src={url}
             alt={filename} />

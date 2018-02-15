@@ -39,6 +39,22 @@ const log = msg => {
 // app.use(Express.static('build'))
 
 // Add endpoints
+
+app.get('/resource', (req, res) => {
+  const public_id = decodeURIComponent(req.query.public_id)
+  const expression = `public_id="${public_id}"`
+  const max_results = 1
+
+  log(`User requested resource with public_id ${public_id}`)
+
+  const search = new Cloudinary.v2.search()
+    .expression(expression)
+    .max_results(max_results)
+    .with_field('tags')
+
+  search.execute((err, result) => res.send(err || result))
+})
+
 app.get('/resources', (req, res) => {
   const folder = req.query.path
   const expression = `folder="${folder}"`

@@ -57,6 +57,7 @@ export default class App extends React.Component {
     this.handleFoldersResize = this.handleFoldersResize.bind(this)
     this.handleFoldersResizeEnd = this.handleFoldersResizeEnd.bind(this)
 
+    this.loadResource = this.loadResource.bind(this)
     this.viewResource = this.viewResource.bind(this)
 
     this.getRouteObject = this.getRouteObject.bind(this)
@@ -123,9 +124,18 @@ export default class App extends React.Component {
     this.saveAppKey(this.storageKeys.ui_column_widths)
   }
 
+  async loadResource (publicId) {
+    const data = await api.getResource(publicId)
+    if (data.hasOwnProperty('resources') && data.resources.length > 0) {
+      this.props.addResources(data)
+    } else {
+      console.warn('Requested resource does not exist.')
+      this.props.history.replace('/browse')
+    }
+  }
+
   // Pulls the current folder from the API
   async loadFolder (route, force = false) {
-    // Update route in store
     this.props.updateRoute(route)
 
     // If forced, remove all currently downloaded files & subfolders
@@ -133,8 +143,7 @@ export default class App extends React.Component {
       this.props.unloadFolder(route)
     }
 
-    const path = location.getAPIPath(route)
-    const loaded = this.getRouteObject(path) !== undefined
+    const loaded = this.getRouteObject(route) !== undefined
 
     // Route not yet loaded
     if (!loaded || force) {
@@ -142,15 +151,15 @@ export default class App extends React.Component {
 
       try {
         const [ resources, folders ] = await Promise.all([
-          api.getResources(path),
-          api.getFolders(path)
+          api.getResources(route),
+          api.getFolders(route)
         ])
 
         // Add folders and resources to store
         this.props.addFolders(folders)
         this.props.addResources(resources)
 
-        this.props.markAsLoaded(path, resources.next_cursor)
+        this.props.markAsLoaded(route, resources.next_cursor)
       } catch (e) {
         // Handle load errors
         console.error(e)
@@ -204,18 +213,47 @@ export default class App extends React.Component {
     }
   }
 
+  // TODO
   handleSearch (term, nameSearch = true) {
-    console.log('Searching', nameSearch?'names':'tags', 'for', term)
+    console.log('Searching', nameSearch ? 'names' : 'tags', 'for', term)
   }
 
   // Lifecycle hooks
   // Used for updating files and folders, and app state
   componentWillMount () {
     this.loadAppState()
-    if (this.props.location.pathname.indexOf('/browse') === 0) {
-      this.loadFolder(this.props.location.pathname)
+
+    // Handle loading different views
+    const route = this.props.location.pathname
+
+    switch (location.getRouteBase(route)) {
+      // File browser
+      case 'browse':
+        this.loadFolder(location.getAPIPath(route))
+        break
+
+      // Single file viewer
+      case 'view':
+        const publicId = decodeURIComponent(route.replace('/view/', ''))
+        if (publicId === '') {
+          // Check that a resource was requested
+          console.warn('Malformed /view URL.')
+          this.props.history.replace('/browse')
+        } else {
+          // Resource hasn't been downloaded yet, so download it
+          this.loadResource(publicId)
+        }
+        break
+
+      // Search screen
+      case 'search':
+        break
+
+      default:
+        console.warn('Invalid URL:', route)
     }
   }
+
   componentDidMount () {
     // Bind resize listeners
     window.addEventListener('resize', this.handleWindowResize)
@@ -223,10 +261,11 @@ export default class App extends React.Component {
   componentWillReceiveProps (nextProps) {
     // Update if we need to
     if (
-      nextProps.location.pathname.indexOf('/browse') === 0 &&
+      location.getRouteBase(nextProps.location.pathname) === 'browse' &&
       !location.matches(this.props.location.pathname, nextProps.location.pathname)
     ) {
-      this.loadFolder(nextProps.location.pathname)
+      // Update route in store and load folder
+      this.loadFolder(location.getAPIPath(nextProps.location.pathname))
     }
 
     // Set previous folder (for going back)
@@ -236,7 +275,6 @@ export default class App extends React.Component {
       : null
 
     if (this.state.prevFolder !== prevFolder) {
-      console.log(prevFolder)
       this.setState({ prevFolder })
     }
   }
@@ -256,7 +294,7 @@ export default class App extends React.Component {
     const path = location.getAPIPath(route)
     const thisRoute = this.getRouteObject(path)
 
-    const browser = props => (
+    const browser = () => (
       <Browser
         prevFolder={this.state.prevFolder}
         onScrollToBottom={() => this.loadMore(path)}
@@ -266,6 +304,8 @@ export default class App extends React.Component {
         onFoldersResize={this.handleFoldersResize}
         onFoldersResizeEnd={this.handleFoldersResizeEnd} />
     )
+
+    const isViewer = this.props.location.pathname.indexOf('/view/') > -1
 
     const title = (path === '' ? 'Browse' : path) + this.TITLE_SUFFIX
 
@@ -278,12 +318,12 @@ export default class App extends React.Component {
           window={this.state.windowSize}
           reload={() => this.loadFolder(this.props.location.pathname, true)}
           onSearchSubmit={this.handleSearch} />
-        {this.state.loading ? (<Spinner />) : null}
         <Switch>
           <Route path="/browse" component={browser} />
           <Route path="/view/:public_id" component={Viewer} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>
+        {this.state.loading && !isViewer && <Spinner />}
       </div>
     )
   }

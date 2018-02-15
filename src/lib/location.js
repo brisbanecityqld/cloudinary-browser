@@ -1,7 +1,8 @@
 // For managing all window.location paths
 
 const ROUTE_SEP = '/'
-const ROUTE_REGEX = /^\/(.+?)\/?$/
+const ROUTE_REGEX = /^\/?(.+?)\/?$/
+const PUBLIC_ID_REGEX = /^(.*?)\/[^/]+$/
 
 /**
  * splitRoute - Splits a route to array format.
@@ -23,6 +24,13 @@ function splitRoute (route) {
   return trimmed.split(ROUTE_SEP)
 }
 
+function getRouteBase (route) {
+  const split = splitRoute(route)
+  return split.length > 0
+    ? split[0]
+    : undefined
+}
+
 // Gets the first n parts of a route
 function getRoute (route) {
   return ROUTE_SEP + splitRoute(route).join(ROUTE_SEP)
@@ -31,6 +39,18 @@ function getRoute (route) {
 // Gets the first n parts of a route
 function getPartialRoute (route, n) {
   return ROUTE_SEP + splitRoute(route).slice(0, n).join(ROUTE_SEP)
+}
+
+// Converts a resource's public_id to a folder path
+function getRouteFromPublicId (publicId) {
+  return APIToRoute(getAPIPathFromPublicId(publicId))
+}
+
+// Converts a resource's public_id to a folder path
+function getAPIPathFromPublicId (publicId) {
+  return (publicId.indexOf('/') > -1)
+    ? publicId.match(PUBLIC_ID_REGEX)[1]
+    : ''
 }
 
 // Converts app route array to API path
@@ -62,9 +82,12 @@ function goBackTo (target, location, history) {
 
 export default {
   splitRoute,
+  getRouteBase,
   getRoute,
   getPartialRoute,
   getAPIPath,
+  getRouteFromPublicId,
+  getAPIPathFromPublicId,
   APIToRoute,
   matches,
   goBackTo
