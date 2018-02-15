@@ -19,19 +19,17 @@ function parseResource (data, imgWidth, imgHeight) {
     ? { width: imgWidth, height: imgHeight, crop: 'fill' }
     : {}
   const url = Cloudinary.url(data.public_id, imgOpts)
+  const attachmentUrl = Cloudinary.url(data.public_id, { flags: 'attachment' })
 
   const [,year,month,day,time] = DATE_REGEX.exec(data.uploaded_at)
   const uploaded = `${day}/${month}/${year} ${time}`
 
-  // Generate tags
   const tags = data.tags
-  // let tags = (data.tags.length > 0)
-  //   ? data.tags.map(tag => (<span className={styles.main} key={tag}>{tag}</span>))
-  //   : undefined
 
   return {
     filename,
     url,
+    attachmentUrl,
     uploaded,
     tags
   }

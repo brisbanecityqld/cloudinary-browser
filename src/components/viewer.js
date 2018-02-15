@@ -45,12 +45,13 @@ export default class Viewer extends React.Component {
       <div className={styles.main}>
         <div className={styles.image}>
           {
-            data &&
-            <img
-              src={data.url}
-              alt={data.filename}
-              onLoad={this.handleImageLoaded}
-              onClick={() => window.open(data.url)} />
+            data && (
+              <img
+                src={data.url}
+                alt={data.filename}
+                onLoad={this.handleImageLoaded}
+                onClick={() => window.open(data.url)} />
+            )
           }
           {!this.state.imageLoaded && <Spinner />}
         </div>
@@ -59,7 +60,24 @@ export default class Viewer extends React.Component {
             <h1 className={styles.title}>{filename}</h1>
             <Button className={styles.closeButton} onClick={this.handleClose} icon="times" />
           </div>
-          {data && <div>Uploaded: <span className={styles.bold}>{data.uploaded}</span></div>}
+          {/* Upload date */}
+          {
+            data && (
+              <div className={styles.upload}>Uploaded: <span className={styles.bold}>{data.uploaded}</span></div>
+            )
+          }
+          {/* Download button */}
+          {
+            data && (
+              <div className={styles.actions}>
+                <Button
+                  invert
+                  icon="cloud-download-alt"
+                  text="Download"
+                  onClick={() => window.open(data.attachmentUrl) } />
+              </div>
+            )
+          }
           <div className={styles.tags}>
             {data && data.tags.map(tag => (<span className={styles.tag} key={tag}>{tag}</span>))}
           </div>

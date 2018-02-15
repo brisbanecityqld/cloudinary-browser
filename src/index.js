@@ -20,6 +20,7 @@ import fontawesome from '@fortawesome/fontawesome'
 import fasImage from '@fortawesome/fontawesome-free-solid/faImage'
 import fasList from '@fortawesome/fontawesome-free-solid/faList'
 import fasSyncAlt from '@fortawesome/fontawesome-free-solid/faSyncAlt'
+import fasCloudDownloadAlt from '@fortawesome/fontawesome-free-solid/faCloudDownloadAlt'
 import fasCog from '@fortawesome/fontawesome-free-solid/faCog'
 import fasStar from '@fortawesome/fontawesome-free-solid/faStar'
 import fasFolder from '@fortawesome/fontawesome-free-solid/faFolder'
@@ -36,6 +37,7 @@ fontawesome.library.add(
   fasCog,
   fasStar,
   fasSyncAlt,
+  fasCloudDownloadAlt,
   fasFolder,
   fasSearch,
   fasTimes,

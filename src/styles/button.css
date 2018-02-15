@@ -21,7 +21,7 @@
 
 .invert {
   composes: base;
-  composes: texWhite bgAccent from './shared/colours.css';
+  composes: textWhite bgAccent from './shared/colours.css';
 }
 
 .text {

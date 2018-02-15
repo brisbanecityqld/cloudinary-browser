@@ -1,4 +1,5 @@
 .base {
+  position: relative;
   overflow: hidden;
   composes: flexItem from './shared/layout.css';
 }
@@ -46,8 +47,14 @@
   justify-items: center;
 }
 
-.empty {
+.list .empty {
   padding: 1em;
+}
+
+.grid .empty {
+  position: absolute;
+  padding: 2em;
+  width: 100%;
 }
 
 .loadMore {
