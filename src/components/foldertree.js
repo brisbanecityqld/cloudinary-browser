@@ -122,6 +122,10 @@ export default class FolderTree extends React.Component {
       flexBasis: toPx(this.state.width)
     }
 
+    const mainStyle = this.props.folderTreeVisible
+      ? styles.main
+      : styles.hidden
+
     const folders = this.makeFolders(this.props.folders)
     const favourites = this.makeFolders(this.props.favourites, true)
     const tabContent = (this.activeTab === 'Folders')
@@ -131,7 +135,7 @@ export default class FolderTree extends React.Component {
       : ''
 
     return (
-      <aside className={styles.main} style={inline} ref={elem => this.elem = elem}>
+      <aside className={mainStyle} style={inline} ref={elem => this.elem = elem}>
         <Tabs tabs={this.state.tabs} onChange={tab => this.handleTabChange(tab)}/>
         <div className={styles.scrolling}>{tabContent}</div>
         <Draggable onDrag={this.onDrag} onDragEnd={this.onDragEnd} />

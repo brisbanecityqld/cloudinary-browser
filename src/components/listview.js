@@ -21,7 +21,6 @@ export default class ListView extends React.Component {
     this.scrollableArea = null
     this.scrollTimeout = null
     this.debounceMS = 66
-    this.storageKey = 'ui_list_view_scroll_top'
 
     // Method bindings
     this.handleScroll = this.handleScroll.bind(this)
@@ -44,7 +43,7 @@ export default class ListView extends React.Component {
     // Handle scrolling to bottom of container
     if (
       target.scrollTop &&
-      target.scrollTop === target.scrollTopMax &&
+      target.scrollTop + target.clientHeight === target.scrollHeight &&
       this.props.canLoadMore
     ) {
       // Load more resources
@@ -75,6 +74,13 @@ export default class ListView extends React.Component {
         <div className={styles.scrollArea}>
           {inner}
         </div>
+        {
+          this.props.canLoadMore && (
+            <div className={styles.loadMore}>
+              <span onClick={this.props.onScrollToBottom}>Load more...</span>
+            </div>
+          )
+        }
       </div>
     </div>
   }

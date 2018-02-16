@@ -23,6 +23,7 @@ export default class App extends React.Component {
     this.state = {
       loading: false,
       prevFolder: null,
+      folderTreeVisible: false,
 
       uiSizes: {
         folderTree: 300,
@@ -57,6 +58,8 @@ export default class App extends React.Component {
     this.handleFoldersResize = this.handleFoldersResize.bind(this)
     this.handleFoldersResizeEnd = this.handleFoldersResizeEnd.bind(this)
 
+    this.toggleFolderTree = this.toggleFolderTree.bind(this)
+
     this.loadResource = this.loadResource.bind(this)
     this.viewResource = this.viewResource.bind(this)
 
@@ -64,6 +67,13 @@ export default class App extends React.Component {
 
     this.handleAPIError = this.handleAPIError.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+
+    // Mobile breakpoint
+    this.BREAKPOINT = 800
+  }
+
+  get isMobile () {
+    return this.state.windowSize.width < this.BREAKPOINT;
   }
 
   // Save a specific app key
@@ -122,6 +132,14 @@ export default class App extends React.Component {
   }
   handleFoldersResizeEnd () {
     this.saveAppKey(this.storageKeys.ui_column_widths)
+  }
+
+  toggleFolderTree () {
+    this.setState(prevState => {
+      return {
+        folderTreeVisible: !prevState.folderTreeVisible
+      }
+    })
   }
 
   async loadResource (publicId) {
@@ -266,6 +284,11 @@ export default class App extends React.Component {
     ) {
       // Update route in store and load folder
       this.loadFolder(location.getAPIPath(nextProps.location.pathname))
+
+      // Close folder tree on mobile
+      if (this.state.folderTreeVisible) {
+        this.toggleFolderTree()
+      }
     }
 
     // Set previous folder (for going back)
@@ -279,12 +302,6 @@ export default class App extends React.Component {
     }
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    // Probably a veeeery bad idea
-    return (this.state.loading)
-      ? !nextState.loading
-      : true
-  }
   componentWillUnmount () {
     window.removeEventListener('resize', this.handleWindowResize)
   }
@@ -294,16 +311,16 @@ export default class App extends React.Component {
     const path = location.getAPIPath(route)
     const thisRoute = this.getRouteObject(path)
 
-    const browser = () => (
-      <Browser
-        prevFolder={this.state.prevFolder}
-        onScrollToBottom={() => this.loadMore(path)}
-        onResourceClick={this.viewResource}
-        canLoadMore={thisRoute && thisRoute.nextCursor !== null}
-        uiSizes={this.state.uiSizes}
-        onFoldersResize={this.handleFoldersResize}
-        onFoldersResizeEnd={this.handleFoldersResizeEnd} />
-    )
+    const browserProps = {
+      prevFolder: this.state.prevFolder,
+      onScrollToBottom: () => this.loadMore(path),
+      onResourceClick: this.viewResource,
+      canLoadMore: thisRoute && thisRoute.nextCursor !== null,
+      uiSizes: this.state.uiSizes,
+      folderTreeVisible: this.state.folderTreeVisible,
+      onFoldersResize: this.handleFoldersResize,
+      onFoldersResizeEnd: this.handleFoldersResizeEnd
+    }
 
     const isViewer = this.props.location.pathname.indexOf('/view/') > -1
 
@@ -315,11 +332,12 @@ export default class App extends React.Component {
         <DocumentTitle title={title} />
         <Header
           { ...this.props }
-          window={this.state.windowSize}
+          isMobile={this.isMobile}
           reload={() => this.loadFolder(this.props.location.pathname, true)}
-          onSearchSubmit={this.handleSearch} />
+          onSearchSubmit={this.handleSearch}
+          onToggleFolderTree={this.toggleFolderTree} />
         <Switch>
-          <Route path="/browse" component={browser} />
+          <Route path="/browse" render={() => <Browser key="ui_browser" { ...browserProps } />} />
           <Route path="/view/:public_id" component={Viewer} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>

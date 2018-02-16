@@ -30,12 +30,6 @@ export default class Header extends React.Component {
     this.handleViewerClose = this.handleViewerClose.bind(this)
     this.handleSearchFocus = this.handleSearchFocus.bind(this)
     this.handleSearchBlur = this.handleSearchBlur.bind(this)
-
-    this.breakpoint = 800
-  }
-
-  get isMobile () {
-    return this.props.window.width < this.breakpoint;
   }
 
   handleViewerClose () {
@@ -49,14 +43,13 @@ export default class Header extends React.Component {
   handleSearchBlur () {
     this.setState({ searchFocused: false })
   }
-
   render () {
     const vmIcon = (this.props.viewmode === VIEW_MODES.LIST) ? 'image' : 'list'
     const vmNext = (this.props.viewmode === VIEW_MODES.LIST) ? VIEW_MODES.GRID : VIEW_MODES.LIST
 
     const isViewer = this.props.location.pathname.indexOf('/view/') === 0
-    const breadcrumbVisibility = !(this.state.searchFocused || this.isMobile)
-    const buttonVisibility = !(this.state.searchFocused && this.isMobile)
+    const breadcrumbVisibility = !(this.state.searchFocused || this.props.isMobile)
+    const buttonVisibility = !(this.state.searchFocused && this.props.isMobile)
 
     return (
       <header className={styles.main}>
@@ -69,29 +62,28 @@ export default class Header extends React.Component {
         {!(breadcrumbVisibility || this.state.searchFocused) && <div className={styles.spacer}></div>}
         {/* Folder toggle button */}
         {
-          !isViewer && this.isMobile && !this.state.searchFocused &&
-          <Button icon="folder" className={styles.buttonRight} />
+          !isViewer && this.props.isMobile && !this.state.searchFocused &&
+          <Button icon="folder" className={styles.buttonRight} onClick={this.props.onToggleFolderTree} />
         }
         {/* Search area */}
         <Search
-          isMobile={this.isMobile}
+          isMobile={this.props.isMobile}
           onFocus={this.handleSearchFocus}
           onBlur={this.handleSearchBlur}
           onSubmit={this.props.onSearchSubmit} />
         {/* View mode switcher */}
         {
-          !isViewer &&
-          buttonVisibility &&
+          !isViewer && buttonVisibility &&
           <Button icon={vmIcon} className={styles.button} onClick={() => this.props.setViewMode(vmNext)} />
         }
         {/* Force refresh button */}
         {
-          buttonVisibility &&
+          !isViewer && buttonVisibility &&
           <Button icon="sync-alt" className={styles.button} onClick={this.props.reload} />
         }
         {/* Mobile viewer close button */}
         {
-          isViewer && this.isMobile &&
+          isViewer && this.props.isMobile &&
           <Button icon="times" className={styles.button} onClick={this.handleViewerClose} />
         }
       </header>

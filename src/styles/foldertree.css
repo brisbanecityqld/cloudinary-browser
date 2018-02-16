@@ -1,11 +1,22 @@
+.base {
+  composes: bgLightGrey from './shared/colours.css';
+  composes: noFlex flexColumn from './shared/layout.css';
+}
+
 .main {
   position: absolute;
   width: 80vw;
-  left: calc(-80vw - 1px);
-  z-index: 1;
+  height: 100%;
+  z-index: 2;
 
-  composes: bgLightGrey from './shared/colours.css';
-  composes: flexColumn from './shared/layout.css';
+  composes: base;
+  composes: slow from './shared/transitions.css';
+}
+
+.hidden {
+  transform: translateX(calc(-100% - 1px));
+
+  composes: main;
 }
 
 .scrolling {
@@ -26,13 +37,13 @@
 @media screen and (min-width: bp-tablet) {
   .main {
     position: relative;
-    left: 0;
     width: auto;
-    flex: 0 0;
-    flex-basis: 300px;
-    margin-right: 1px;
-
     min-width: 8em;
     max-width: 35em;
+    margin-right: 1px;
+  }
+
+  .hidden {
+    transform: none;
   }
 }
