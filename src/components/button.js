@@ -6,15 +6,22 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 // Styles
 import styles from '../styles/button.css'
 
+function stop (event) {
+  event.preventDefault()
+  event.stopPropagation()
+}
+
 function handleClick (event, props) {
   if (typeof props.onClick === 'function') {
     props.onClick(event)
+    stop(event)
   }
 }
 
 function handleMouseDown (event, props) {
   if (typeof props.onMouseDown === 'function') {
     props.onMouseDown(event)
+    stop(event)
   }
 }
 

@@ -60,10 +60,20 @@ export default class Viewer extends React.Component {
             <h1 className={styles.title}>{filename}</h1>
             <Button className={styles.closeButton} onClick={this.handleClose} icon="times" />
           </div>
-          {/* Upload date */}
+          {/* File information */}
           {
             data && (
-              <div className={styles.upload}>Uploaded: <span className={styles.bold}>{data.uploaded}</span></div>
+              <div className={styles.fileInfo}>
+                {/* Upload date */}
+                <div className={styles.key}>Uploaded</div>
+                <div className={styles.value}>{data.uploaded}</div>
+                {/* Resolution */}
+                <div className={styles.key}>Resolution</div>
+                <div className={styles.value}>{data.resolution}</div>
+                {/* File size */}
+                <div className={styles.key}>File size</div>
+                <div className={styles.value}>{data.size}</div>
+              </div>
             )
           }
           {/* Download button */}

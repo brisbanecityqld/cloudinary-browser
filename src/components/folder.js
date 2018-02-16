@@ -11,12 +11,6 @@ import { location } from '../lib'
 // Styles
 import styles from '../styles/folder.css'
 
-// Handle click
-function handleClick (event, props) {
-  event.preventDefault()
-  props.onClick()
-}
-
 export default function Folder (props) {
   const route = location.APIToRoute(props.path)
   let iconLeft
@@ -38,7 +32,7 @@ export default function Folder (props) {
       <div className={styles.main}>
         <div className={styles.folder}><FontAwesomeIcon icon={iconLeft} /></div>
         <div className={styles.label}>{props.name}</div>
-        {!props.linkOnly && <Button className={css} icon={iconRight} onClick={event => handleClick(event, props)} />}
+        {!props.linkOnly && <Button className={css} icon={iconRight} onClick={props.onClick} />}
       </div>
     </Link>
   )

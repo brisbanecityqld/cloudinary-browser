@@ -56,7 +56,9 @@ export default class FolderTree extends React.Component {
         name={folder.name}
         deletable={deletable}
         isFavourite={isFavourite}
-        onClick={() => this.props.updateFavourites(folder.path, !isFavourite)} />
+        onClick={() => {
+          this.props[isFavourite ? 'removeFavourite' : 'addFavourite'](folder.path)
+        }} />
     })
 
     const folderActions = []

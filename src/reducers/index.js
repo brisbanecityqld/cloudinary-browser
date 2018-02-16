@@ -78,18 +78,20 @@ const ACTIONS = {
 
   // Add or remove a favourite folder
   [UPDATE_FAVOURITE] (state, action) {
-    const i = state.favourites.findIndex(fav => fav.path === action.path)
+    const i = state.favourites.indexOf(action.path)
+    const newFavourites = state.favourites.slice()
 
     // Create updated favourites list
     if (action.add && i === -1) {
       return {
         ...state,
-        favourites: [ ...state.favourites.slice(), action.path ]
+        favourites: [ ...newFavourites, action.path ]
       }
     } else if (!action.add && i > -1) {
+      newFavourites.splice(i, 1)
       return {
         ...state,
-        favourites: [ ...state.favourites.slice(0, i), ...state.favourites.slice(i + 1) ]
+        favourites: newFavourites
       }
     }
 

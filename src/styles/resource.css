@@ -131,6 +131,12 @@
   padding: 0 .8em;
 }
 
+/* Grid view hidden fields */
+
+.grid .actions {
+  display: none;
+}
+
 /* Media queries */
 
 @value bp-tablet from "./shared/breakpoints.css";
@@ -144,8 +150,11 @@
 
 @media screen and (min-width: bp-medium) {
   .list .upload,
-  .list .tags,
-  .list .actions {
+  .list .tags {
+    display: block;
+  }
+
+  .list:hover .actions {
     display: block;
   }
 }

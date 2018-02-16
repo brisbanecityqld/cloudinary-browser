@@ -2,6 +2,7 @@ import React from 'react'
 
 // Components
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import Button from './button'
 
 // Actions
 import { VIEW_MODES } from '../actions'
@@ -45,7 +46,7 @@ export default class File extends React.Component {
       ? (this.props.viewmode === VIEW_MODES.GRID ? styles.gridImage : undefined)
       : styles.imageHidden
 
-    const { filename, url, uploaded, tags } = fileparser.parseResource(this.props.data, 240, 180)
+    const { filename, url, attachmentUrl, uploaded, tags } = fileparser.parseResource(this.props.data, 240, 180)
 
     return (
       <div className={mainStyle} onClick={this.handleClick}>
@@ -66,7 +67,12 @@ export default class File extends React.Component {
         <div className={styles.tags}>
           {tags.map(tag => (<span className={styles.tag} key={tag}>{tag}</span>))}
         </div>
-        <div className={styles.actions}></div>
+        <div className={styles.actions}>
+          <Button
+            invert
+            icon="cloud-download-alt"
+            onClick={() => window.open(attachmentUrl)} />
+        </div>
       </div>
     )
   }

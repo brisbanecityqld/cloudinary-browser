@@ -62,8 +62,19 @@
   font-weight: bold;
 }
 
-.upload {
+.fileInfo {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-column-gap: 1em;
   margin-bottom: 1em;
+}
+
+.fileInfo .key {
+  grid-column: 1 / 2;
+}
+.fileInfo .value {
+  grid-column: 2 / 3;
+  font-weight: bold;
 }
 
 .actions {

@@ -17,9 +17,13 @@
   left: 0;
   width: .375em;
   height: 100%;
-  background: linear-gradient(to bottom, #106DB2 50%, #EBC822 22.5%);
-  background-size: 100% 40%;
-  background-repeat: repeat-y;
+  background: linear-gradient(
+    to bottom,
+    #106DB2 20%, #EBC822 20%,
+    #EBC822 40%, #106DB2 40%,
+    #106DB2 60%, #EBC822 60%,
+    #EBC822 80%, #106DB2 80%
+  )
 }
 
 .icon {

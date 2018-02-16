@@ -24,14 +24,31 @@ function parseResource (data, imgWidth, imgHeight) {
   const [,year,month,day,time] = DATE_REGEX.exec(data.uploaded_at)
   const uploaded = `${day}/${month}/${year} ${time}`
 
-  const tags = data.tags
+  // File resolution
+  const resolution = `${data.width} x ${data.height}px`
+
+  // File size
+  const base = 1024
+  const sizes = ['b', 'kb', 'MB', 'GB', 'TB', 'PB']
+
+  let bytes = data.bytes
+  let thisSize = 0
+  while (bytes > base && thisSize < sizes.length - 1) {
+    bytes /= base
+    thisSize++
+  }
+
+  // Round size to 2 decimal places
+  const size = Math.floor(bytes * 100) / 100 + ' ' + sizes[thisSize]
 
   return {
     filename,
     url,
     attachmentUrl,
     uploaded,
-    tags
+    tags: data.tags,
+    size,
+    resolution
   }
 }
 
