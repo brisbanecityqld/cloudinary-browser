@@ -67,6 +67,9 @@ export default class App extends React.Component {
 
     this.handleAPIError = this.handleAPIError.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.doSearch = this.doSearch.bind(this)
+
+    this.handlePageLoad = this.handlePageLoad.bind(this)
 
     // Mobile breakpoint
     this.BREAKPOINT = 800
@@ -231,16 +234,24 @@ export default class App extends React.Component {
     }
   }
 
-  // TODO
-  handleSearch (term, nameSearch = true) {
-    console.log('Searching', nameSearch ? 'names' : 'tags', 'for', term)
+  handleSearch (query, nameSearch = true) {
+    if (query) {
+      console.log('Searching', nameSearch ? 'names' : 'tags', 'for', query)
+      this.props.history.push('/search?q=' + query)
+    }
   }
 
-  // Lifecycle hooks
-  // Used for updating files and folders, and app state
-  componentWillMount () {
-    this.loadAppState()
+  // TODO
+  async doSearch (query) {
+    try {
+      const results = await api.search(query)
+      console.log(results)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
+  handlePageLoad () {
     // Handle loading different views
     const route = this.props.location.pathname
 
@@ -248,10 +259,15 @@ export default class App extends React.Component {
       // File browser
       case 'browse':
         this.loadFolder(location.getAPIPath(route))
+
+        // Close folder tree on mobile
+        if (this.state.folderTreeVisible) {
+          this.toggleFolderTree()
+        }
         break
 
-      // Single file viewer
       case 'view':
+        // Single file viewer
         const publicId = decodeURIComponent(route.replace('/view/', ''))
         if (publicId === '') {
           // Check that a resource was requested
@@ -263,13 +279,20 @@ export default class App extends React.Component {
         }
         break
 
-      // Search screen
       case 'search':
+        // Search screen
         break
 
       default:
         console.warn('Invalid URL:', route)
     }
+  }
+
+  // Lifecycle hooks
+  // Used for updating files and folders, and app state
+  componentWillMount () {
+    this.loadAppState()
+    this.handlePageLoad()
   }
 
   componentDidMount () {

@@ -48,7 +48,7 @@ export default class Header extends React.Component {
     const vmNext = (this.props.viewmode === VIEW_MODES.LIST) ? VIEW_MODES.GRID : VIEW_MODES.LIST
 
     const isViewer = this.props.location.pathname.indexOf('/view/') === 0
-    const breadcrumbVisibility = !(this.state.searchFocused || this.props.isMobile)
+    const breadcrumbVisibility = !this.props.isMobile
     const buttonVisibility = !(this.state.searchFocused && this.props.isMobile)
 
     return (

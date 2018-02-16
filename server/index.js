@@ -93,5 +93,30 @@ app.get('/folders', (req, res) => {
   )
 })
 
+app.get('/search', (req, res) => {
+  const query = req.query.q
+  const max_results = req.query.max_results
+  const next_cursor = req.query.hasOwnProperty('next_cursor')
+    ? req.query.next_cursor
+    : null
+
+  log(`User searched for "${query}"`)
+
+  // Build search query
+  const search = new Cloudinary.v2.search()
+    .expression(query)
+    .max_results(max_results)
+    .sort_by('public_id', 'asc') //TODO: custom sorting
+    .with_field('tags');
+
+  // For requesting next page of results
+  if (next_cursor) {
+    search.next_cursor(next_cursor)
+  }
+
+  // Execute search
+  search.execute((err, result) => res.send(err || result))
+})
+
 // Start server
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`))

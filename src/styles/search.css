@@ -4,7 +4,10 @@
 }
 
 .main {
-  width: 16em;
+  flex-grow: 2;
+  max-width: 16em;
+  transition: max-width .3s ease;
+
   composes: base;
 }
 
@@ -29,7 +32,8 @@
 }
 
 .focused {
-  flex: 1;
+  max-width: 28em;
+
   composes: base;
 }
 

@@ -4,6 +4,7 @@ import request from 'request-promise-native'
 
 const SERVER_URL = 'localhost'
 const SERVER_PORT = 8000
+const MAX_RESULTS = 50
 
 // Create API URL from endpoint and params object
 function URL (endpoint, params = null) {
@@ -61,8 +62,7 @@ function getResource (public_id) {
 
 // Endpoint: list all files in a directory
 function getResources (path, nextCursor = null) {
-  const max_results = 50
-  const options = { path, max_results }
+  const options = { path, max_results: MAX_RESULTS }
   if (nextCursor) {
     options.next_cursor = nextCursor
   }
@@ -71,8 +71,19 @@ function getResources (path, nextCursor = null) {
   return respond(url)
 }
 
+function search (query, nextCursor = null) {
+  const options = { q: query, max_results: MAX_RESULTS }
+  if (nextCursor) {
+    options.next_cursor = nextCursor
+  }
+
+  const url = URL('/search', options)
+  return respond(url)
+}
+
 export default {
   getFolders,
   getResource,
-  getResources
+  getResources,
+  search
 }
