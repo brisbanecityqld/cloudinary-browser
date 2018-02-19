@@ -38,7 +38,7 @@ export default function Browser (props) {
   const childProps = {
     children: resources,
     viewmode: props.viewmode,
-    prevFolder: props.prevFolder,
+    parentFolder: props.parentFolder,
     onScrollToBottom: props.onScrollToBottom,
     canLoadMore: props.nextCursor !== null
   }

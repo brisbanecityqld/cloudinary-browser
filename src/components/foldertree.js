@@ -62,11 +62,11 @@ export default class FolderTree extends React.Component {
     })
 
     const folderActions = []
-    if (this.props.prevFolder !== null && this.activeTab === 'Folders') {
+    if (this.props.parentFolder !== null && this.activeTab === 'Folders') {
       folderActions.push(
         <Folder
-          key={this.props.prevFolder}
-          path={this.props.prevFolder}
+          key={this.props.parentFolder}
+          path={this.props.parentFolder}
           name="Go back"
           linkOnly />
       )

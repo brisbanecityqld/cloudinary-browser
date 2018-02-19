@@ -30,11 +30,6 @@ export default class Breadcrumb extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-      needsUpdate: true,
-      truncate: false
-    }
-
     this.makeTrail = this.makeTrail.bind(this)
   }
 
@@ -59,34 +54,11 @@ export default class Breadcrumb extends React.Component {
     return trail
   }
 
-  componentWillUpdate () {
-    if (this.state.needsUpdate) {
-      this.setState({ needsUpdate: false })
-
-      // On route change, check if our trail has wrapped onto multiple lines
-      const baseH = this.base.getBoundingClientRect().height
-      const currentH = this.main.getBoundingClientRect().height
-      if (currentH > baseH) {
-        this.setState({ truncate: true })
-      }
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (!location.matches(this.props.route, nextProps.route)) {
-      this.setState({
-        needsUpdate: true,
-        truncate: false
-      })
-    }
-  }
-
   render () {
     const trail = this.makeTrail()
-    const css = (this.state.truncate ? styles.truncate : styles.main)
 
     return (
-      <div ref={elem => this.main = elem} className={css}>
+      <div ref={elem => this.main = elem} className={styles.main}>
         <Link to={`/${BROWSE_BASE}`}>
           <span ref={elem => this.base = elem} className={styles.crumb}>{BROWSE_BASE_NAME}</span>
         </Link>

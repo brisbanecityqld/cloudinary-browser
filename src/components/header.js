@@ -47,8 +47,7 @@ export default class Header extends React.Component {
     const vmIcon = (this.props.viewmode === VIEW_MODES.LIST) ? 'image' : 'list'
     const vmNext = (this.props.viewmode === VIEW_MODES.LIST) ? VIEW_MODES.GRID : VIEW_MODES.LIST
 
-    const isViewer = this.props.location.pathname.indexOf('/view/') === 0
-    const breadcrumbVisibility = !this.props.isMobile
+    const isViewer = location.getRouteBase(this.props.location.pathname) === 'view'
     const buttonVisibility = !(this.state.searchFocused && this.props.isMobile)
 
     return (
@@ -57,9 +56,11 @@ export default class Header extends React.Component {
           <Link to="/browse"><img src={BCC_logo} alt="logo" /></Link>
         </div>
         {/* Breadcrumb trail */}
-        {breadcrumbVisibility && (<Breadcrumb route={this.props.location.pathname} />)}
-        {/* Conditional header spacer */}
-        {!(breadcrumbVisibility || this.state.searchFocused) && <div className={styles.spacer}></div>}
+        {
+          !this.props.isMobile
+            ? (<Breadcrumb route={this.props.location.pathname} />)
+            : (<div className={styles.spacer}></div>)
+        }
         {/* Folder toggle button */}
         {
           !isViewer && this.props.isMobile && !this.state.searchFocused &&

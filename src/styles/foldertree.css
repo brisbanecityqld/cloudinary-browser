@@ -8,6 +8,7 @@
   width: 80vw;
   height: 100%;
   z-index: 2;
+  box-shadow: 0 0 2.5em .5em rgba(0, 0, 0, .4);
 
   composes: base;
   composes: slow from './shared/transitions.css';
@@ -15,8 +16,28 @@
 
 .hidden {
   transform: translateX(calc(-100% - 1px));
+  box-shadow: none;
 
   composes: main;
+}
+
+/* Background "fade" */
+
+.main:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -100vw;
+  width: 100vw;
+  height: 100%;
+  opacity: 1;
+  background-color: rgba(0, 0, 0, .2);
+  transition: all .3s ease;
+}
+
+.hidden:after {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .scrolling {

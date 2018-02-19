@@ -22,7 +22,7 @@ export default class App extends React.Component {
 
     this.state = {
       loading: false,
-      prevFolder: null,
+      parentFolder: null,
       folderTreeVisible: false,
 
       uiSizes: {
@@ -251,9 +251,9 @@ export default class App extends React.Component {
     }
   }
 
-  handlePageLoad () {
+  handlePageLoad (props = this.props) {
     // Handle loading different views
-    const route = this.props.location.pathname
+    const route = props.location.pathname
 
     switch (location.getRouteBase(route)) {
       // File browser
@@ -270,9 +270,9 @@ export default class App extends React.Component {
         // Single file viewer
         const publicId = decodeURIComponent(route.replace('/view/', ''))
         if (publicId === '') {
-          // Check that a resource was requested
-          console.warn('Malformed /view URL.')
-          this.props.history.replace('/browse')
+          // A resource wasn't actually requested
+          console.warn('No resource requested to view.')
+          props.history.replace('/browse')
         } else {
           // Resource hasn't been downloaded yet, so download it
           this.loadResource(publicId)
@@ -285,6 +285,7 @@ export default class App extends React.Component {
 
       default:
         console.warn('Invalid URL:', route)
+        break
     }
   }
 
@@ -301,27 +302,16 @@ export default class App extends React.Component {
   }
   componentWillReceiveProps (nextProps) {
     // Update if we need to
-    if (
-      location.getRouteBase(nextProps.location.pathname) === 'browse' &&
-      !location.matches(this.props.location.pathname, nextProps.location.pathname)
-    ) {
-      // Update route in store and load folder
-      this.loadFolder(location.getAPIPath(nextProps.location.pathname))
-
-      // Close folder tree on mobile
-      if (this.state.folderTreeVisible) {
-        this.toggleFolderTree()
-      }
-    }
+    this.handlePageLoad(nextProps)
 
     // Set previous folder (for going back)
     const path = location.splitRoute(nextProps.location.pathname)
-    const prevFolder = path.length > 1
+    const parentFolder = path.length > 1
       ? location.getAPIPath(path.slice(0, path.length - 1))
       : null
 
-    if (this.state.prevFolder !== prevFolder) {
-      this.setState({ prevFolder })
+    if (this.state.parentFolder !== parentFolder) {
+      this.setState({ parentFolder })
     }
   }
 
@@ -331,11 +321,12 @@ export default class App extends React.Component {
 
   render() {
     const route = this.props.location.pathname
+    const base = location.getRouteBase(route)
     const path = location.getAPIPath(route)
     const thisRoute = this.getRouteObject(path)
 
     const browserProps = {
-      prevFolder: this.state.prevFolder,
+      parentFolder: this.state.parentFolder,
       onScrollToBottom: () => this.loadMore(path),
       onResourceClick: this.viewResource,
       canLoadMore: thisRoute && thisRoute.nextCursor !== null,
@@ -344,8 +335,6 @@ export default class App extends React.Component {
       onFoldersResize: this.handleFoldersResize,
       onFoldersResizeEnd: this.handleFoldersResizeEnd
     }
-
-    const isViewer = this.props.location.pathname.indexOf('/view/') > -1
 
     const title = (path === '' ? 'Browse' : path) + this.TITLE_SUFFIX
 
@@ -364,7 +353,7 @@ export default class App extends React.Component {
           <Route path="/view/:public_id" component={Viewer} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>
-        {this.state.loading && !isViewer && <Spinner />}
+        {this.state.loading && base !== 'view' && <Spinner />}
       </div>
     )
   }

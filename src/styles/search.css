@@ -1,5 +1,6 @@
 .base {
   position: relative;
+
   composes: flexCenter from './shared/layout.css';
 }
 
@@ -16,19 +17,19 @@
 }
 
 .mobile {
-  width: 2.25em;
+  flex-grow: 1000;
+  max-width: 2.25em;
 
   composes: base;
 }
 
 .mobile .input {
-  width: 0;
   overflow: hidden;
 }
 
 .mobile:not(.focused) .input {
   padding: 0;
-  flex: none;
+  opacity: 0;
 }
 
 .focused {

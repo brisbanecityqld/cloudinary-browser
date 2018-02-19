@@ -26,13 +26,8 @@
 }
 
 .star {
-  display: none;
-
   composes: starBase;
   composes: textGrey from './shared/colours.css';
-}
-.main:hover .star {
-  display: block;
 }
 
 .starSelected {
@@ -40,12 +35,8 @@
 }
 
 .delete {
-  display: none;
   composes: starBase;
   composes: textRed from './shared/colours.css';
-}
-.main:hover .delete {
-  display: block;
 }
 
 .label {
@@ -57,4 +48,18 @@
   font-size: .9em;
 
   composes: flexItem from './shared/layout.css';
+}
+
+/* Media queries */
+
+@value bp-medium from "./shared/breakpoints.css";
+
+@media screen and (min-width: bp-medium) {
+  .main .star, .main .delete {
+    display: none;
+  }
+
+  .main:hover .star, .main:hover .delete {
+    display: block;
+  }
 }
