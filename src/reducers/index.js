@@ -18,7 +18,6 @@ const DEFAULT_STATE = {
   favourites: [],
 
   loadedRoutes: [],
-  searches: [],
 
   cloudName: 'rosies'
 }

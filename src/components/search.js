@@ -48,7 +48,6 @@ export default class Search extends React.Component {
   }
 
   _submit () {
-    console.log('temp')
     if (typeof this.props.onSubmit === 'function') {
       const type = this.state.searchType === 'name'
       this.props.onSubmit(this.state.value, type)

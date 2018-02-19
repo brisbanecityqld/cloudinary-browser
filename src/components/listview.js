@@ -2,12 +2,24 @@ import React from 'react'
 
 // Components
 import FileHeader from './fileheader'
+import Resource from './resource'
 
 // Actions
 import { VIEW_MODES } from '../actions'
 
 // Styles
 import styles from '../styles/listview.css'
+
+// Alphabetically sort list of resource objects
+function sortAlphabetical (a, b) {
+  const strA = a.public_id.toLowerCase()
+  const strB = b.public_id.toLowerCase()
+  return (strA < strB)
+    ? -1
+    : (strA > strB)
+    ? 1
+    : 0
+}
 
 export default class ListView extends React.Component {
   constructor (props) {
@@ -16,6 +28,9 @@ export default class ListView extends React.Component {
     this.state = {
       columnWidths: null
     }
+
+    // Resource component generation
+    this.generateResourceComponents = this.generateResourceComponents.bind(this)
 
     // Track scroll
     this.scrollableArea = null
@@ -51,6 +66,23 @@ export default class ListView extends React.Component {
     }
   }
 
+  generateResourceComponents () {
+    if (!this.props.hasOwnProperty('resources') || this.props.resources.length === 0) {
+      return []
+    }
+
+    // Create array of resource components
+    return this.props.resources
+      .sort(sortAlphabetical)
+      .map(file => (
+        <Resource
+          key={file.public_id}
+          data={file}
+          viewmode={this.props.viewmode}
+          onClick={() => this.props.onResourceClick(encodeURIComponent(file.public_id))} />
+      ))
+  }
+
   // Init and deinit scroll event listener
   componentDidMount () {
     this.scrollableArea.addEventListener('scroll', this.handleScroll, false)
@@ -60,10 +92,11 @@ export default class ListView extends React.Component {
   }
 
   render () {
+    const resources = this.generateResourceComponents()
     const isList = this.props.viewmode === VIEW_MODES.LIST
 
-    const inner = (this.props.children.length > 0)
-      ? this.props.children
+    const inner = (resources.length > 0)
+      ? resources
       : <div className={styles.empty}>There are no resources in this folder.</div>
 
     return <div className={isList ? styles.list : styles.grid}>

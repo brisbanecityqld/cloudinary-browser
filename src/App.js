@@ -9,6 +9,8 @@ import Spinner from './components/spinner'
 
 import Browser from './containers/browser'
 import Viewer from './containers/viewer'
+import Search from './containers/search'
+import Listview from './components/listview'
 
 // Libraries
 import { api, location } from './lib'
@@ -351,6 +353,7 @@ export default class App extends React.Component {
         <Switch>
           <Route path="/browse" render={() => <Browser key="ui_browser" { ...browserProps } />} />
           <Route path="/view/:public_id" component={Viewer} />
+          <Route path="/search" component={Search} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>
         {this.state.loading && base !== 'view' && <Spinner />}
