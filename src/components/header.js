@@ -47,8 +47,13 @@ export default class Header extends React.Component {
     const vmIcon = (this.props.viewmode === VIEW_MODES.LIST) ? 'image' : 'list'
     const vmNext = (this.props.viewmode === VIEW_MODES.LIST) ? VIEW_MODES.GRID : VIEW_MODES.LIST
 
-    const isViewer = location.getRouteBase(this.props.location.pathname) === 'view'
+    const routeBase = location.getRouteBase(this.props.location.pathname)
+    const isViewer = routeBase === 'view'
     const buttonVisibility = !(this.state.searchFocused && this.props.isMobile)
+
+    const initialSearch = routeBase === 'search'
+      ? decodeURIComponent(this.props.location.pathname.replace('/search/', ''))
+      : undefined
 
     return (
       <header className={styles.main}>
@@ -68,6 +73,7 @@ export default class Header extends React.Component {
         }
         {/* Search area */}
         <Search
+          initial={initialSearch}
           isMobile={this.props.isMobile}
           onFocus={this.handleSearchFocus}
           onBlur={this.handleSearchBlur}

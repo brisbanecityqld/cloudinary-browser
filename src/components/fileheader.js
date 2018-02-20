@@ -3,7 +3,11 @@ import React from 'react'
 import styles from '../styles/fileheader.css'
 
 export default function FileHeader (props) {
-  return <div className={styles.main}>
+  let css = styles.main
+  if (props.showListDetails) {
+    css += ' ' + styles.showListDetails
+  }
+  return <div className={css}>
     <div className={styles.checkbox}>
       <div></div>
     </div>

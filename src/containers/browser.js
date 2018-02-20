@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { updateFavourite } from '../actions'
 import FolderTree from '../components/foldertree'
-import Browser from '../components/browser'
+import ListView from '../components/listview'
 
 // Selectors
 import { getCurrentFiles, getCurrentFolders, getFavourites, getNextCursor } from '../selectors'
@@ -29,8 +29,20 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const browserAndTree = props => (
   <div className={styles.content}>
-    <FolderTree { ...props } />
-    <Browser { ...props } />
+    <FolderTree
+      folders={props.folders}
+      favourites={props.favourites}
+      parentFolder={props.parentFolder}
+      width={props.folderTreeWidth}
+      folderTreeVisible={props.folderTreeVisible}
+      onFoldersResize={props.onFoldersResize}
+      onFoldersResizeEnd={props.onFoldersResizeEnd} />
+    <ListView
+      viewmode={props.viewmode}
+      files={props.files}
+      nextCursor={props.nextCursor}
+      onScrollToBottom={props.onScrollToBottom}
+      width={props.browserWidth} />
   </div>
 )
 

@@ -10,7 +10,6 @@ import Spinner from './components/spinner'
 import Browser from './containers/browser'
 import Viewer from './containers/viewer'
 import Search from './containers/search'
-import Listview from './components/listview'
 
 // Libraries
 import { api, location } from './lib'
@@ -27,24 +26,19 @@ export default class App extends React.Component {
       parentFolder: null,
       folderTreeVisible: false,
 
-      uiSizes: {
-        folderTree: 300,
-        browser: window.innerWidth - 300
-      },
+      folderTreeWidth: 300,
 
-      windowSize: {
-        width: window.innerWidth,
-        height: window.innerHeight
-      }
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight
     }
 
     // Cloudinary cloud name
     this.CLOUD_NAME = 'rosies'
     this.TITLE_SUFFIX = ' | BCC Image Browser'
 
-    this.storageKeys = {
-      'ui_column_widths': 'uiSizes'
-    }
+    this.storageKeys = [
+      'folderTreeWidth'
+    ]
 
     // Method bindings
     this.saveAppKey = this.saveAppKey.bind(this)
@@ -57,19 +51,16 @@ export default class App extends React.Component {
 
     // Handle UI resizing
     this.handleWindowResize = this.handleWindowResize.bind(this)
-    this.handleFoldersResize = this.handleFoldersResize.bind(this)
     this.handleFoldersResizeEnd = this.handleFoldersResizeEnd.bind(this)
 
     this.toggleFolderTree = this.toggleFolderTree.bind(this)
 
     this.loadResource = this.loadResource.bind(this)
-    this.viewResource = this.viewResource.bind(this)
 
     this.getRouteObject = this.getRouteObject.bind(this)
 
     this.handleAPIError = this.handleAPIError.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
-    this.doSearch = this.doSearch.bind(this)
 
     this.handlePageLoad = this.handlePageLoad.bind(this)
 
@@ -78,33 +69,35 @@ export default class App extends React.Component {
   }
 
   get isMobile () {
-    return this.state.windowSize.width < this.BREAKPOINT;
+    return this.state.windowWidth < this.BREAKPOINT;
   }
 
   // Save a specific app key
   saveAppKey (key) {
-    localStorage.setItem(key, JSON.stringify(this.state[this.storageKeys[key]]))
+    localStorage.setItem(key, JSON.stringify(this.state[key]))
   }
 
   // Save select parts of app state to localStorage
   saveAppState () {
-    Object.keys(this.storageKeys).forEach(key => this.saveAppKey)
+    this.storageKeys.forEach(this.saveAppKey)
   }
 
   loadAppState () {
-    Object.entries(this.storageKeys).forEach(([ key, value ]) => {
+    const newState = {}
+
+    this.storageKeys.forEach(key => {
       const val = localStorage.getItem(key)
       if (val) {
         try {
-          this.setState({
-            value: JSON.parse(val)
-          })
+          newState[key] = JSON.parse(val)
         } catch (e) {
           console.log(`Error parsing stored key ${key}, deleting...`)
           localStorage.removeItem(key)
         }
       }
     })
+
+    this.setState(newState)
   }
 
   // Mark for reload
@@ -119,24 +112,13 @@ export default class App extends React.Component {
   // UI resizing
   handleWindowResize () {
     this.setState({
-      windowSize: {
-        width: window.innerWidth,
-        height: window.innerHeight
-      }
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight
     })
   }
-  handleFoldersResize (newSize) {
-    this.setState((prevState, props) => {
-      return {
-        uiSizes: {
-          folderTree: newSize,
-          browser: prevState.windowSize.width - newSize
-        }
-      }
-    })
-  }
-  handleFoldersResizeEnd () {
-    this.saveAppKey(this.storageKeys.ui_column_widths)
+  handleFoldersResizeEnd (folderTreeWidth) {
+    this.setState({ folderTreeWidth })
+    this.saveAppState()
   }
 
   toggleFolderTree () {
@@ -220,11 +202,6 @@ export default class App extends React.Component {
     }
   }
 
-  // Reroute to file viewer
-  viewResource (publicId) {
-    this.props.history.push('/view/' + publicId, { canGoBack: true })
-  }
-
   // Handles some API errors
   handleAPIError (error) {
     if (error.hasOwnProperty('http_code') && error.http_code === 404) {
@@ -238,18 +215,7 @@ export default class App extends React.Component {
 
   handleSearch (query, nameSearch = true) {
     if (query) {
-      console.log('Searching', nameSearch ? 'names' : 'tags', 'for', query)
-      this.props.history.push('/search?q=' + query)
-    }
-  }
-
-  // TODO
-  async doSearch (query) {
-    try {
-      const results = await api.search(query)
-      console.log(results)
-    } catch (e) {
-      console.error(e)
+      this.props.history.push('/search/' + encodeURIComponent(query))
     }
   }
 
@@ -283,10 +249,17 @@ export default class App extends React.Component {
 
       case 'search':
         // Search screen
+        const query = decodeURIComponent(route.replace('/search/', ''))
+        if (query === '') {
+          console.warn('No search term specified.')
+          props.history.replace('/browse')
+        } else {
+          props.setSearch(query)
+        }
         break
 
       default:
-        console.warn('Invalid URL:', route)
+        console.warn('Unhandled URL:', route)
         break
     }
   }
@@ -325,14 +298,12 @@ export default class App extends React.Component {
     const route = this.props.location.pathname
     const base = location.getRouteBase(route)
     const path = location.getAPIPath(route)
-    const thisRoute = this.getRouteObject(path)
 
     const browserProps = {
       parentFolder: this.state.parentFolder,
       onScrollToBottom: () => this.loadMore(path),
-      onResourceClick: this.viewResource,
-      canLoadMore: thisRoute && thisRoute.nextCursor !== null,
-      uiSizes: this.state.uiSizes,
+      browserWidth: this.state.windowWidth - this.state.folderTreeWidth,
+      folderTreeWidth: this.state.folderTreeWidth,
       folderTreeVisible: this.state.folderTreeVisible,
       onFoldersResize: this.handleFoldersResize,
       onFoldersResizeEnd: this.handleFoldersResizeEnd
@@ -353,7 +324,7 @@ export default class App extends React.Component {
         <Switch>
           <Route path="/browse" render={() => <Browser key="ui_browser" { ...browserProps } />} />
           <Route path="/view/:public_id" component={Viewer} />
-          <Route path="/search" component={Search} />
+          <Route path="/search/:query" render={() => <Search width={this.state.windowWidth} />} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>
         {this.state.loading && base !== 'view' && <Spinner />}

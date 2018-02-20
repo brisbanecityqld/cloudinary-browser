@@ -1,6 +1,7 @@
 import React from 'react'
 
 // Components
+import { Link } from 'react-router-dom'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import Button from './button'
 
@@ -26,9 +27,7 @@ export default class File extends React.Component {
   }
 
   handleClick () {
-    if (this.props.onClick) {
-      this.props.onClick()
-    }
+
   }
 
   handleImageLoaded () {
@@ -38,18 +37,25 @@ export default class File extends React.Component {
   }
 
   render () {
-    const mainStyle = this.props.viewmode === VIEW_MODES.LIST
+    let mainStyle = this.props.viewmode === VIEW_MODES.LIST
       ? styles.list
       : styles.grid
+    if (this.props.showListDetails) {
+      mainStyle += ' ' + styles.showListDetails
+    }
 
     const imgStyle = this.state.imageLoaded
       ? (this.props.viewmode === VIEW_MODES.GRID ? styles.gridImage : undefined)
       : styles.imageHidden
 
     const { filename, url, attachmentUrl, uploaded, tags } = fileparser.parseResource(this.props.data, 240, 180)
+    const viewUrl = '/view/' + encodeURIComponent(this.props.data.public_id)
+
+    // this.props.history.push('/view/' + publicId, { canGoBack: true })
 
     return (
       <div className={mainStyle} onClick={this.handleClick}>
+        <Link to={{ pathname: viewUrl, state: { canGoBack: true } }} />
         <div className={styles.checkbox}>
           <div></div>
         </div>

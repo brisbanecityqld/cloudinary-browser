@@ -7,7 +7,8 @@ import {
   markAsLoaded,
   addResources,
   addFolders,
-  unloadFolder
+  unloadFolder,
+  setSearch
 } from '../actions'
 
 import { location } from '../lib'
@@ -27,7 +28,8 @@ const mapDispatchToProps = dispatch => {
     markAsLoaded: (path, nextCursor) => dispatch(markAsLoaded(path, nextCursor)),
     addResources: files => dispatch(addResources(files)),
     addFolders: folders => dispatch(addFolders(folders)),
-    unloadFolder: route => dispatch(unloadFolder(location.getAPIPath(route)))
+    unloadFolder: route => dispatch(unloadFolder(location.getAPIPath(route))),
+    setSearch: search => dispatch(setSearch(search))
   }
 }
 

@@ -25,10 +25,6 @@ export default class ListView extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-      columnWidths: null
-    }
-
     // Resource component generation
     this.generateResourceComponents = this.generateResourceComponents.bind(this)
 
@@ -37,14 +33,19 @@ export default class ListView extends React.Component {
     this.scrollTimeout = null
     this.debounceMS = 66
 
+    this.widthThreshold = 800
+
     // Method bindings
     this.handleScroll = this.handleScroll.bind(this)
     this.handleScrollEnd = this.handleScrollEnd.bind(this)
-    this.handleColResize = this.handleColResize.bind(this)
   }
 
-  handleColResize (columns) {
-    console.log(columns)
+  get canLoadMore () {
+    return this.props.nextCursor !== null
+  }
+
+  get showListDetails () {
+    return this.props.width > this.widthThreshold
   }
 
   handleScroll (event) {
@@ -59,7 +60,7 @@ export default class ListView extends React.Component {
     if (
       target.scrollTop &&
       target.scrollTop + target.clientHeight === target.scrollHeight &&
-      this.props.canLoadMore
+      this.canLoadMore
     ) {
       // Load more resources
       this.props.onScrollToBottom()
@@ -67,18 +68,19 @@ export default class ListView extends React.Component {
   }
 
   generateResourceComponents () {
-    if (!this.props.hasOwnProperty('resources') || this.props.resources.length === 0) {
+    if (!this.props.files || this.props.files.length === 0) {
       return []
     }
 
     // Create array of resource components
-    return this.props.resources
+    return this.props.files
       .sort(sortAlphabetical)
       .map(file => (
         <Resource
           key={file.public_id}
           data={file}
           viewmode={this.props.viewmode}
+          showListDetails={this.showListDetails}
           onClick={() => this.props.onResourceClick(encodeURIComponent(file.public_id))} />
       ))
   }
@@ -95,12 +97,23 @@ export default class ListView extends React.Component {
     const resources = this.generateResourceComponents()
     const isList = this.props.viewmode === VIEW_MODES.LIST
 
+    let mainClass = isList ? styles.list : styles.grid
+    if (this.showListDetails) {
+      mainClass += ' ' + styles.showListDetails
+    }
+
+    const emptyText = !this.props.isSearch
+      ? 'There are no resources in this folder.'
+      : this.props.isLoading
+      ? 'Loading search results...'
+      : 'Your search returned no results.'
+
     const inner = (resources.length > 0)
       ? resources
-      : <div className={styles.empty}>There are no resources in this folder.</div>
+      : (<div className={styles.empty}>{emptyText}</div>)
 
-    return <div className={isList ? styles.list : styles.grid}>
-      {isList && <FileHeader onColResize={this.handleColResize} />}
+    return <div className={mainClass}>
+      {isList && <FileHeader showListDetails={this.showListDetails} onColResize={this.handleColResize} />}
       <div
         ref={div => this.scrollableArea = div}
         className={isList ? styles.listWrap : styles.gridWrap}>
@@ -108,7 +121,7 @@ export default class ListView extends React.Component {
           {inner}
         </div>
         {
-          this.props.canLoadMore && (
+          this.canLoadMore && (
             <div className={styles.loadMore}>
               <span onClick={this.props.onScrollToBottom}>Load more...</span>
             </div>

@@ -76,6 +76,16 @@ export default class Search extends React.Component {
     }
   }
 
+  // Synchronise input field value with URL bar
+  componentWillMount () {
+    this.setState({ value: this.props.initial })
+  }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.initial) {
+      this.setState({ value: nextProps.initial })
+    }
+  }
+
   render () {
     let mainStyle = this.props.isMobile ? styles.mobile : styles.main
     if (this.state.focused) {

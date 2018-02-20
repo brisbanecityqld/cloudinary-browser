@@ -34,21 +34,18 @@
   display: none;
 }
 
+.showListDetails .upload,
+.showListDetails .tags,
+.showListDetails .actions {
+  display: block;
+}
+
 /* Media queries */
 
 @value bp-tablet from "./shared/breakpoints.css";
-@value bp-medium from "./shared/breakpoints.css";
 
 @media screen and (min-width: bp-tablet) {
   .main {
     padding-left: 1.5rem;
-  }
-}
-
-@media screen and (min-width: bp-medium) {
-  .upload,
-  .tags,
-  .actions {
-    display: block;
   }
 }

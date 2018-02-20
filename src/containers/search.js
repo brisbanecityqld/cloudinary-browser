@@ -1,24 +1,26 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Browser from '../components/browser'
+import { addSearchResults } from '../actions'
+import SearchResults from '../components/searchresults'
 
-// Styles
-import styles from '../App.css'
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    viewmode: state.viewmode
+    viewmode: state.viewmode,
+    search: state.search,
+    nextCursor: state.searchCursor,
+    results: state.results
   }
 }
 
-const browser = props => (
-  <div className={styles.content}>
-    <Browser { ...props } />
-  </div>
-)
+const mapDispatchToProps = dispatch => {
+  return {
+    addSearchResults: (results, nextCursor) => dispatch(addSearchResults(results, nextCursor))
+  }
+}
 
-const WrappedBrowser = connect(
-  mapStateToProps
-)(browser)
+const search = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(props => <SearchResults { ...props } />)
 
-export default WrappedBrowser
+export default search

@@ -9,6 +9,8 @@ export const ADD_FOLDERS = 'add_folders'
 export const UPDATE_FAVOURITE = 'update_favourites'
 export const MARK_AS_LOADED = 'mark_as_loaded'
 export const UNLOAD_FOLDER = 'unload_folder'
+export const SET_SEARCH = 'set_search'
+export const ADD_SEARCH_RESULTS = 'add_search_results'
 
 /**
  * Other constants
@@ -23,30 +25,12 @@ export const VIEW_MODES = {
  * Action creators
  */
 
-export function setViewMode (viewmode) {
-  return { type: SET_VIEW_MODE, viewmode }
-}
-
-export function setCurrentRoute (route) {
-  return { type: SET_CURRENT_ROUTE, route }
-}
-
-export function addResources (payload) {
-  return { type: ADD_RESOURCES, payload }
-}
-
-export function addFolders (payload) {
-  return { type: ADD_FOLDERS, payload }
-}
-
-export function updateFavourite (path, add = true) {
-  return { type: UPDATE_FAVOURITE, path, add }
-}
-
-export function markAsLoaded (path, nextCursor = null) {
-  return { type: MARK_AS_LOADED, path, nextCursor }
-}
-
-export function unloadFolder (path) {
-  return { type: UNLOAD_FOLDER, path }
-}
+export const setViewMode = viewmode => ({ type: SET_VIEW_MODE, viewmode })
+export const setCurrentRoute = route => ({ type: SET_CURRENT_ROUTE, route })
+export const addResources = payload => ({ type: ADD_RESOURCES, payload })
+export const addFolders = payload => ({ type: ADD_FOLDERS, payload })
+export const updateFavourite = (path, add = true) => ({ type: UPDATE_FAVOURITE, path, add })
+export const markAsLoaded = (path, nextCursor = null) => ({ type: MARK_AS_LOADED, path, nextCursor })
+export const unloadFolder = path => ({ type: UNLOAD_FOLDER, path })
+export const setSearch = search => ({ type: SET_SEARCH, search })
+export const addSearchResults = (results, nextCursor = null) => ({ type: ADD_SEARCH_RESULTS, results, nextCursor })

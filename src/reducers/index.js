@@ -6,7 +6,9 @@ import {
   UPDATE_FAVOURITE,
   MARK_AS_LOADED,
   UNLOAD_FOLDER,
-  VIEW_MODES
+  VIEW_MODES,
+  SET_SEARCH,
+  ADD_SEARCH_RESULTS
 } from '../actions'
 
 const DEFAULT_STATE = {
@@ -18,6 +20,10 @@ const DEFAULT_STATE = {
   favourites: [],
 
   loadedRoutes: [],
+
+  search: '',
+  searchCursor: null,
+  results: [],
 
   cloudName: 'rosies'
 }
@@ -147,6 +153,30 @@ const ACTIONS = {
       ...state,
       files,
       folders
+    }
+  },
+
+  // Set the current search term
+  [SET_SEARCH] (state, action) {
+    return (action.search !== state.search)
+      ? {
+          ...state,
+          search: action.search,
+          searchCursor: null,
+          results: []
+        }
+      : state
+  },
+
+  // Add search results
+  [ADD_SEARCH_RESULTS] (state, action) {
+    return {
+      ...state,
+      searchCursor: action.nextCursor,
+      results: [
+        ...state.results,
+        ...action.results
+      ]
     }
   }
 }

@@ -1,4 +1,5 @@
 .list {
+  position: relative;
   height: 4em;
   padding: 0 .825em 0 1em;
   cursor: pointer;
@@ -75,6 +76,7 @@
 }
 
 /* Tags */
+
 .list .tags {
   height: 2em;
 }
@@ -94,6 +96,7 @@
 /* Grid view */
 
 .grid {
+  position: relative;
   width: 15em;
   height: 18.5em;
   cursor: pointer;
@@ -137,24 +140,35 @@
   display: none;
 }
 
+/* Links */
+
+.checkbox, .tags, .actions {
+  position: relative;
+  z-index: 2;
+}
+
+.list > a, .grid > a {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.list.showListDetails .upload,
+.list.showListDetails .tags {
+  display: block;
+}
+
+.list.showListDetails:hover .actions {
+  display: block;
+}
+
 /* Media queries */
 
 @value bp-tablet from "./shared/breakpoints.css";
-@value bp-medium from "./shared/breakpoints.css";
 
 @media screen and (min-width: bp-tablet) {
   .list {
     padding-left: 1.5em;
-  }
-}
-
-@media screen and (min-width: bp-medium) {
-  .list .upload,
-  .list .tags {
-    display: block;
-  }
-
-  .list:hover .actions {
-    display: block;
   }
 }

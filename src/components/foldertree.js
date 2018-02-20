@@ -15,6 +15,7 @@ export default class FolderTree extends React.Component {
     super (props)
 
     this.state = {
+      width: props.width,
       tabs: [
         { name: 'Folders', active: true },
         { name: 'Favourites', active: false }
@@ -79,18 +80,16 @@ export default class FolderTree extends React.Component {
   }
 
   onDrag (offset) {
-    this.setState((prevState, props) => ({
-      width: prevState.baseWidth + offset
-    }))
+    this.setState({
+      width: this.props.width + offset
+    })
   }
 
   // Drag end
   // Pull client width of element and set as base width
-  // This ensures that the element respect css min- and max-widths
+  // This ensures that the element respects css min- and max-widths
   onDragEnd () {
-    this.setState({
-      baseWidth: this.elem.clientWidth
-    }, this.saveState)
+    this.props.onFoldersResizeEnd(this.state.width)
   }
 
   displayMessage (text) {
@@ -109,11 +108,11 @@ export default class FolderTree extends React.Component {
     }, this.saveState)
   }
 
-  componentWillMount () {
-    // Load width if it's saved in localStorage
-    const state = localStorage.getItem(this.storageKey)
-    if (state) {
-      this.setState(JSON.parse(state))
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.width !== this.state.width) {
+      this.setState({
+        width: nextProps.width
+      })
     }
   }
 
