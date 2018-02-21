@@ -78,7 +78,9 @@ export default class Search extends React.Component {
 
   // Synchronise input field value with URL bar
   componentWillMount () {
-    this.setState({ value: this.props.initial })
+    if (this.props.initial) {
+      this.setState({ value: this.props.initial })
+    }
   }
   componentWillReceiveProps (nextProps) {
     if (nextProps.initial) {

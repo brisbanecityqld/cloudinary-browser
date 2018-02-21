@@ -2,7 +2,7 @@ import React from 'react'
 import ListView from './listview'
 import Spinner from './spinner'
 
-import { api } from '../lib'
+import { api, argparser } from '../lib'
 
 import styles from '../App.css'
 
@@ -23,14 +23,19 @@ export default class SearchResults extends React.Component {
     this.setState({ loading })
   }
 
+  createSearch (search) {
+    const terms = argparser(search)
+    return `tags:(${terms.join(' AND ')}) OR filename:(${search}*)`
+  }
+
   async doSearch (props = this.props) {
     this.loading()
 
     // Perform search and handle results
-    const search = props.search
+    const query = this.createSearch(props.search)
 
     try {
-      const results = await api.search(search)
+      const results = await api.search(query)
       this.loading(false)
 
       // Set results and next cursor value
@@ -46,7 +51,8 @@ export default class SearchResults extends React.Component {
 
       // Perform search with next_cursor applied
       try {
-        const results = await api.search(this.props.search, this.props.nextCursor)
+        const query = this.createSearch(this.props.search)
+        const results = await api.search(query, this.props.nextCursor)
         this.loading(false)
 
         results.total_count > 0 && this.props.addSearchResults(results.resources, results.next_cursor)

@@ -4,6 +4,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import Button from './button'
+import Tag from './tag'
 
 // Actions
 import { VIEW_MODES } from '../actions'
@@ -71,7 +72,7 @@ export default class File extends React.Component {
         <div className={styles.title}>{filename}</div>
         <div className={styles.upload}>{uploaded}</div>
         <div className={styles.tags}>
-          {tags.map(tag => (<span className={styles.tag} key={tag}>{tag}</span>))}
+          {tags.map(tag => <Tag text={tag} key={tag} />)}
         </div>
         <div className={styles.actions}>
           <Button

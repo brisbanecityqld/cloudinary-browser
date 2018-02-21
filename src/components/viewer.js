@@ -3,6 +3,7 @@ import React from 'react'
 // Components
 import Spinner from './spinner'
 import Button from './button'
+import Tag from './tag'
 
 // Libraries
 import { fileparser, location } from '../lib'
@@ -89,7 +90,7 @@ export default class Viewer extends React.Component {
             )
           }
           <div className={styles.tags}>
-            {data && data.tags.map(tag => (<span className={styles.tag} key={tag}>{tag}</span>))}
+            {data && data.tags.map(tag => <Tag text={tag} key={tag} />)}
           </div>
         </div>
       </div>

@@ -10,17 +10,6 @@ import { VIEW_MODES } from '../actions'
 // Styles
 import styles from '../styles/listview.css'
 
-// Alphabetically sort list of resource objects
-function sortAlphabetical (a, b) {
-  const strA = a.public_id.toLowerCase()
-  const strB = b.public_id.toLowerCase()
-  return (strA < strB)
-    ? -1
-    : (strA > strB)
-    ? 1
-    : 0
-}
-
 export default class ListView extends React.Component {
   constructor (props) {
     super(props)
@@ -74,7 +63,6 @@ export default class ListView extends React.Component {
 
     // Create array of resource components
     return this.props.files
-      .sort(sortAlphabetical)
       .map(file => (
         <Resource
           key={file.public_id}
