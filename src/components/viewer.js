@@ -16,16 +16,23 @@ export default class Viewer extends React.Component {
     super(props)
 
     this.state = {
-      imageLoaded: false
+      imageState: 'loading'
     }
 
     this.handleImageLoaded = this.handleImageLoaded.bind(this)
+    this.handleImageError = this.handleImageError.bind(this)
     this.handleClose = this.handleClose.bind(this)
   }
 
   handleImageLoaded () {
     this.setState({
-      imageLoaded: true
+      imageState: 'loaded'
+    })
+  }
+
+  handleImageError() {
+    this.setState({
+      imageState: 'error'
     })
   }
 
@@ -41,20 +48,26 @@ export default class Viewer extends React.Component {
   render () {
     const data = fileparser.parseResource(this.props.resource)
     const filename = data ? data.filename : 'Loading file...'
+    const img = this.state.imageState === 'error'
+      ? (<div className={styles.error}>Cannot preview this resource.</div>)
+      : data
+      ? (
+          <img
+            src={data.url}
+            alt={data.filename}
+            onLoad={this.handleImageLoaded}
+            onError={this.handleImageError}
+            onClick={() => window.open(data.url)} />
+        )
+      : undefined
 
     return (
       <div className={styles.main}>
         <div className={styles.image}>
           {
-            data && (
-              <img
-                src={data.url}
-                alt={data.filename}
-                onLoad={this.handleImageLoaded}
-                onClick={() => window.open(data.url)} />
-            )
+            data && img
           }
-          {!this.state.imageLoaded && <Spinner />}
+          {this.state.imageState === 'loading' && <Spinner />}
         </div>
         <div className={styles.details}>
           <div className={styles.header}>

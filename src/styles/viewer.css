@@ -94,6 +94,18 @@
   composes: tag from './tag.css';
 }
 
+/* Error for image load failure */
+
+.error {
+  width: 100%;
+  height: 100%;
+  padding: 1em;
+  text-align: center;
+  justify-content: center;
+
+  composes: flexCenter from './shared/layout.css';
+}
+
 /* Media queries */
 
 @value bp-tablet from "./shared/breakpoints.css";

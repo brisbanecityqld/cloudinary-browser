@@ -2,18 +2,9 @@ import React from 'react'
 import ListView from './listview'
 import Spinner from './spinner'
 
-import { api, argparser } from '../lib'
+import { api } from '../lib'
 
 import styles from '../App.css'
-
-function createTerm (type, term) {
-  const isMinus = term[0] === '-'
-  return (isMinus ? '-' : '') + type + ':' + term.replace(/^-/, '')
-}
-
-function createSearch (type, terms) {
-  return terms.map(term => createTerm(type, term)).join(' AND ')
-}
 
 export default class SearchResults extends React.Component {
   constructor (props) {
@@ -32,33 +23,18 @@ export default class SearchResults extends React.Component {
     this.setState({ loading })
   }
 
-  createSearch (search) {
-    const terms = argparser(search).map(term => term.toLowerCase())
-
-    // Generate tag search
-    let tags = createSearch('tags', terms)
-    let fnames = createSearch('filename', terms)
-
-    // Combined search query
-    return (terms.length > 1)
-      ? `(${tags}) OR (${fnames})`
-      : `${tags} OR ${fnames}`
-  }
-
   async doSearch (props = this.props) {
     this.loading()
 
-    // Perform search and handle results
-    const query = this.createSearch(props.search)
-
     try {
-      const results = await api.search(query)
+      const results = await api.search(props.search)
       this.loading(false)
 
       // Set results and next cursor value
       results.total_count > 0 && this.props.addSearchResults(results.resources, results.next_cursor)
     } catch (e) {
       console.error(e)
+      this.loading(false)
     }
   }
 
@@ -68,13 +44,13 @@ export default class SearchResults extends React.Component {
 
       // Perform search with next_cursor applied
       try {
-        const query = this.createSearch(this.props.search)
-        const results = await api.search(query, this.props.nextCursor)
+        const results = await api.search(this.props.search, this.props.nextCursor)
         this.loading(false)
 
         results.total_count > 0 && this.props.addSearchResults(results.resources, results.next_cursor)
       } catch (e) {
         console.error(e)
+        this.loading(false)
       }
     }
   }
