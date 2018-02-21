@@ -6,6 +6,15 @@ import { api, argparser } from '../lib'
 
 import styles from '../App.css'
 
+function createTerm (type, term) {
+  const isMinus = term[0] === '-'
+  return (isMinus ? '-' : '') + type + ':' + term.replace(/^-/, '')
+}
+
+function createSearch (type, terms) {
+  return terms.map(term => createTerm(type, term)).join(' AND ')
+}
+
 export default class SearchResults extends React.Component {
   constructor (props) {
     super(props)
@@ -26,9 +35,11 @@ export default class SearchResults extends React.Component {
   createSearch (search) {
     const terms = argparser(search).map(term => term.toLowerCase())
 
-    let tags = terms.map(term => 'tags:' + term).join(' AND ')
-    let fnames = terms.map(term => 'filename:' + term + (term[term.length - 1] === '"' ? '' : '*')).join(' OR ')
+    // Generate tag search
+    let tags = createSearch('tags', terms)
+    let fnames = createSearch('filename', terms)
 
+    // Combined search query
     return (terms.length > 1)
       ? `(${tags}) OR (${fnames})`
       : `${tags} OR ${fnames}`
