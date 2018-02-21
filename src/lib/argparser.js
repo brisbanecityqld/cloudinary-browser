@@ -31,5 +31,10 @@ export default function parse (str) {
   }
   clearBuffer()
 
-  return terms.map(t => t.trim().toLowerCase())
+  return terms.map(t => {
+    t = t.trim()
+    return (t.indexOf(ch_space) > -1)
+      ? `"${t}"`
+      : t
+  })
 }

@@ -24,8 +24,14 @@ export default class SearchResults extends React.Component {
   }
 
   createSearch (search) {
-    const terms = argparser(search)
-    return `tags:(${terms.join(' AND ')}) OR filename:(${search}*)`
+    const terms = argparser(search).map(term => term.toLowerCase())
+
+    let tags = terms.map(term => 'tags:' + term).join(' AND ')
+    let fnames = terms.map(term => 'filename:' + term + (term[term.length - 1] === '"' ? '' : '*')).join(' OR ')
+
+    return (terms.length > 1)
+      ? `(${tags}) OR (${fnames})`
+      : `${tags} OR ${fnames}`
   }
 
   async doSearch (props = this.props) {
