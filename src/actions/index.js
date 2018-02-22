@@ -11,6 +11,8 @@ export const MARK_AS_LOADED = 'mark_as_loaded'
 export const UNLOAD_FOLDER = 'unload_folder'
 export const SET_SEARCH = 'set_search'
 export const ADD_SEARCH_RESULTS = 'add_search_results'
+export const UPDATE_CHECKED = 'update_checked'
+export const CLEAR_ALL_CHECKED = 'clear_all_checked'
 
 /**
  * Other constants
@@ -34,3 +36,5 @@ export const markAsLoaded = (path, nextCursor = null) => ({ type: MARK_AS_LOADED
 export const unloadFolder = path => ({ type: UNLOAD_FOLDER, path })
 export const setSearch = search => ({ type: SET_SEARCH, search })
 export const addSearchResults = (results, nextCursor = null) => ({ type: ADD_SEARCH_RESULTS, results, nextCursor })
+export const updateChecked = (path, add = true) => ({ type: UPDATE_CHECKED, path, add })
+export const clearAllChecked = () => ({ type: CLEAR_ALL_CHECKED })

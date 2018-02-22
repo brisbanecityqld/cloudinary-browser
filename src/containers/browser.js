@@ -1,11 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { updateFavourite } from '../actions'
+import { updateFavourite, updateChecked } from '../actions'
 import FolderTree from '../components/foldertree'
 import ListView from '../components/listview'
 
 // Selectors
-import { getCurrentFiles, getCurrentFolders, getFavourites, getNextCursor } from '../selectors'
+import {
+  getCurrentFiles,
+  getCurrentFolders,
+  getFavourites,
+  getNextCursor,
+  areAllFilesChecked
+} from '../selectors'
 
 // Styles
 import styles from '../App.css'
@@ -14,6 +20,8 @@ const mapStateToProps = (state) => {
   return {
     viewmode: state.viewmode,
     files: getCurrentFiles(state),
+    checkedFiles: state.checked,
+    allChecked: areAllFilesChecked(state),
     folders: getCurrentFolders(state),
     favourites: getFavourites(state),
     nextCursor: getNextCursor(state)
@@ -23,11 +31,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     addFavourite: path => dispatch(updateFavourite(path)),
-    removeFavourite: path => dispatch(updateFavourite(path, false))
+    removeFavourite: path => dispatch(updateFavourite(path, false)),
+    updateChecked: (path, newVal) => dispatch(updateChecked(path, newVal)),
   }
 }
 
-const browserAndTree = props => (
+const BrowserAndTree = props => (
   <div className={styles.content}>
     <FolderTree
       folders={props.folders}
@@ -36,19 +45,24 @@ const browserAndTree = props => (
       width={props.folderTreeWidth}
       folderTreeVisible={props.folderTreeVisible}
       onFoldersResize={props.onFoldersResize}
-      onFoldersResizeEnd={props.onFoldersResizeEnd} />
+      onFoldersResizeEnd={props.onFoldersResizeEnd}
+      addFavourite={props.addFavourite}
+      removeFavourite={props.removeFavourite} />
     <ListView
       viewmode={props.viewmode}
       files={props.files}
+      checkedFiles={props.checkedFiles}
+      allChecked={props.allChecked}
       nextCursor={props.nextCursor}
       onScrollToBottom={props.onScrollToBottom}
-      width={props.browserWidth} />
+      width={props.browserWidth}
+      updateChecked={props.updateChecked} />
   </div>
 )
 
 const WrappedBrowser = connect(
   mapStateToProps,
   mapDispatchToProps
-)(browserAndTree)
+)(BrowserAndTree)
 
 export default WrappedBrowser

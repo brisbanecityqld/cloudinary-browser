@@ -71,9 +71,8 @@ export default class SearchResults extends React.Component {
       <div className={styles.content}>
         <ListView
           isSearch
-          isLoading={this.state.loading}
-          nextCursor={this.props.nextCursor}
           files={this.props.results}
+          isLoading={this.state.loading}
           onScrollToBottom={this.doNextSearch}
           { ...this.props } />
         {this.state.loading && <Spinner />}

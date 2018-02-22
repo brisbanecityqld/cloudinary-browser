@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import Button from './button'
 import Tag from './tag'
+import Checkbox from './checkbox'
 
 // Actions
 import { VIEW_MODES } from '../actions'
@@ -57,9 +58,7 @@ export default class File extends React.Component {
     return (
       <div className={mainStyle} onClick={this.handleClick}>
         <Link to={{ pathname: viewUrl, state: { canGoBack: true } }} />
-        <div className={styles.checkbox}>
-          <div></div>
-        </div>
+        <Checkbox className={styles.checkbox} value={this.props.checked} onToggle={this.props.onCheckboxToggle} />
         <div className={styles.image}>
           <img
             className={imgStyle}

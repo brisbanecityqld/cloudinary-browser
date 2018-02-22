@@ -1,43 +1,47 @@
-.main {
+.base {
   height: 3em;
   padding: 0 .75em 0 1em;
+
+  composes: noFlex from './shared/layout.css';
+}
+
+.list {
   grid-template-columns: inherit;
   grid-column-gap: inherit;
-  flex-shrink: 0;
 
+  composes: base;
   composes: bgMedGrey from './shared/colours.css';
   composes: gridCenter from './shared/layout.css';
 }
 
-.checkbox > div {
-  width: 1em;
-  height: 1em;
-  border-radius: .2em;
-  border: 2px solid #333;
-  cursor: pointer;
+.grid {
+  composes: base;
+  composes: bgMedGrey from './shared/colours.css';
+  composes: flexCenter from './shared/layout.css';
 }
 
-.image {
-  width: 3em;
-}
-
-.checkbox { grid-column: 1 / 2; }
-.image    { grid-column: 2 / 3; }
-.title    { grid-column: 3 / 4; }
-.upload   { grid-column: 4 / 5; }
-.tags     { grid-column: 5 / 6; }
-.actions  { grid-column: 6 / 7; }
-
-.upload,
-.tags,
-.actions {
+.grid .title {
   display: none;
 }
 
-.showListDetails .upload,
-.showListDetails .tags,
-.showListDetails .actions {
+.list .checkbox { grid-column: 1 / 2; }
+.list .title    { grid-column: 3 / 4; }
+.list .upload   { grid-column: 4 / 5; }
+.list .tags     { grid-column: 5 / 6; }
+
+.upload, .tags, .actions {
+  display: none;
+}
+
+.list.showListDetails .upload,
+.list.showListDetails .tags {
   display: block;
+}
+
+/* Actions */
+
+.grid.showActions .actions {
+
 }
 
 /* Media queries */
@@ -45,7 +49,7 @@
 @value bp-tablet from "./shared/breakpoints.css";
 
 @media screen and (min-width: bp-tablet) {
-  .main {
+  .base {
     padding-left: 1.5rem;
   }
 }

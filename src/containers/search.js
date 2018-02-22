@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addSearchResults } from '../actions'
+import { addSearchResults, updateChecked } from '../actions'
 import SearchResults from '../components/searchresults'
 
 const mapStateToProps = state => {
@@ -8,13 +8,15 @@ const mapStateToProps = state => {
     viewmode: state.viewmode,
     search: state.search,
     nextCursor: state.searchCursor,
-    results: state.results
+    results: state.results,
+    checkedFiles: state.checked
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    addSearchResults: (results, nextCursor) => dispatch(addSearchResults(results, nextCursor))
+    addSearchResults: (results, nextCursor) => dispatch(addSearchResults(results, nextCursor)),
+    updateChecked: (path, newVal) => dispatch(updateChecked(path, newVal))
   }
 }
 

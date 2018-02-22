@@ -1,7 +1,7 @@
 .fast {
-  transition: transform .05s ease;
+  transition: transform .05s;
 }
 
 .slow {
-  transition: transform .3s ease;
+  transition: transform .3s;
 }

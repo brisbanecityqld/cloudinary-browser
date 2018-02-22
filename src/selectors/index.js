@@ -5,6 +5,7 @@ const getResources = state => state.files
 const getFolders = state => state.folders
 const getFavouritePaths = state => state.favourites
 const getLoadedRoutes = state => state.loadedRoutes
+const getChecked = state => state.checked
 
 // Get all files in current folder
 export const getCurrentFiles = createSelector(
@@ -33,5 +34,19 @@ export const getNextCursor = createSelector(
     return current
       ? current.nextCursor
       : null
+  }
+)
+
+export const areAllFilesChecked = createSelector(
+  [ getCurrentFiles, getChecked ],
+  (files, checked) => {
+    // Fail if no files loaded or nothing checked
+    if (files.length === 0 || checked.length === 0) return false
+
+    // Check each loaded file is checked
+    for (let f of files) {
+      if (checked.indexOf(f.public_id) === -1) return false
+    }
+    return true
   }
 )

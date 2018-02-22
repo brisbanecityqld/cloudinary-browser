@@ -1,7 +1,8 @@
 .base {
   position: relative;
   overflow: hidden;
-  composes: flexItem from './shared/layout.css';
+
+  composes: flexItem flexColumn from './shared/layout.css';
 }
 
 .overflow {
@@ -9,11 +10,10 @@
 }
 
 .list {
-  grid-template-columns: auto auto 1fr;
+  grid-template-columns: 1em 3em 1fr;
   grid-column-gap: 1em;
 
   composes: base;
-  composes: flexColumn from './shared/layout.css';
 }
 
 .grid {
@@ -79,7 +79,7 @@
 }
 
 .list.showListDetails {
-  grid-template-columns: auto auto 1fr 9em 16em 2.25em;
+  grid-template-columns: 1em 3em 1fr 9em 16em 2.25em;
 }
 
 /* Media queries */

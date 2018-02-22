@@ -8,7 +8,9 @@ import {
   UNLOAD_FOLDER,
   VIEW_MODES,
   SET_SEARCH,
-  ADD_SEARCH_RESULTS
+  ADD_SEARCH_RESULTS,
+  UPDATE_CHECKED,
+  CLEAR_ALL_CHECKED
 } from '../actions'
 
 const DEFAULT_STATE = {
@@ -18,6 +20,7 @@ const DEFAULT_STATE = {
   files: [],
   folders: [],
   favourites: [],
+  checked: [],
 
   loadedRoutes: [],
 
@@ -89,20 +92,16 @@ const ACTIONS = {
 
     // Create updated favourites list
     if (action.add && i === -1) {
-      return {
-        ...state,
-        favourites: [ ...newFavourites, action.path ]
-      }
+      newFavourites.push(action.path)
     } else if (!action.add && i > -1) {
       newFavourites.splice(i, 1)
-      return {
-        ...state,
-        favourites: newFavourites
-      }
     }
 
     // No change
-    return state
+    return {
+      ...state,
+      favourites: newFavourites
+    }
   },
 
   // Adds a folder to the loaded folders array,
@@ -177,6 +176,34 @@ const ACTIONS = {
         ...state.results,
         ...action.results
       ]
+    }
+  },
+
+  // Add or remove a favourite folder
+  [UPDATE_CHECKED] (state, action) {
+    const i = state.checked.indexOf(action.path)
+    const newChecked = state.checked.slice()
+
+    // Create updated favourites list
+    if (action.add && i === -1) {
+      newChecked.push(action.path)
+    } else if (!action.add && i > -1) {
+      newChecked.splice(i, 1)
+    }
+
+    // No change
+    return {
+      ...state,
+      checked: newChecked
+    }
+  },
+
+  // Remove all checked files
+  // Used for check all box, and when navigating
+  [CLEAR_ALL_CHECKED] (state) {
+    return {
+      ...state,
+      checked: []
     }
   }
 }

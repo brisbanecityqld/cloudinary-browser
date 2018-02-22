@@ -69,7 +69,9 @@ export default class ListView extends React.Component {
           data={file}
           viewmode={this.props.viewmode}
           showListDetails={this.showListDetails}
-          onClick={() => this.props.onResourceClick(encodeURIComponent(file.public_id))} />
+          onClick={() => this.props.onResourceClick(encodeURIComponent(file.public_id))}
+          checked={this.props.checkedFiles.indexOf(file.public_id) > -1}
+          onCheckboxToggle={newVal => this.props.updateChecked(file.public_id, newVal)} />
       ))
   }
 
@@ -100,22 +102,29 @@ export default class ListView extends React.Component {
       ? resources
       : (<div className={styles.empty}>{emptyText}</div>)
 
-    return <div className={mainClass}>
-      {isList && <FileHeader showListDetails={this.showListDetails} onColResize={this.handleColResize} />}
-      <div
-        ref={div => this.scrollableArea = div}
-        className={isList ? styles.listWrap : styles.gridWrap}>
-        <div className={styles.scrollArea}>
-          {inner}
+    return (
+      <div className={mainClass}>
+        <FileHeader
+          viewmode={this.props.viewmode}
+          showListDetails={this.showListDetails}
+          onColResize={this.handleColResize}
+          checked={this.props.allChecked}
+          onCheckboxToggle={() => {}} />
+        <div
+          ref={div => this.scrollableArea = div}
+          className={isList ? styles.listWrap : styles.gridWrap}>
+          <div className={styles.scrollArea}>
+            {inner}
+          </div>
+          {
+            this.canLoadMore && (
+              <div className={styles.loadMore}>
+                <span onClick={this.props.onScrollToBottom}>Load more...</span>
+              </div>
+            )
+          }
         </div>
-        {
-          this.canLoadMore && (
-            <div className={styles.loadMore}>
-              <span onClick={this.props.onScrollToBottom}>Load more...</span>
-            </div>
-          )
-        }
       </div>
-    </div>
+    )
   }
 }
