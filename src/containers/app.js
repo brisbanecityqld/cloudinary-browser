@@ -10,6 +10,7 @@ import {
   addFolders,
   unloadFolder,
   setSearch,
+  setSearchPending,
   clearAllChecked
 } from '../actions'
 
@@ -20,7 +21,9 @@ const mapStateToProps = state => {
     viewmode: state.viewmode,
     appView: state.currentView,
     route: state.currentRoute,
-    loadedRoutes: state.loadedRoutes
+    loadedRoutes: state.loadedRoutes,
+    currentSearch: state.search,
+    currentFile: state.currentFile
   }
 }
 
@@ -34,6 +37,7 @@ const mapDispatchToProps = dispatch => {
     addFolders: folders => dispatch(addFolders(folders)),
     unloadFolder: route => dispatch(unloadFolder(location.getAPIPath(route))),
     setSearch: search => dispatch(setSearch(search)),
+    refreshSearch: () => dispatch(setSearchPending(true)),
     clearAllChecked: () => dispatch(clearAllChecked())
   }
 }

@@ -70,8 +70,9 @@
 
 .loadMore span {
   position: absolute;
-  padding: 0 2em;
   cursor: pointer;
+  left: 0;
+  right: 0;
 }
 
 .loadMore span:hover {

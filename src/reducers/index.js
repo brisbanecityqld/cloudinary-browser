@@ -9,7 +9,9 @@ import {
   UNLOAD_FOLDER,
   VIEW_MODES,
   SET_SEARCH,
+  SET_SEARCH_PENDING,
   ADD_SEARCH_RESULTS,
+  SET_CURRENT_FILE,
   UPDATE_CHECKED,
   CLEAR_ALL_CHECKED
 } from '../actions'
@@ -18,6 +20,7 @@ const DEFAULT_STATE = {
   viewmode: VIEW_MODES.LIST,
   currentRoute: '',
   currentView: '',
+  currentFile: '',
 
   files: [],
   folders: [],
@@ -27,6 +30,7 @@ const DEFAULT_STATE = {
   loadedRoutes: [],
 
   search: '',
+  searchPending: false,
   searchCursor: null,
   results: []
 }
@@ -169,10 +173,20 @@ const ACTIONS = {
       ? {
           ...state,
           search: action.search,
+          searchPending: true,
           searchCursor: null,
           results: []
         }
       : state
+  },
+
+  [SET_SEARCH_PENDING] (state, action) {
+    return {
+      ...state,
+      searchPending: action.pending,
+      searchCursor: (action.pending ? null : state.searchCursor),
+      results: (action.pending ? [] : state.results)
+    }
   },
 
   // Add search results
@@ -184,6 +198,14 @@ const ACTIONS = {
         ...state.results,
         ...action.results
       ]
+    }
+  },
+
+  // Sets the currently-viewed filename
+  [SET_CURRENT_FILE] (state, action) {
+    return {
+      ...state,
+      currentFile: action.filename
     }
   },
 

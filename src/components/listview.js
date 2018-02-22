@@ -148,8 +148,8 @@ export default class ListView extends React.Component {
           viewmode={this.props.viewmode}
           showListDetails={this.showListDetails}
           onColResize={this.handleColResize}
+          checkedFiles={this.props.checkedFiles}
           checked={this.props.allChecked}
-          anyChecked={this.props.checkedFiles.length > 0}
           onCheckboxToggle={this.checkAllFiles}
           onClearChecked={this.props.clearAllChecked}
           downloadSelected={this.downloadSelected} />

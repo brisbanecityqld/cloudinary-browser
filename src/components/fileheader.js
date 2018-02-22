@@ -6,7 +6,9 @@ import Checkbox from './checkbox'
 import styles from '../styles/fileheader.css'
 
 export default function FileHeader (props) {
-  let css = (props.viewmode === 'list' && !props.anyChecked ? styles.list : styles.grid)
+  const anyChecked = props.checkedFiles && props.checkedFiles.length > 0
+
+  let css = (props.viewmode === 'list' && !anyChecked ? styles.list : styles.grid)
   if (props.showListDetails) {
     css += ' ' + styles.showListDetails
   }
@@ -17,7 +19,7 @@ export default function FileHeader (props) {
     <div className={styles.upload}>Uploaded at</div>
     <div className={styles.tags}>Tags</div>
     {
-      props.anyChecked && (
+      anyChecked && (
         <div className={styles.actions}>
           <Button clear
             onClick={props.onClearChecked}
@@ -26,7 +28,7 @@ export default function FileHeader (props) {
           <Button clear
             onClick={props.downloadSelected}
             icon="cloud-download-alt"
-            text={'Download' + (props.checked ? ' all' : '')} />
+            text={'Download' + (props.checkedFiles.length > 1 ? ' .zip' : '')} />
         </div>
       )
     }

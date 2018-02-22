@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { setCurrentFile } from '../actions'
 
 import Viewer from '../components/viewer'
 
@@ -13,8 +14,13 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  setCurrentFile: filename => dispatch(setCurrentFile(filename))
+})
+
 const WrappedViewer = connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Viewer)
 
 export default WrappedViewer

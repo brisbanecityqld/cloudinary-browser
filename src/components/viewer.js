@@ -45,6 +45,13 @@ export default class Viewer extends React.Component {
     )
   }
 
+  componentWillReceiveProps (nextProps) {
+    const data = fileparser.parseResource(nextProps.resource)
+    if (data) {
+      this.props.setCurrentFile(data.filename)
+    }
+  }
+
   render () {
     const data = fileparser.parseResource(this.props.resource)
     const filename = data ? data.filename : 'Loading file...'

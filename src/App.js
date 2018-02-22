@@ -24,8 +24,9 @@ export default class App extends React.Component {
     this.state = {
       loading: false,
       parentFolder: null,
-      folderTreeVisible: false,
+      pageTitle: '',
 
+      folderTreeVisible: false,
       folderTreeWidth: 300,
 
       windowWidth: window.innerWidth,
@@ -34,7 +35,7 @@ export default class App extends React.Component {
 
     // Cloudinary cloud name
     this.CLOUD_NAME = 'rosies'
-    this.TITLE_SUFFIX = ' | BCC Image Browser'
+    this.TITLE_SUFFIX = 'BCC Image Browser'
 
     this.storageKeys = [
       'folderTreeWidth'
@@ -54,15 +55,18 @@ export default class App extends React.Component {
     this.handleFoldersResizeEnd = this.handleFoldersResizeEnd.bind(this)
 
     this.toggleFolderTree = this.toggleFolderTree.bind(this)
+    this.makePageTitle = this.makePageTitle.bind(this)
 
+    // Resource loading
     this.loadResource = this.loadResource.bind(this)
+    this.handleReload = this.handleReload.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
+    this.handlePageLoad = this.handlePageLoad.bind(this)
 
     this.getRouteObject = this.getRouteObject.bind(this)
 
+    // Errors
     this.handleAPIError = this.handleAPIError.bind(this)
-    this.handleSearch = this.handleSearch.bind(this)
-
-    this.handlePageLoad = this.handlePageLoad.bind(this)
 
     // Mobile breakpoint
     this.BREAKPOINT = 800
@@ -202,6 +206,20 @@ export default class App extends React.Component {
     }
   }
 
+  handleReload () {
+    switch (this.props.appView) {
+      case 'browse':
+        this.loadFolder(location.getAPIPath(this.props.location.pathname), true)
+        break
+      case 'search':
+        this.props.refreshSearch()
+        break
+      default:
+        break
+    }
+
+  }
+
   // Handles some API errors
   handleAPIError (error) {
     if (error.hasOwnProperty('http_code') && error.http_code === 404) {
@@ -213,7 +231,7 @@ export default class App extends React.Component {
     }
   }
 
-  handleSearch (query, nameSearch = true) {
+  handleSearch (query) {
     if (query) {
       this.props.history.push('/search/' + encodeURIComponent(query))
     }
@@ -301,12 +319,18 @@ export default class App extends React.Component {
     window.removeEventListener('resize', this.handleWindowResize)
   }
 
+  makePageTitle (text) {
+    return text + (text !== '' ? ' | ' : '')
+      + this.props.appView.charAt(0).toUpperCase() + this.props.appView.slice(1)
+      + ' | ' + this.TITLE_SUFFIX
+  }
+
   render() {
     const route = this.props.location.pathname
-    const base = location.getRouteBase(route)
     const path = location.getAPIPath(route)
 
     const browserProps = {
+      loading: this.state.loading,
       parentFolder: this.state.parentFolder,
       onScrollToBottom: () => this.loadMore(path),
       browserWidth: this.state.windowWidth - this.state.folderTreeWidth,
@@ -316,7 +340,20 @@ export default class App extends React.Component {
       onFoldersResizeEnd: this.handleFoldersResizeEnd
     }
 
-    const title = (path === '' ? 'Browse' : path) + this.TITLE_SUFFIX
+    let title = this.TITLE_SUFFIX
+    switch (this.props.appView) {
+      case 'browse':
+        title = this.makePageTitle(path)
+        break
+      case 'search':
+        title = this.makePageTitle(this.props.currentSearch)
+        break
+      case 'view':
+        title = this.makePageTitle(this.props.currentFile)
+        break
+      default:
+        break
+    }
 
     // Folders loaded
     return (
@@ -325,7 +362,7 @@ export default class App extends React.Component {
         <Header
           { ...this.props }
           isMobile={this.isMobile}
-          reload={() => this.loadFolder(this.props.location.pathname, true)}
+          reload={this.handleReload}
           onSearchSubmit={this.handleSearch}
           onToggleFolderTree={this.toggleFolderTree} />
         <Switch>
@@ -334,7 +371,6 @@ export default class App extends React.Component {
           <Route path="/search/:query" render={() => <Search width={this.state.windowWidth} />} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>
-        {this.state.loading && base !== 'view' && <Spinner />}
       </div>
     )
   }

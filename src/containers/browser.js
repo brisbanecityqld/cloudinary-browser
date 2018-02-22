@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { updateFavourite, updateChecked, clearAllChecked } from '../actions'
 import FolderTree from '../components/foldertree'
 import ListView from '../components/listview'
+import Spinner from '../components/spinner'
 
 // Selectors
 import {
@@ -59,6 +60,7 @@ const BrowserAndTree = props => (
       width={props.browserWidth}
       updateChecked={props.updateChecked}
       clearAllChecked={props.clearAllChecked} />
+    {props.loading && <Spinner />}
   </div>
 )
 

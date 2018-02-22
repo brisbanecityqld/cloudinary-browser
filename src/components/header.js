@@ -47,11 +47,8 @@ export default class Header extends React.Component {
     const vmIcon = (this.props.viewmode === VIEW_MODES.LIST) ? 'image' : 'list'
     const vmNext = (this.props.viewmode === VIEW_MODES.LIST) ? VIEW_MODES.GRID : VIEW_MODES.LIST
 
-    const routeBase = location.getRouteBase(this.props.location.pathname)
-    const isViewer = routeBase === 'view'
     const buttonVisibility = !(this.state.searchFocused && this.props.isMobile)
-
-    const initialSearch = routeBase === 'search'
+    const initialSearch = this.props.appView === 'search'
       ? decodeURIComponent(this.props.location.pathname.replace('/search/', ''))
       : undefined
 
@@ -68,7 +65,7 @@ export default class Header extends React.Component {
         }
         {/* Folder toggle button */}
         {
-          !isViewer && this.props.isMobile && !this.state.searchFocused &&
+          this.props.appView === 'browse' && this.props.isMobile && !this.state.searchFocused &&
           <Button icon="folder" className={styles.buttonRight} onClick={this.props.onToggleFolderTree} />
         }
         {/* Search area */}
@@ -80,17 +77,17 @@ export default class Header extends React.Component {
           onSubmit={this.props.onSearchSubmit} />
         {/* View mode switcher */}
         {
-          !isViewer && buttonVisibility &&
+          this.props.appView !== 'view' && buttonVisibility &&
           <Button icon={vmIcon} className={styles.button} onClick={() => this.props.setViewMode(vmNext)} />
         }
         {/* Force refresh button */}
         {
-          !isViewer && buttonVisibility &&
+          this.props.appView !== 'view' && buttonVisibility &&
           <Button icon="sync-alt" className={styles.button} onClick={this.props.reload} />
         }
         {/* Mobile viewer close button */}
         {
-          isViewer && this.props.isMobile &&
+          this.props.appView === 'view' && this.props.isMobile &&
           <Button icon="times" className={styles.button} onClick={this.handleViewerClose} />
         }
       </header>

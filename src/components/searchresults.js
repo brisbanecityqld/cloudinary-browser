@@ -23,7 +23,9 @@ export default class SearchResults extends React.Component {
     this.setState({ loading })
   }
 
+  // Perform a search
   async doSearch (props = this.props) {
+    this.props.completeSearch()
     this.loading()
 
     try {
@@ -56,12 +58,12 @@ export default class SearchResults extends React.Component {
   }
 
   componentWillMount () {
-    this.props.results.length === 0
+    this.props.searchPending === true
       && this.props.search !== ''
       && this.doSearch()
   }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.search !== this.props.search) {
+    if (nextProps.searchPending && nextProps.search !== '') {
       this.doSearch(nextProps)
     }
   }
