@@ -71,6 +71,7 @@ function getResources (path, nextCursor = null) {
   return respond(url)
 }
 
+// Endpoint: perform a search
 function search (query, nextCursor = null) {
   const options = { q: query, max_results: MAX_RESULTS }
   if (nextCursor) {
@@ -81,9 +82,20 @@ function search (query, nextCursor = null) {
   return respond(url)
 }
 
+// Endpoint: get .zip of multiple public_ids
+function downloadZip (publicIds = []) {
+  if (!Array.isArray(publicIds) || publicIds.length < 2) return null
+
+  // Limit to 1000 public_ids max
+  const public_ids = encodeURIComponent(publicIds.slice(0, 1000).join(','))
+  const url = URL('/download', { public_ids })
+  return respond(url)
+}
+
 export default {
   getFolders,
   getResource,
   getResources,
-  search
+  search,
+  downloadZip
 }

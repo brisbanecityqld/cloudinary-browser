@@ -29,7 +29,7 @@
 .list .upload   { grid-column: 4 / 5; }
 .list .tags     { grid-column: 5 / 6; }
 
-.upload, .tags, .actions {
+.upload, .tags {
   display: none;
 }
 
@@ -38,10 +38,10 @@
   display: block;
 }
 
-/* Actions */
+.actions {
+  justify-content: flex-end;
 
-.grid.showActions .actions {
-
+  composes: flexItem flexCenter from './shared/layout.css';
 }
 
 /* Media queries */

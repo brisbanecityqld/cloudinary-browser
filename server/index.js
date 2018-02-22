@@ -3,6 +3,7 @@
 
 const Express = require('express')
 const Cloudinary = require('cloudinary')
+const Crypto = require('crypto')
 
 // Server settings
 const PORT = 8000
@@ -93,6 +94,7 @@ app.get('/folders', (req, res) => {
   )
 })
 
+// Perform an API search
 app.get('/search', (req, res) => {
   const query = req.query.q
   const max_results = req.query.max_results
@@ -116,6 +118,37 @@ app.get('/search', (req, res) => {
 
   // Execute search
   search.execute((err, result) => res.send(err || result))
+})
+
+function getSignableString(timestamp, public_ids, split = false) {
+  const pids = split
+    ? public_ids.map(pid => `&public_ids[]=${pid}`).join('')
+    : '&public_ids=' + public_ids.join(',')
+  return `allow_missing=1&flatten_folders=true&mode=download${pids}&target_public_id=cloudinary_images.zip&timestamp=${timestamp}`
+}
+
+// Create a .zip URL of files
+app.get('/download', (req, res) => {
+  // Parse public IDs
+  const public_ids = decodeURIComponent(req.query.public_ids).split(',')
+  if (!public_ids || !Array.isArray(public_ids)) {
+    res.send('')
+    return
+  }
+
+  // Generate ZIP url
+  log('Generating .zip archive with ' + public_ids.length + ' files...')
+
+  const timestamp = Date.now()
+  const signable = getSignableString(timestamp, public_ids)
+  const signature = Crypto.createHash('sha1').update(signable + CONFIG.api_secret).digest('hex')
+
+  const download_url = `https://api.cloudinary.com/v1_1/${CONFIG.cloud_name}/image/generate_archive`
+    + '?' + getSignableString(timestamp, public_ids, true)
+    + `&api_key=${CONFIG.api_key}`
+    + `&signature=${signature}`
+
+  res.send({ download_url })
 })
 
 // Start server

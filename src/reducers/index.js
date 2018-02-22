@@ -28,9 +28,7 @@ const DEFAULT_STATE = {
 
   search: '',
   searchCursor: null,
-  results: [],
-
-  cloudName: 'rosies'
+  results: []
 }
 
 // Helpers

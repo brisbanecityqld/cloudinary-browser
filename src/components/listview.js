@@ -7,6 +7,9 @@ import Resource from './resource'
 // Actions
 import { VIEW_MODES } from '../actions'
 
+// Lib
+import { fileparser, api } from '../lib'
+
 // Styles
 import styles from '../styles/listview.css'
 
@@ -17,6 +20,7 @@ export default class ListView extends React.Component {
     // Resource component generation
     this.generateResourceComponents = this.generateResourceComponents.bind(this)
     this.checkAllFiles = this.checkAllFiles.bind(this)
+    this.downloadSelected = this.downloadSelected.bind(this)
 
     // Track scroll
     this.scrollableArea = null
@@ -67,6 +71,27 @@ export default class ListView extends React.Component {
       for (let f of this.props.files) {
         this.props.updateChecked(f.public_id)
       }
+    }
+  }
+
+  // Download currently selected files
+  downloadSelected () {
+    // Abort if nothing to download
+    if (!this.props.checkedFiles || this.props.checkedFiles.length === 0) return
+
+    const numFiles = this.props.checkedFiles.length
+    if (numFiles === 1) {
+      // Download a single file - no need to zip
+      const public_id = this.props.checkedFiles[0]
+      const { attachmentUrl } = fileparser.parseResource(this.props.files.find(f => f.public_id === public_id))
+      window.open(attachmentUrl)
+    } else {
+      // Create a zip and download it
+      api.downloadZip(this.props.checkedFiles).then(data => {
+        data.hasOwnProperty('download_url')
+          && data.download_url
+          && window.open(data.download_url)
+      })
     }
   }
 
@@ -123,7 +148,9 @@ export default class ListView extends React.Component {
           showListDetails={this.showListDetails}
           onColResize={this.handleColResize}
           checked={this.props.allChecked}
-          onCheckboxToggle={this.checkAllFiles} />
+          anyChecked={this.props.checkedFiles.length > 0}
+          onCheckboxToggle={this.checkAllFiles}
+          downloadSelected={this.downloadSelected} />
         <div
           ref={div => this.scrollableArea = div}
           className={isList ? styles.listWrap : styles.gridWrap}>
