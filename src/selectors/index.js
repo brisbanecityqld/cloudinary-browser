@@ -1,7 +1,9 @@
 import { createSelector } from 'reselect'
 
+const getAppView = state => state.currentView
 const getCurrentRoute = state => state.currentRoute
 const getResources = state => state.files
+const getSearchResults = state => state.results
 const getFolders = state => state.folders
 const getFavouritePaths = state => state.favourites
 const getLoadedRoutes = state => state.loadedRoutes
@@ -38,8 +40,10 @@ export const getNextCursor = createSelector(
 )
 
 export const areAllFilesChecked = createSelector(
-  [ getCurrentFiles, getChecked ],
-  (files, checked) => {
+  [ getAppView, getCurrentFiles, getSearchResults, getChecked ],
+  (view, currFiles, searchFiles, checked) => {
+    const files = (view === 'search' ? searchFiles : currFiles)
+
     // Fail if no files loaded or nothing checked
     if (files.length === 0 || checked.length === 0) return false
 

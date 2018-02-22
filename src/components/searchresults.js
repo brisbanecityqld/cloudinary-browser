@@ -27,7 +27,7 @@ export default class SearchResults extends React.Component {
     this.loading()
 
     try {
-      const results = await api.search(props.search)
+      const results = await api.search(props.search.toLowerCase())
       this.loading(false)
 
       // Set results and next cursor value

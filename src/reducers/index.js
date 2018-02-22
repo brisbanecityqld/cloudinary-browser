@@ -1,5 +1,6 @@
 import {
   SET_VIEW_MODE,
+  SET_APP_VIEW,
   SET_CURRENT_ROUTE,
   ADD_RESOURCES,
   ADD_FOLDERS,
@@ -16,6 +17,7 @@ import {
 const DEFAULT_STATE = {
   viewmode: VIEW_MODES.LIST,
   currentRoute: '',
+  currentView: '',
 
   files: [],
   folders: [],
@@ -58,6 +60,14 @@ const ACTIONS = {
     return {
       ...state,
       viewmode: action.viewmode
+    }
+  },
+
+  // Current app view
+  [SET_APP_VIEW] (state, action) {
+    return {
+      ...state,
+      currentView: action.view
     }
   },
 

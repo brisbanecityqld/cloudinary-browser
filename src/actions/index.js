@@ -3,6 +3,7 @@
  */
 
 export const SET_VIEW_MODE = 'set_view_mode'
+export const SET_APP_VIEW = 'set_app_view'
 export const SET_CURRENT_ROUTE = 'set_current_route'
 export const ADD_RESOURCES = 'add_resources'
 export const ADD_FOLDERS = 'add_folders'
@@ -28,6 +29,7 @@ export const VIEW_MODES = {
  */
 
 export const setViewMode = viewmode => ({ type: SET_VIEW_MODE, viewmode })
+export const setAppView = view => ({ type: SET_APP_VIEW, view })
 export const setCurrentRoute = route => ({ type: SET_CURRENT_ROUTE, route })
 export const addResources = payload => ({ type: ADD_RESOURCES, payload })
 export const addFolders = payload => ({ type: ADD_FOLDERS, payload })

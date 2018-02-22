@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { updateFavourite, updateChecked } from '../actions'
+import { updateFavourite, updateChecked, clearAllChecked } from '../actions'
 import FolderTree from '../components/foldertree'
 import ListView from '../components/listview'
 
@@ -33,6 +33,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     addFavourite: path => dispatch(updateFavourite(path)),
     removeFavourite: path => dispatch(updateFavourite(path, false)),
     updateChecked: (path, newVal) => dispatch(updateChecked(path, newVal)),
+    clearAllChecked: () => dispatch(clearAllChecked())
   }
 }
 
@@ -56,7 +57,8 @@ const BrowserAndTree = props => (
       nextCursor={props.nextCursor}
       onScrollToBottom={props.onScrollToBottom}
       width={props.browserWidth}
-      updateChecked={props.updateChecked} />
+      updateChecked={props.updateChecked}
+      clearAllChecked={props.clearAllChecked} />
   </div>
 )
 

@@ -222,8 +222,10 @@ export default class App extends React.Component {
   handlePageLoad (props = this.props) {
     // Handle loading different views
     const route = props.location.pathname
+    const view = location.getRouteBase(route)
+    this.props.setAppView(view)
 
-    switch (location.getRouteBase(route)) {
+    switch (view) {
       // File browser
       case 'browse':
         this.loadFolder(location.getAPIPath(route))
@@ -277,7 +279,12 @@ export default class App extends React.Component {
   }
   componentWillReceiveProps (nextProps) {
     // Update if we need to
-    this.handlePageLoad(nextProps)
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.handlePageLoad(nextProps)
+
+      // On navigation anywhere, clear any checked items
+      this.props.clearAllChecked()
+    }
 
     // Set previous folder (for going back)
     const path = location.splitRoute(nextProps.location.pathname)

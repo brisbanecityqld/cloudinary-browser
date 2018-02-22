@@ -16,6 +16,7 @@ export default class ListView extends React.Component {
 
     // Resource component generation
     this.generateResourceComponents = this.generateResourceComponents.bind(this)
+    this.checkAllFiles = this.checkAllFiles.bind(this)
 
     // Track scroll
     this.scrollableArea = null
@@ -53,6 +54,19 @@ export default class ListView extends React.Component {
     ) {
       // Load more resources
       this.props.onScrollToBottom()
+    }
+  }
+
+  checkAllFiles () {
+    if (!this.props.files || this.props.files.length === 0) return
+
+    // Should we check or uncheck all files?
+    if (this.props.allChecked) {
+      this.props.clearAllChecked()
+    } else {
+      for (let f of this.props.files) {
+        this.props.updateChecked(f.public_id)
+      }
     }
   }
 
@@ -109,7 +123,7 @@ export default class ListView extends React.Component {
           showListDetails={this.showListDetails}
           onColResize={this.handleColResize}
           checked={this.props.allChecked}
-          onCheckboxToggle={() => {}} />
+          onCheckboxToggle={this.checkAllFiles} />
         <div
           ref={div => this.scrollableArea = div}
           className={isList ? styles.listWrap : styles.gridWrap}>

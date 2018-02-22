@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addSearchResults, updateChecked } from '../actions'
+import { addSearchResults, updateChecked, clearAllChecked } from '../actions'
+import { areAllFilesChecked } from '../selectors'
 import SearchResults from '../components/searchresults'
 
 const mapStateToProps = state => {
@@ -9,14 +10,16 @@ const mapStateToProps = state => {
     search: state.search,
     nextCursor: state.searchCursor,
     results: state.results,
-    checkedFiles: state.checked
+    checkedFiles: state.checked,
+    allChecked: areAllFilesChecked(state)
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     addSearchResults: (results, nextCursor) => dispatch(addSearchResults(results, nextCursor)),
-    updateChecked: (path, newVal) => dispatch(updateChecked(path, newVal))
+    updateChecked: (path, newVal) => dispatch(updateChecked(path, newVal)),
+    clearAllChecked: () => dispatch(clearAllChecked())
   }
 }
 
