@@ -24,6 +24,11 @@
   composes: textWhite bgAccent from './shared/colours.css';
 }
 
+.clear {
+  composes: base;
+  composes: textAccent from './shared/colours.css';
+}
+
 .text {
   width: auto;
   justify-content: center;

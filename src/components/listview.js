@@ -88,9 +88,10 @@ export default class ListView extends React.Component {
     } else {
       // Create a zip and download it
       api.downloadZip(this.props.checkedFiles).then(data => {
-        data.hasOwnProperty('download_url')
-          && data.download_url
-          && window.open(data.download_url)
+        // Check for valid download URL
+        data.hasOwnProperty('download_url') && data.download_url
+          ? window.open(data.download_url)
+          : console.error(data)
       })
     }
   }
@@ -150,6 +151,7 @@ export default class ListView extends React.Component {
           checked={this.props.allChecked}
           anyChecked={this.props.checkedFiles.length > 0}
           onCheckboxToggle={this.checkAllFiles}
+          onClearChecked={this.props.clearAllChecked}
           downloadSelected={this.downloadSelected} />
         <div
           ref={div => this.scrollableArea = div}

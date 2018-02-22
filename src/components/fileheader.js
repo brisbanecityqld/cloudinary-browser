@@ -19,7 +19,11 @@ export default function FileHeader (props) {
     {
       props.anyChecked && (
         <div className={styles.actions}>
-          <Button invert
+          <Button clear
+            onClick={props.onClearChecked}
+            icon="times"
+            text="Clear checked" />
+          <Button clear
             onClick={props.downloadSelected}
             icon="cloud-download-alt"
             text={'Download' + (props.checked ? ' all' : '')} />

@@ -27,7 +27,11 @@ function handleMouseDown (event, props) {
 
 // Functional component
 export default function Button (props) {
-  let css = props.invert ? styles.invert : styles.main
+  let css = props.invert
+    ? styles.invert
+    : props.clear
+    ? styles.clear
+    : styles.main
 
   // Get icon
   let icon
