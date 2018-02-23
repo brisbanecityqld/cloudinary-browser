@@ -9,6 +9,7 @@ import registerServiceWorker from './registerServiceWorker'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import FileBrowser from './reducers'
+import { getDefaultState, persist } from './initState'
 
 // Cloudinary
 import Cloudinary from 'cloudinary'
@@ -46,10 +47,31 @@ fontawesome.library.add(
 )
 
 // Redux store
+
+// Load favourites from localStorage
+const KEY_FAVOURITES = 'persisted_favourites'
+const persistedState = {}
+
+try {
+  const storedFavourites = localStorage.getItem(KEY_FAVOURITES)
+  if (storedFavourites) {
+    const persistedFavourites = JSON.parse(storedFavourites)
+    persistedState.favourites = persistedFavourites
+  }
+} catch (e) {
+  console.warn(`Corrupt localStorage key ${KEY_FAVOURITES}, deleting...`)
+  localStorage.removeItem(KEY_FAVOURITES)
+}
+
+// Create the store
 const store = createStore(
   FileBrowser,
+  getDefaultState(),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
+
+// Make certain store keys persistent
+persist(store)
 
 // Configure Cloudinary
 Cloudinary.config({ cloud_name: 'rosies' })

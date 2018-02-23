@@ -7,7 +7,6 @@ import {
   UPDATE_FAVOURITE,
   MARK_AS_LOADED,
   UNLOAD_FOLDER,
-  VIEW_MODES,
   SET_SEARCH,
   SET_SEARCH_PENDING,
   ADD_SEARCH_RESULTS,
@@ -15,25 +14,6 @@ import {
   UPDATE_CHECKED,
   CLEAR_ALL_CHECKED
 } from '../actions'
-
-const DEFAULT_STATE = {
-  viewmode: VIEW_MODES.LIST,
-  currentRoute: '',
-  currentView: '',
-  currentFile: '',
-
-  files: [],
-  folders: [],
-  favourites: [],
-  checked: [],
-
-  loadedRoutes: [],
-
-  search: '',
-  searchPending: false,
-  searchCursor: null,
-  results: []
-}
 
 // Helpers
 
@@ -239,7 +219,7 @@ const ACTIONS = {
 }
 
 // Reducer
-export default function (state = DEFAULT_STATE, action) {
+export default function (state = {}, action) {
   const type = action.type
   return (ACTIONS.hasOwnProperty(type))
     ? ACTIONS[type](state, action)

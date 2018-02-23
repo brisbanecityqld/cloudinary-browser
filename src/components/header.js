@@ -49,7 +49,7 @@ export default class Header extends React.Component {
 
     const buttonVisibility = !(this.state.searchFocused && this.props.isMobile)
     const initialSearch = this.props.appView === 'search'
-      ? decodeURIComponent(this.props.location.pathname.replace('/search/', ''))
+      ? this.props.currentSearch
       : undefined
 
     return (

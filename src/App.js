@@ -5,8 +5,6 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import DocumentTitle from 'react-document-title'
 
 import Header from './components/header'
-import Spinner from './components/spinner'
-
 import Browser from './containers/browser'
 import Viewer from './containers/viewer'
 import Search from './containers/search'
@@ -274,6 +272,7 @@ export default class App extends React.Component {
           console.warn('No search term specified.')
           props.history.replace('/browse')
         } else {
+          console.log(route)
           props.setSearch(query)
         }
         break
