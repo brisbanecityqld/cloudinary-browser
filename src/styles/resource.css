@@ -6,7 +6,7 @@
   grid-template-columns: inherit;
   grid-column-gap: inherit;
 
-  composes: gridCenter from './shared/layout.css';
+  composes: gridCenter from './shared/_style.css';
 }
 
 .list:hover {
@@ -92,11 +92,11 @@
   height: 18.5em;
   cursor: pointer;
 
-  composes: bgLightGrey from './shared/colours.css';
+  composes: bgLightGrey from './shared/_style.css';
 }
 
 .gridImage {
-  composes: slow from './shared/transitions.css';
+  composes: slow from './shared/_style.css';
 }
 
 .grid:hover .gridImage {
@@ -176,7 +176,7 @@
 
 /* Media queries */
 
-@value bp-tablet from "./shared/breakpoints.css";
+@value bp-tablet from "./shared/_style.css";
 
 @media screen and (min-width: bp-tablet) {
   .list {

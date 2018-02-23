@@ -5,21 +5,21 @@
   grid-template-rows: 1fr 1fr;
   overflow: hidden;
 
-  composes: flexItem from './shared/layout.css';
+  composes: flexItem from './shared/_style.css';
 }
 
 .header {
   margin-bottom: 1em;
 
-  composes: noFlex flexCenter from './shared/layout.css';
+  composes: noFlex flexCenter from './shared/_style.css';
 }
 
 .title {
   line-height: 1.5em;
   white-space: nowrap;
 
-  composes: flexItem from './shared/layout.css';
-  composes: title clip from './shared/typography.css';
+  composes: flexItem from './shared/_style.css';
+  composes: title clip from './shared/_style.css';
 }
 
 .closeButton {
@@ -34,7 +34,7 @@
   overflow: hidden;
   position: relative;
 
-  composes: bgLightGrey from './shared/colours.css';
+  composes: bgLightGrey from './shared/_style.css';
 }
 
 .image img {
@@ -80,14 +80,14 @@
 .actions {
   margin-bottom: 2em;
 
-  composes: flexRow from './shared/layout.css';
+  composes: flexRow from './shared/_style.css';
 }
 
 .tags {
   margin: .5em 0;
   line-height: 2.5em;
 
-  composes: clip from './shared/typography.css';
+  composes: clip from './shared/_style.css';
 }
 
 .tag {
@@ -103,12 +103,12 @@
   text-align: center;
   justify-content: center;
 
-  composes: flexCenter from './shared/layout.css';
+  composes: flexCenter from './shared/_style.css';
 }
 
 /* Media queries */
 
-@value bp-tablet from "./shared/breakpoints.css";
+@value bp-tablet from "./shared/_style.css";
 
 @media screen and (min-width: bp-tablet) {
   .header {

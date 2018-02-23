@@ -24,7 +24,7 @@
   display: inline-block;
   animation: bounce 1.4s infinite ease-in-out both;
 
-  composes: bgAccent from './shared/colours.css';
+  composes: bgAccent from './shared/_style.css';
 }
 
 .background {

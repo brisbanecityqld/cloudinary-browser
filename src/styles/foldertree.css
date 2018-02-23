@@ -1,6 +1,6 @@
 .base {
-  composes: bgLightGrey from './shared/colours.css';
-  composes: noFlex flexColumn from './shared/layout.css';
+  composes: bgLightGrey from './shared/_style.css';
+  composes: noFlex flexColumn from './shared/_style.css';
 }
 
 .main {
@@ -11,7 +11,7 @@
   box-shadow: 0 0 2.5em .5em rgba(0, 0, 0, .4);
 
   composes: base;
-  composes: slow from './shared/transitions.css';
+  composes: slow from './shared/_style.css';
 }
 
 .hidden {
@@ -44,7 +44,7 @@
   overflow-y: auto;
   clear: both;
 
-  composes: flexItem from './shared/layout.css';
+  composes: flexItem from './shared/_style.css';
 }
 
 .message {
@@ -53,7 +53,7 @@
 
 /* Media queries */
 
-@value bp-tablet from "./shared/breakpoints.css";
+@value bp-tablet from "./shared/_style.css";
 
 @media screen and (min-width: bp-tablet) {
   .main {

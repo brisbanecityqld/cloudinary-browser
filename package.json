@@ -102,5 +102,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-polyfill": "^6.26.0"
+  }
 }

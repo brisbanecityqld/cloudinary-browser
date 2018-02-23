@@ -2,7 +2,7 @@
   height: 3em;
   padding: 0 .75em 0 1em;
 
-  composes: noFlex from './shared/layout.css';
+  composes: noFlex from './shared/_style.css';
 }
 
 .list {
@@ -10,14 +10,14 @@
   grid-column-gap: inherit;
 
   composes: base;
-  composes: bgMedGrey from './shared/colours.css';
-  composes: gridCenter from './shared/layout.css';
+  composes: bgMedGrey from './shared/_style.css';
+  composes: gridCenter from './shared/_style.css';
 }
 
 .grid {
   composes: base;
-  composes: bgMedGrey from './shared/colours.css';
-  composes: flexCenter from './shared/layout.css';
+  composes: bgMedGrey from './shared/_style.css';
+  composes: flexCenter from './shared/_style.css';
 }
 
 .grid .title {
@@ -41,7 +41,7 @@
 .actions {
   justify-content: flex-end;
 
-  composes: flexItem flexCenter from './shared/layout.css';
+  composes: flexItem flexCenter from './shared/_style.css';
 }
 
 .actions > div {
@@ -51,7 +51,7 @@
 
 /* Media queries */
 
-@value bp-tablet from "./shared/breakpoints.css";
+@value bp-tablet from "./shared/_style.css";
 
 @media screen and (min-width: bp-tablet) {
   .base {

@@ -4,8 +4,8 @@
   width: 2.25em;
   height: 2.25em;
 
-  composes: corners from './shared/ui.css';
-  composes: fast from './shared/transitions.css';
+  composes: corners from './shared/_style.css';
+  composes: fast from './shared/_style.css';
 }
 .base:hover {
   transform: scale(1.1);
@@ -16,24 +16,24 @@
 
 .main {
   composes: base;
-  composes: textAccent bgWhite from './shared/colours.css';
+  composes: textAccent bgWhite from './shared/_style.css';
 }
 
 .invert {
   composes: base;
-  composes: textWhite bgAccent from './shared/colours.css';
+  composes: textWhite bgAccent from './shared/_style.css';
 }
 
 .clear {
   composes: base;
-  composes: textAccent from './shared/colours.css';
+  composes: textAccent from './shared/_style.css';
 }
 
 .text {
   width: auto;
   justify-content: center;
 
-  composes: flexCenter from './shared/layout.css';
+  composes: flexCenter from './shared/_style.css';
 }
 
 .label {

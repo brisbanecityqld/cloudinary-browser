@@ -6,9 +6,9 @@
   margin-right: .5em;
   cursor: pointer;
 
-  composes: textWhite from './shared/colours.css';
-  composes: bgAccent from './shared/colours.css';
-  composes: corners from './shared/ui.css';
+  composes: textWhite from './shared/_style.css';
+  composes: bgAccent from './shared/_style.css';
+  composes: corners from './shared/_style.css';
 }
 
 .tag:hover {

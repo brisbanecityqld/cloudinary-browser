@@ -5,7 +5,7 @@
   direction: rtl;
   text-align: left;
 
-  composes: flexItem from './shared/layout.css';
+  composes: flexItem from './shared/_style.css';
 }
 
 .crumb {

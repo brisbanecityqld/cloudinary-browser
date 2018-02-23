@@ -7,7 +7,7 @@
   /* background-color: #3FADFE; */
   background-image: linear-gradient(to right, #179CFE 0%, #106DB2 100%);
 
-  composes: noFlex flexCenter from './shared/layout.css';
+  composes: noFlex flexCenter from './shared/_style.css';
 }
 
 .main:after {
@@ -31,7 +31,7 @@
   height: 3em;
   margin: 0 1em 0 .625em;
 
-  composes: noFlex from './shared/layout.css';
+  composes: noFlex from './shared/_style.css';
 }
 
 .icon img {
@@ -41,7 +41,7 @@
 }
 
 .spacer {
-  composes: flexItem from './shared/layout.css';
+  composes: flexItem from './shared/_style.css';
 }
 
 .button {

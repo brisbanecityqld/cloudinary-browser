@@ -1,7 +1,7 @@
 .base {
   position: relative;
 
-  composes: flexCenter from './shared/layout.css';
+  composes: flexCenter from './shared/_style.css';
 }
 
 .main {
@@ -50,9 +50,9 @@
   background-color: white;
   font-size: 1em;
 
-  composes: flexItem from './shared/layout.css';
-  composes: textGrey from './shared/colours.css';
-  composes: roundedCorners from './shared/layout.css';
+  composes: flexItem from './shared/_style.css';
+  composes: textGrey from './shared/_style.css';
+  composes: corners from './shared/_style.css';
 }
 
 .button {

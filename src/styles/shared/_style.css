@@ -1,0 +1,106 @@
+@value bp-mobile: 420px;
+@value bp-tablet: 800px;
+@value bp-medium: 1280px;
+
+/* Text colours */
+.textWhite {
+  color: white;
+}
+.textAccent {
+  color: #106DB2;
+}
+.textGrey {
+  color: #333;
+}
+.textRed {
+  color: #f00;
+}
+
+/* Background colours */
+.bgWhite {
+  background-color: white;
+}
+
+.bgGrey {
+  background-color: #222;
+}
+
+.bgLightGrey {
+  background-color: #f4f4f4;
+}
+
+.bgMedGrey {
+  background-color: #e4e4e4;
+}
+
+.bgAccent {
+  background-color: #106DB2;
+}
+
+/* Flex layouts */
+.flexRow {
+  display: flex;
+}
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+.flexCenter {
+  display: flex;
+  align-items: center;
+}
+
+.flexItem {
+  flex: 1 0 0;
+}
+.noFlex {
+  flex: 0 0 auto;
+}
+
+/* Grid layouts */
+.gridCenter {
+  display: grid;
+  align-items: center;
+}
+
+/* Transitions */
+.fast {
+  transition: transform .05s;
+}
+
+.slow {
+  transition: transform .3s;
+}
+
+/* Typography */
+.title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.body {
+  font-size: 1.15em;
+  font-weight: normal;
+}
+
+.alignLeft {
+  text-align: left;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.clip {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* UI styles */
+.corners {
+  border-radius: .2em;
+}
+
+.shadow {
+  box-shadow: 4px 0 30px 5px rgba(0, 0, 0, .3);
+}

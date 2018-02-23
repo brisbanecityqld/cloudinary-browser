@@ -5,8 +5,8 @@
   cursor: pointer;
   overflow: hidden;
 
-  composes: textGrey from './shared/colours.css';
-  composes: flexCenter from './shared/layout.css';
+  composes: textGrey from './shared/_style.css';
+  composes: flexCenter from './shared/_style.css';
 }
 
 .main:hover {
@@ -27,7 +27,7 @@
 
 .star {
   composes: starBase;
-  composes: textGrey from './shared/colours.css';
+  composes: textGrey from './shared/_style.css';
 }
 
 .starSelected {
@@ -36,7 +36,7 @@
 
 .delete {
   composes: starBase;
-  composes: textRed from './shared/colours.css';
+  composes: textRed from './shared/_style.css';
 }
 
 .label {
@@ -47,12 +47,12 @@
   text-overflow: ellipsis;
   font-size: .9em;
 
-  composes: flexItem from './shared/layout.css';
+  composes: flexItem from './shared/_style.css';
 }
 
 /* Media queries */
 
-@value bp-medium from "./shared/breakpoints.css";
+@value bp-medium from "./shared/_style.css";
 
 @media screen and (min-width: bp-medium) {
   .main .star, .main .delete {
