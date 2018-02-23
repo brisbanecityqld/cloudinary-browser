@@ -59,8 +59,11 @@
 
 /* Grid layouts */
 .gridCenter {
-  display: grid;
+  display: grid; display: -ms-grid;
   align-items: center;
+}
+.gridCenter > * {
+  -ms-grid-row-align: center;
 }
 
 /* Transitions */

@@ -1,5 +1,6 @@
 .base {
   height: 3em;
+  line-height: 3em;
   padding: 0 .75em 0 1em;
 
   composes: noFlex from './shared/_style.css';
@@ -7,11 +8,22 @@
 
 .list {
   grid-template-columns: inherit;
+	-ms-grid-columns: inherit;
   grid-column-gap: inherit;
 
   composes: base;
   composes: bgMedGrey from './shared/_style.css';
   composes: gridCenter from './shared/_style.css';
+}
+
+.list > div {
+  margin-right: 1em;
+}
+
+@supports (display: grid) {
+  .list > div {
+    margin-right: 0;
+  }
 }
 
 .grid {
@@ -24,10 +36,10 @@
   display: none;
 }
 
-.list .checkbox { grid-column: 1 / 2; }
-.list .title    { grid-column: 3 / 4; }
-.list .upload   { grid-column: 4 / 5; }
-.list .tags     { grid-column: 5 / 6; }
+.list .checkbox { grid-column: 1 / 2; -ms-grid-column: 1; }
+.list .title    { grid-column: 3 / 4; -ms-grid-column: 3; }
+.list .upload   { grid-column: 4 / 5; -ms-grid-column: 4; }
+.list .tags     { grid-column: 5 / 6; -ms-grid-column: 5; }
 
 .upload, .tags {
   display: none;

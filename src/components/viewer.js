@@ -86,14 +86,14 @@ export default class Viewer extends React.Component {
             data && (
               <div className={styles.fileInfo}>
                 {/* Upload date */}
-                <div className={styles.key}>Uploaded</div>
-                <div className={styles.value}>{data.uploaded}</div>
+                <div className={styles.row1 + ' ' + styles.key}>Uploaded</div>
+                <div className={styles.row1 + ' ' + styles.value}>{data.uploaded}</div>
                 {/* Resolution */}
-                <div className={styles.key}>Resolution</div>
-                <div className={styles.value}>{data.resolution}</div>
+                <div className={styles.row2 + ' ' + styles.key}>Resolution</div>
+                <div className={styles.row2 + ' ' + styles.value}>{data.resolution}</div>
                 {/* File size */}
-                <div className={styles.key}>File size</div>
-                <div className={styles.value}>{data.size}</div>
+                <div className={styles.row3 + ' ' + styles.key}>File size</div>
+                <div className={styles.row3 + ' ' + styles.value}>{data.size}</div>
               </div>
             )
           }

@@ -2,7 +2,7 @@
 
 import request from 'request-promise-native'
 
-const SERVER_URL = 'localhost'
+const SERVER_URL = window.location.hostname
 const SERVER_PORT = 8000
 const MAX_RESULTS = 50
 

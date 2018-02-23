@@ -11,6 +11,7 @@
 
 .list {
   grid-template-columns: 1em 3em 1fr;
+	-ms-grid-columns: 2em 4em 1fr;
   grid-column-gap: 1em;
 
   composes: base;
@@ -22,6 +23,7 @@
 
 .listWrap {
   grid-template-columns: inherit;
+	-ms-grid-columns: inherit;
   grid-column-gap: inherit;
 
   composes: overflow;
@@ -36,17 +38,39 @@
 .list .scrollArea {
   flex: 1;
   grid-template-columns: inherit;
+	-ms-grid-columns: inherit;
   grid-column-gap: inherit;
 }
 
 .grid .scrollArea {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
-  grid-column-gap: 1em;
-  grid-row-gap: 1.5em;
   padding: 1.5em 1em;
   font-size: 11px;
   justify-items: center;
+
+  /* IE compatibility */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.grid .scrollArea > div {
+  margin: 2em;
+  margin-top: 0;
+}
+
+/* Override for grid-compliant browsers */
+@supports (display: grid) {
+  .grid .scrollArea {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    grid-column-gap: 1em;
+    grid-row-gap: 1.5em;
+  }
+
+  .grid .scrollArea > div {
+    margin: 0;
+  }
 }
 
 .list .empty {
@@ -80,6 +104,7 @@
 }
 
 .list.showListDetails {
+  -ms-grid-columns: 2em 4em 1fr 10em 17em 2.25em;
   grid-template-columns: 1em 3em 1fr 9em 16em 2.25em;
 }
 

@@ -1,12 +1,28 @@
 .list {
   position: relative;
   height: 4em;
+  line-height: 4em;
   padding: 0 .825em 0 1em;
   cursor: pointer;
   grid-template-columns: inherit;
+	-ms-grid-columns: inherit;
   grid-column-gap: inherit;
 
   composes: gridCenter from './shared/_style.css';
+}
+
+.list > div {
+  margin-right: 1em;
+}
+
+@supports (display: grid) {
+  .list > div {
+    margin-right: 0;
+  }
+}
+
+.list .tags {
+  line-height: 2em;
 }
 
 .list:hover {
@@ -24,12 +40,12 @@
 }
 
 /* List view positioning */
-.list .checkbox { grid-column: 1 / 2; }
-.list .image    { grid-column: 2 / 3; }
-.list .title    { grid-column: 3 / 4; }
-.list .upload   { grid-column: 4 / 5; }
-.list .tags     { grid-column: 5 / 6; }
-.list .actions  { grid-column: 6 / 7; }
+.list .checkbox { grid-column: 1 / 2; -ms-grid-column: 1; }
+.list .image    { grid-column: 2 / 3; -ms-grid-column: 2; }
+.list .title    { grid-column: 3 / 4; -ms-grid-column: 3; }
+.list .upload   { grid-column: 4 / 5; -ms-grid-column: 4; }
+.list .tags     { grid-column: 5 / 6; -ms-grid-column: 5; }
+.list .actions  { grid-column: 6 / 7; -ms-grid-column: 6; }
 
 /* Title */
 .title, .upload {
@@ -162,6 +178,8 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  top: 0;
+  left: 0;
   z-index: 1;
 }
 
