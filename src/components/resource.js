@@ -50,7 +50,7 @@ export default class File extends React.Component {
       ? (this.props.viewmode === VIEW_MODES.GRID ? styles.gridImage : undefined)
       : styles.imageHidden
 
-    const { filename, url, attachmentUrl, uploaded, tags } = fileparser.parseResource(this.props.data, 240, 180)
+    const { filename, sizes, thumbnail, uploaded, tags } = fileparser.parseResource(this.props.data)
     const viewUrl = '/view/' + encodeURIComponent(this.props.data.public_id)
 
     // this.props.history.push('/view/' + publicId, { canGoBack: true })
@@ -63,7 +63,7 @@ export default class File extends React.Component {
           <img
             className={imgStyle}
             onLoad={this.handleImageLoaded}
-            src={url}
+            src={thumbnail}
             alt={filename} />
           <FontAwesomeIcon icon="image" />
         </div>
@@ -77,7 +77,7 @@ export default class File extends React.Component {
           <Button
             invert
             icon="cloud-download-alt"
-            onClick={() => window.open(attachmentUrl)} />
+            onClick={() => window.open(sizes.original)} />
         </div>
       </div>
     )

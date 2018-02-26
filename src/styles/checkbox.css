@@ -1,3 +1,5 @@
+@value col-primary from "./shared/_style.css";
+
 .main {
   margin: -1em;
   padding: 1em;
@@ -31,7 +33,7 @@
   border-radius: 50%;
   top: 50%;
   left: 50%;
-  background-color: #106db2;
+  background-color: col-primary;
   transition: all .2s;
 }
 

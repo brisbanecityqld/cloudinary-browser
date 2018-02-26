@@ -83,8 +83,9 @@ export default class ListView extends React.Component {
     if (numFiles === 1) {
       // Download a single file - no need to zip
       const public_id = this.props.checkedFiles[0]
-      const { attachmentUrl } = fileparser.parseResource(this.props.files.find(f => f.public_id === public_id))
-      window.open(attachmentUrl)
+      const file = this.props.files.find(f => f.public_id === public_id)
+      const { sizes } = fileparser.parseResource(file)
+      window.open(sizes.original)
     } else {
       // Create a zip and download it
       api.downloadZip(this.props.checkedFiles).then(data => {

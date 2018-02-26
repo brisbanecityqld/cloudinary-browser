@@ -2,12 +2,15 @@
 @value bp-tablet: 800px;
 @value bp-medium: 1280px;
 
+@value col-primary: #106DB2;
+@value col-secondary: #EBC822;
+
 /* Text colours */
 .textWhite {
   color: white;
 }
 .textAccent {
-  color: #106DB2;
+  color: col-primary;
 }
 .textGrey {
   color: #333;
@@ -34,7 +37,7 @@
 }
 
 .bgAccent {
-  background-color: #106DB2;
+  background-color: col-primary;
 }
 
 /* Flex layouts */
@@ -101,6 +104,7 @@
 
 /* UI styles */
 .corners {
+  -webkit-border-radius: .2em;
   border-radius: .2em;
 }
 

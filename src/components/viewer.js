@@ -4,6 +4,7 @@ import React from 'react'
 import Spinner from './spinner'
 import Button from './button'
 import Tag from './tag'
+import Select from './select'
 
 // Libraries
 import { fileparser, location } from '../lib'
@@ -16,24 +17,43 @@ export default class Viewer extends React.Component {
     super(props)
 
     this.state = {
-      imageState: 'loading'
+      imageState: 'loading',
+      downloadSize: 'original',
+      resourceData: null
     }
 
-    this.handleImageLoaded = this.handleImageLoaded.bind(this)
-    this.handleImageError = this.handleImageError.bind(this)
+    this.breakpoint = 420
+    this.handleDownloadClick = this.handleDownloadClick.bind(this)
     this.handleClose = this.handleClose.bind(this)
   }
 
-  handleImageLoaded () {
-    this.setState({
-      imageState: 'loaded'
-    })
+  // Opens URL for selected download size
+  handleDownloadClick () {
+    window.open(this.state.resourceData.sizes[this.state.downloadSize])
   }
 
-  handleImageError() {
-    this.setState({
-      imageState: 'error'
-    })
+  makeDownloadForm (data) {
+    if (!data) return undefined
+
+    // Options dropdown for multiple download sizes
+    const options = data.sizes.all.map(size => (
+      { label: size.label, value: size.size }
+    ))
+
+    // Return actions area
+    return (
+      <div className={styles.actions}>
+        {
+          data.sizes.all.length > 1 &&
+          <Select
+            options={options}
+            value={this.state.downloadSize}
+            onChange={downloadSize => this.setState({ downloadSize })} />
+        }
+        <Button invert icon="cloud-download-alt" text={this.props.width > this.breakpoint ? 'Download' : ''}
+          onClick={this.handleDownloadClick} />
+      </div>
+    )
   }
 
   // Handle "closing" the viewer
@@ -49,22 +69,25 @@ export default class Viewer extends React.Component {
     const data = fileparser.parseResource(nextProps.resource)
     if (data) {
       this.props.setCurrentFile(data.filename)
+      this.setState({ resourceData: data })
     }
   }
 
   render () {
-    const data = fileparser.parseResource(this.props.resource)
+    const data = this.state.resourceData
+
+    // Parse resource into displayable data
     const filename = data ? data.filename : 'Loading file...'
     const img = this.state.imageState === 'error'
       ? (<div className={styles.error}>Cannot preview this resource.</div>)
       : data
       ? (
           <img
-            src={data.url}
+            src={data.sizes.large || data.sizes.original}
             alt={data.filename}
-            onLoad={this.handleImageLoaded}
-            onError={this.handleImageError}
-            onClick={() => window.open(data.url)} />
+            onLoad={() => this.setState({ imageState: 'loaded' })}
+            onError={() => this.setState({ imageState: 'error' })}
+            onClick={() => window.open(data.viewUrl)} />
         )
       : undefined
 
@@ -93,21 +116,13 @@ export default class Viewer extends React.Component {
                 <div className={styles.row2 + ' ' + styles.value}>{data.resolution}</div>
                 {/* File size */}
                 <div className={styles.row3 + ' ' + styles.key}>File size</div>
-                <div className={styles.row3 + ' ' + styles.value}>{data.size}</div>
+                <div className={styles.row3 + ' ' + styles.value}>{data.filesize}</div>
               </div>
             )
           }
-          {/* Download button */}
+          {/* Download buttons */}
           {
-            data && (
-              <div className={styles.actions}>
-                <Button
-                  invert
-                  icon="cloud-download-alt"
-                  text="Download"
-                  onClick={() => window.open(data.attachmentUrl) } />
-              </div>
-            )
+            data && this.makeDownloadForm(data)
           }
           <div className={styles.tags}>
             {data && data.tags.map(tag => <Tag text={tag} key={tag} />)}

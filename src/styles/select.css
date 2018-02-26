@@ -1,0 +1,111 @@
+@value col-primary from "./shared/_style.css";
+
+.displayBase {
+  background-color: white;
+  border: 1px solid col-primary;
+  composes: corners from './shared/_style.css';
+}
+
+.optionBase {
+  height: 2.25em;
+  line-height: 2.25em;
+  cursor: default;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select {
+  position: relative;
+  overflow: hidden;
+  width: 0;
+
+  composes: optionBase displayBase;
+  composes: textAccent from './shared/_style.css';
+}
+
+.select:after {
+  content: '';
+  position: absolute;
+  top: .9375em;
+  right: .75em;
+
+  border: .375em solid transparent;
+  border-top: .375em solid col-primary;
+}
+
+.selectOpen {
+  composes: select;
+  overflow: visible;
+}
+
+.selectOpen .optionsVisible {
+  height: 0;
+  line-height: 0;
+  opacity: 0;
+}
+
+.optionsDropdown {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  z-index: 1;
+
+  composes: displayBase;
+}
+
+.option {
+  position: relative;
+  padding: 0 2.5em 0 .5em;
+
+  composes: optionBase;
+  composes: textGrey from './shared/_style.css';
+}
+
+/* Tick box on active option */
+.tick {
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  top: .55em;
+  right: .65em;
+  transform: rotate(45deg);
+}
+.tick:before, .tick:after {
+  content: '';
+  position: absolute;
+  background-color: col-primary;
+}
+.tick:before {
+  top: .8em;
+  left: .2em;
+  width: .5em;
+  height: .2em;
+}
+.tick:after {
+  top: 0;
+  left: .5em;
+  width: .2em;
+  height: 1em;
+}
+
+.optionsDropdown .option:hover {
+  color: white;
+  background-color: col-primary;
+}
+
+.optionsDropdown .option:hover .tick:before,
+.optionsDropdown .option:hover .tick:after {
+  background-color: white;
+}
+
+/* Media queries */
+
+@value bp-mobile from "./shared/_style.css";
+
+@media screen and (min-width: bp-mobile) {
+  .select {
+    width: auto;
+  }
+}

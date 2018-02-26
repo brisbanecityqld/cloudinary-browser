@@ -1,3 +1,6 @@
+@value col-primary from "./shared/_style.css";
+@value col-secondary from "./shared/_style.css";
+
 .main {
   position: relative;
   height: 4em;
@@ -5,7 +8,7 @@
   font-size: 1.2em;
   padding: 0 .875em 0 .375em;
   /* background-color: #3FADFE; */
-  background-image: linear-gradient(to right, #179CFE 0%, #106DB2 100%);
+  background-image: linear-gradient(to right, #179CFE 0%, col-primary);
 
   composes: noFlex flexCenter from './shared/_style.css';
 }
@@ -19,10 +22,10 @@
   height: 100%;
   background: linear-gradient(
     to bottom,
-    #106DB2 20%, #EBC822 20%,
-    #EBC822 40%, #106DB2 40%,
-    #106DB2 60%, #EBC822 60%,
-    #EBC822 80%, #106DB2 80%
+    col-primary 20%, col-secondary 20%,
+    col-secondary 40%, col-primary 40%,
+    col-primary 60%, col-secondary 60%,
+    col-secondary 80%, col-primary 80%
   )
 }
 

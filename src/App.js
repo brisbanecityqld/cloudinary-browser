@@ -366,7 +366,7 @@ export default class App extends React.Component {
           onToggleFolderTree={this.toggleFolderTree} />
         <Switch>
           <Route path="/browse" render={() => <Browser key="ui_browser" { ...browserProps } />} />
-          <Route path="/view/:public_id" component={Viewer} />
+          <Route path="/view/:public_id" render={props => <Viewer width={this.state.windowWidth} height={this.state.windowHeight} {...props} />} />
           <Route path="/search/:query" render={() => <Search width={this.state.windowWidth} />} />
           <Redirect exact from="/*" to="/browse" />
         </Switch>
