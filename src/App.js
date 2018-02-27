@@ -135,6 +135,7 @@ export default class App extends React.Component {
   // Load the data for resource given a public ID
   async loadResource (publicId) {
     const data = await api.getResource(publicId)
+
     if (data.hasOwnProperty('resources') && data.resources.length > 0) {
       this.props.addResources(data)
     } else {
@@ -276,6 +277,7 @@ export default class App extends React.Component {
           props.history.replace('/browse')
         } else {
           // Resource hasn't been downloaded yet, so download it
+          console.log(publicId)
           this.loadResource(publicId)
         }
         break

@@ -16,12 +16,19 @@ const DEFAULT_STATE = {
   search: '',
   searchPending: false,
   searchCursor: null,
-  results: []
+  results: [],
+
+  customFileSize: {
+    width: 600,
+    height: 400,
+    crop: true
+  }
 }
 
 const PERSIST_KEYS = [
   'viewmode',
-  'favourites'
+  'favourites',
+  'customFileSize'
 ]
 
 function getPersistKeys () {

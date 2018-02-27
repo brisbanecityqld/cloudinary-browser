@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from './button'
+import Tooltip from './tooltip'
 
 // CSS
 import styles from '../styles/customimageform.css'
@@ -81,6 +82,11 @@ export default class CustomImageForm extends React.Component {
             icon={this.props.data.crop ? 'crop' : 'expand-arrows-alt'}
             text={this.props.data.crop ? 'Crop' : 'Stretch'}
             onClick={this.handleCropClick} />
+          <Tooltip>{
+            this.props.data.crop
+              ? 'Crop mode: image maintains aspect ratio and fills area, but edges may be cut off.'
+              : 'Stretch mode: image is stretched to requested size but may appear distorted.'
+          }</Tooltip>
         </div>
       </div>
     )

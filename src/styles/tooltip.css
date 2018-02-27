@@ -1,0 +1,41 @@
+@value col-grey: rgba(51, 51, 51, .9);
+
+.main {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin: .625em;
+  border-radius: 50%;
+  color: col-grey;
+}
+
+.popup {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  line-height: 1.3em;
+  top: 1.75em;
+  left: .5em;
+  width: 16em;
+  padding: .75em;
+  color: white;
+  background-color: col-grey;
+  transform: translateX(-50%);
+  transition: opacity .3s;
+
+  composes: corners from './shared/_style.css';
+}
+
+.popup:before {
+  content: '';
+  position: absolute;
+  top: -1em;
+  left: calc(50% - .5em);
+  border: .5em solid transparent;
+  border-bottom: .5em solid col-grey;
+}
+
+.main:hover .popup {
+  opacity: 1;
+}

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { setCurrentFile } from '../actions'
+import { setCurrentFile, setCustomSize } from '../actions'
 
 import Viewer from '../components/viewer'
 
@@ -10,12 +10,15 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     publicId,
-    resource: state.files.find(file => file.public_id === publicId)
+    currentFile: state.currentFile,
+    resource: state.files.find(file => file.public_id === publicId),
+    customFileSize: state.customFileSize
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentFile: filename => dispatch(setCurrentFile(filename))
+  setCurrentFile: filename => dispatch(setCurrentFile(filename)),
+  setCustomSize: data => dispatch(setCustomSize(data))
 })
 
 const WrappedViewer = connect(

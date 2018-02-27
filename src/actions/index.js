@@ -16,6 +16,7 @@ export const ADD_SEARCH_RESULTS = 'add_search_results'
 export const SET_CURRENT_FILE   = 'set_current_file'
 export const UPDATE_CHECKED     = 'update_checked'
 export const CLEAR_ALL_CHECKED  = 'clear_all_checked'
+export const SET_CUSTOM_SIZE    = 'set_custom_size'
 
 /**
  * Other constants
@@ -44,3 +45,4 @@ export const addSearchResults = (results, nextCursor = null) => ({ type: ADD_SEA
 export const setCurrentFile   = filename => ({ type: SET_CURRENT_FILE, filename })
 export const updateChecked    = (path, add = true) => ({ type: UPDATE_CHECKED, path, add })
 export const clearAllChecked  = () => ({ type: CLEAR_ALL_CHECKED })
+export const setCustomSize    = data => ({ type: SET_CUSTOM_SIZE, data })

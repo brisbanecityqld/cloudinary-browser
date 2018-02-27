@@ -24,16 +24,6 @@
   composes: textAccent from './shared/_style.css';
 }
 
-.select:after {
-  content: '';
-  position: absolute;
-  top: .9375em;
-  right: .75em;
-
-  border: .375em solid transparent;
-  border-top: .375em solid col-primary;
-}
-
 .selectOpen {
   composes: select;
   overflow: visible;
@@ -43,6 +33,10 @@
   height: 0;
   line-height: 0;
   opacity: 0;
+}
+
+.optionsVisible .option {
+  padding-right: 2.5em;
 }
 
 .optionsDropdown {
@@ -57,37 +51,33 @@
 
 .option {
   position: relative;
-  padding: 0 2.5em 0 .5em;
+  padding-left: .5em;
 
   composes: optionBase;
   composes: textGrey from './shared/_style.css';
 }
 
-/* Tick box on active option */
-.tick {
+/* Dropdown icons */
+
+.arrow {
   position: absolute;
   width: 1em;
   height: 1em;
-  top: .5em;
-  right: .6em;
-  transform: rotate(45deg);
+  top: .625em;
+  right: .625em;
+
+  composes: textAccent from './shared/_style.css';
 }
-.tick:before, .tick:after {
-  content: '';
+
+.tick {
   position: absolute;
-  background-color: col-primary;
-}
-.tick:before {
+  border-radius: 50%;
+  width: .65em;
+  height: .65em;
   top: .8em;
-  left: .2em;
-  width: .5em;
-  height: .2em;
-}
-.tick:after {
-  top: 0;
-  left: .5em;
-  width: .2em;
-  height: 1em;
+  right: .8em;
+
+  composes: bgAccent from './shared/_style.css';
 }
 
 .optionsDropdown .option:hover {
@@ -95,8 +85,7 @@
   background-color: col-primary;
 }
 
-.optionsDropdown .option:hover .tick:before,
-.optionsDropdown .option:hover .tick:after {
+.optionsDropdown .option:hover .tick {
   background-color: white;
 }
 

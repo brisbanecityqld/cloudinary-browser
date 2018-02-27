@@ -1,4 +1,6 @@
 import React from 'react'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+
 import styles from '../styles/select.css'
 
 export default class Select extends React.Component {
@@ -59,7 +61,7 @@ export default class Select extends React.Component {
       return (
         <div className={styles.option} key={opt.value} onClick={event => this.handleChange(event, opt.value)}>
           {opt.label}
-          {this.props.value === opt.value && <div className={styles.tick}></div>}
+          {this.props.value === opt.value && (<div className={styles.tick}></div>)}
         </div>
       )
     })
@@ -75,6 +77,7 @@ export default class Select extends React.Component {
 
     return (
       <div className={selectStyle} onClick={this.showOptions} ref={div => this.select = div}>
+        <div className={styles.arrow}><FontAwesomeIcon icon="chevron-down" /></div>
         { optionsVisible }
         { this.state.showOptions && optionsDropdown }
       </div>

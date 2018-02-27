@@ -12,7 +12,8 @@ import {
   ADD_SEARCH_RESULTS,
   SET_CURRENT_FILE,
   UPDATE_CHECKED,
-  CLEAR_ALL_CHECKED
+  CLEAR_ALL_CHECKED,
+  SET_CUSTOM_SIZE
 } from '../actions'
 
 // Helpers
@@ -214,6 +215,14 @@ const ACTIONS = {
     return {
       ...state,
       checked: []
+    }
+  },
+
+  // State used in custom resource size download form
+  [SET_CUSTOM_SIZE] (state, action) {
+    return {
+      ...state,
+      customFileSize: action.data
     }
   }
 }

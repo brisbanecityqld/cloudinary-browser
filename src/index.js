@@ -27,10 +27,12 @@ import {
   faStar,
   faFolder,
   faSearch,
+  faChevronDown,
   faTimes,
   faArrowLeft,
   faCrop,
-  faExpandArrowsAlt
+  faExpandArrowsAlt,
+  faInfoCircle
 } from '@fortawesome/fontawesome-free-solid'
 
 // Regular icons
@@ -45,10 +47,12 @@ fontawesome.library.add(
   faCloudDownloadAlt,
   faFolder,
   faSearch,
+  faChevronDown,
   faTimes,
   faArrowLeft,
   faCrop,
   faExpandArrowsAlt,
+  faInfoCircle,
   farStar
 )
 

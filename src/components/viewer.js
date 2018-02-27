@@ -19,13 +19,7 @@ export default class Viewer extends React.Component {
 
     this.state = {
       imageState: 'loading',
-      downloadSize: 'original',
-      resourceData: null,
-      customSize: {
-        width: 600,
-        height: 400,
-        crop: true
-      }
+      downloadSize: 'original'
     }
 
     this.breakpoint = 420
@@ -37,14 +31,15 @@ export default class Viewer extends React.Component {
   handleDownloadClick () {
     if (this.state.downloadSize !== 'custom') {
       // Download a preset image size
-      window.open(this.state.resourceData.sizes[this.state.downloadSize])
+      const { sizes } = fileparser.parseResource(this.props.resource)
+      window.open(sizes[this.state.downloadSize])
     } else {
       // Download a custom size
       const url = fileparser.getDownloadUrl(
         this.props.resource.public_id,
-        this.state.customSize.width,
-        this.state.customSize.height,
-        this.state.customSize.crop ? 'fill' : 'scale'
+        this.props.customFileSize.width,
+        this.props.customFileSize.height,
+        this.props.customFileSize.crop ? 'fill' : 'scale'
       )
       window.open(url)
     }
@@ -72,8 +67,8 @@ export default class Viewer extends React.Component {
         {
           this.state.downloadSize === 'custom' && (
             <CustomImageForm
-              data={this.state.customSize}
-              onChange={customSize => this.setState({ customSize })} />
+              data={this.props.customFileSize}
+              onChange={data => this.props.setCustomSize(data)} />
           )
         }
       </div>
@@ -91,14 +86,15 @@ export default class Viewer extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     const data = fileparser.parseResource(nextProps.resource)
-    if (data) {
+
+    // Update title filename
+    if (data && data.filename !== this.props.currentFile) {
       this.props.setCurrentFile(data.filename)
-      this.setState({ resourceData: data })
     }
   }
 
   render () {
-    const data = this.state.resourceData
+    const data = fileparser.parseResource(this.props.resource)
 
     // Parse resource into displayable data
     const filename = data ? data.filename : 'Loading file...'
@@ -145,9 +141,9 @@ export default class Viewer extends React.Component {
             )
           }
           {/* Download buttons */}
-          {
-            data && this.makeDownloadForm(data)
-          }
+          {data && this.makeDownloadForm(data)}
+          {/* Tags */}
+          {data && <h3>Tags</h3>}
           <div className={styles.tags}>
             {data && data.tags.map(tag => <Tag text={tag} key={tag} />)}
           </div>
