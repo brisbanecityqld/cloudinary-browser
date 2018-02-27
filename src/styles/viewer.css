@@ -62,13 +62,12 @@
 
 .fileInfo {
   display: grid; display: -ms-grid;
-  grid-template-columns: auto 1fr;
-	-ms-grid-columns: auto 1fr;
+  grid-template-columns: 7em 1fr;
+	-ms-grid-columns: 7em 1fr;
   margin-bottom: 1em;
 }
 
 .fileInfo .key {
-  margin-right: 1em;
   grid-column: 1 / 2; -ms-grid-column: 1; -ms-grid-column-span: 1;
 }
 .fileInfo .value {
@@ -81,9 +80,14 @@
 .fileInfo .row3 { -ms-grid-row: 3; }
 
 .actions {
-  margin-bottom: 2em;
+  padding: 1em 0 .75em 0;
+  flex-wrap: wrap;
 
   composes: flexRow from './shared/_style.css';
+}
+
+.actions > * {
+  margin-bottom: 1em;
 }
 
 .actions > div:first-child {
@@ -112,6 +116,12 @@
   justify-content: center;
 
   composes: flexCenter from './shared/_style.css';
+}
+
+/* Custom image download size form */
+
+.customForm {
+  width: 100%;
 }
 
 /* Media queries */

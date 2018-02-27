@@ -1,0 +1,39 @@
+@value col-primary from "./shared/_style.css";
+
+.main {
+  width: 100%;
+  line-height: 2.25em;
+}
+
+.sep {
+  padding: 0 .5em;
+}
+
+.block {
+  width: 100%;
+  margin-bottom: .25em;
+
+  composes: flexCenter from './shared/_style.css';
+}
+
+.label {
+  width: 7em;
+}
+
+.cropButton {
+  margin-left: -.5em;
+}
+
+.input {
+  width: 3em;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  border-bottom: 1px solid col-primary;
+  height: 1.75em;
+  margin-top: .15em;
+  font-size: 1rem;
+  text-align: center;
+}

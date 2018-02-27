@@ -1,6 +1,7 @@
 @value bp-mobile: 420px;
 @value bp-tablet: 800px;
 @value bp-medium: 1280px;
+@value bp-laptop: 1920px;
 
 @value col-primary: #106DB2;
 @value col-secondary: #EBC822;

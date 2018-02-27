@@ -18,31 +18,37 @@ import Cloudinary from 'cloudinary'
 import fontawesome from '@fortawesome/fontawesome'
 
 // Solid icons
-import fasImage from '@fortawesome/fontawesome-free-solid/faImage'
-import fasList from '@fortawesome/fontawesome-free-solid/faList'
-import fasSyncAlt from '@fortawesome/fontawesome-free-solid/faSyncAlt'
-import fasCloudDownloadAlt from '@fortawesome/fontawesome-free-solid/faCloudDownloadAlt'
-import fasCog from '@fortawesome/fontawesome-free-solid/faCog'
-import fasStar from '@fortawesome/fontawesome-free-solid/faStar'
-import fasFolder from '@fortawesome/fontawesome-free-solid/faFolder'
-import fasSearch from '@fortawesome/fontawesome-free-solid/faSearch'
-import fasTimes from '@fortawesome/fontawesome-free-solid/faTimes'
-import fasArrowLeft from '@fortawesome/fontawesome-free-solid/faArrowLeft'
+import {
+  faImage,
+  faList,
+  faSyncAlt,
+  faCloudDownloadAlt,
+  faCog,
+  faStar,
+  faFolder,
+  faSearch,
+  faTimes,
+  faArrowLeft,
+  faCrop,
+  faExpandArrowsAlt
+} from '@fortawesome/fontawesome-free-solid'
 
 // Regular icons
 import farStar from '@fortawesome/fontawesome-free-regular/faStar'
 
 fontawesome.library.add(
-  fasImage,
-  fasList,
-  fasCog,
-  fasStar,
-  fasSyncAlt,
-  fasCloudDownloadAlt,
-  fasFolder,
-  fasSearch,
-  fasTimes,
-  fasArrowLeft,
+  faImage,
+  faList,
+  faCog,
+  faStar,
+  faSyncAlt,
+  faCloudDownloadAlt,
+  faFolder,
+  faSearch,
+  faTimes,
+  faArrowLeft,
+  faCrop,
+  faExpandArrowsAlt,
   farStar
 )
 

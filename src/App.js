@@ -123,6 +123,7 @@ export default class App extends React.Component {
     this.saveAppState()
   }
 
+  // Folder UI toggle for mobile devices
   toggleFolderTree () {
     this.setState(prevState => {
       return {
@@ -131,6 +132,7 @@ export default class App extends React.Component {
     })
   }
 
+  // Load the data for resource given a public ID
   async loadResource (publicId) {
     const data = await api.getResource(publicId)
     if (data.hasOwnProperty('resources') && data.resources.length > 0) {
@@ -141,7 +143,7 @@ export default class App extends React.Component {
     }
   }
 
-  // Pulls the current folder from the API
+  // Load all subfolders and resources for a given route (folder)
   async loadFolder (route, force = false) {
     this.props.updateRoute(route)
 
@@ -161,6 +163,11 @@ export default class App extends React.Component {
           api.getResources(route),
           api.getFolders(route)
         ])
+
+        // Handle failed response from server
+        if (resources.errno || folders.errno) {
+          throw new Error('Folder download failed; you may be offline, or may have exceeded the hourly request limit. Try again in an hour.')
+        }
 
         // Add folders and resources to store
         this.props.addFolders(folders)
@@ -190,6 +197,12 @@ export default class App extends React.Component {
 
       try {
         const resources = await api.getResources(path, thisRoute.nextCursor)
+
+        // Handle failed response from server
+        if (resources.errno) {
+          throw new Error('Resource download failed; you may be offline, or may have exceeded the hourly request limit. Try again in an hour.')
+        }
+
         this.props.addResources(resources)
 
         // Update nextCursor
@@ -204,6 +217,7 @@ export default class App extends React.Component {
     }
   }
 
+  // Perform view-specific action when refresh button is pressed
   handleReload () {
     switch (this.props.appView) {
       case 'browse':
@@ -215,7 +229,6 @@ export default class App extends React.Component {
       default:
         break
     }
-
   }
 
   // Handles some API errors
@@ -229,12 +242,14 @@ export default class App extends React.Component {
     }
   }
 
+  // Push search URL to browser history
   handleSearch (query) {
     if (query) {
       this.props.history.push('/search/' + encodeURIComponent(query))
     }
   }
 
+  // View-specific actions for handling page loads
   handlePageLoad (props = this.props) {
     // Handle loading different views
     const route = props.location.pathname
@@ -318,9 +333,10 @@ export default class App extends React.Component {
     window.removeEventListener('resize', this.handleWindowResize)
   }
 
+  // Create SEO-friendly, human-readable page title
   makePageTitle (text) {
     return text + (text !== '' ? ' | ' : '')
-      + this.props.appView.charAt(0).toUpperCase() + this.props.appView.slice(1)
+      + (this.props.appView ? this.props.appView.charAt(0).toUpperCase() + this.props.appView.slice(1) : '')
       + ' | ' + this.TITLE_SUFFIX
   }
 
@@ -339,20 +355,15 @@ export default class App extends React.Component {
       onFoldersResizeEnd: this.handleFoldersResizeEnd
     }
 
-    let title = this.TITLE_SUFFIX
-    switch (this.props.appView) {
-      case 'browse':
-        title = this.makePageTitle(path)
-        break
-      case 'search':
-        title = this.makePageTitle(this.props.currentSearch)
-        break
-      case 'view':
-        title = this.makePageTitle(this.props.currentFile)
-        break
-      default:
-        break
-    }
+    const title = this.makePageTitle(
+      this.props.appView === 'browse'
+        ? path
+        : this.props.appView === 'search'
+        ? this.props.currentSearch
+        : this.props.appView === 'view'
+        ? this.props.currentFile
+        : this.TITLE_SUFFIX
+    )
 
     // Folders loaded
     return (

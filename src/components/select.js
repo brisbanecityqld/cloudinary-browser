@@ -9,9 +9,12 @@ export default class Select extends React.Component {
       showOptions: false
     }
 
+    this.div = null
+
     this.handleChange = this.handleChange.bind(this)
     this.showOptions = this.showOptions.bind(this)
     this.hideOptions = this.hideOptions.bind(this)
+    this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
   // Handle select change
@@ -30,19 +33,20 @@ export default class Select extends React.Component {
 
   // Close dropdown
   hideOptions () {
-    if (this.state.showOptions) {
-      this.setState({
-        showOptions: false
-      })
+    this.setState({ showOptions: false })
+  }
+
+  handleClickOutside (event) {
+    if (!this.select || !this.select.contains(event.target)) {
+      this.hideOptions()
     }
   }
 
-  // Lifecycle hooks
   componentDidMount () {
-    // window.addEventListener('click', this.hideOptions)
+    window.addEventListener('click', this.handleClickOutside)
   }
   componentWillUnmount () {
-    // window.removeEventListener('click', this.hideOptions)
+    window.removeEventListener('click', this.handleClickOutside)
   }
 
   // Render
@@ -70,7 +74,7 @@ export default class Select extends React.Component {
     const selectStyle = styles[this.state.showOptions ? 'selectOpen' : 'select']
 
     return (
-      <div className={selectStyle} onClick={this.showOptions}>
+      <div className={selectStyle} onClick={this.showOptions} ref={div => this.select = div}>
         { optionsVisible }
         { this.state.showOptions && optionsDropdown }
       </div>

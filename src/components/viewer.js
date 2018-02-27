@@ -5,6 +5,7 @@ import Spinner from './spinner'
 import Button from './button'
 import Tag from './tag'
 import Select from './select'
+import CustomImageForm from './customimageform'
 
 // Libraries
 import { fileparser, location } from '../lib'
@@ -19,7 +20,12 @@ export default class Viewer extends React.Component {
     this.state = {
       imageState: 'loading',
       downloadSize: 'original',
-      resourceData: null
+      resourceData: null,
+      customSize: {
+        width: 600,
+        height: 400,
+        crop: true
+      }
     }
 
     this.breakpoint = 420
@@ -29,7 +35,19 @@ export default class Viewer extends React.Component {
 
   // Opens URL for selected download size
   handleDownloadClick () {
-    window.open(this.state.resourceData.sizes[this.state.downloadSize])
+    if (this.state.downloadSize !== 'custom') {
+      // Download a preset image size
+      window.open(this.state.resourceData.sizes[this.state.downloadSize])
+    } else {
+      // Download a custom size
+      const url = fileparser.getDownloadUrl(
+        this.props.resource.public_id,
+        this.state.customSize.width,
+        this.state.customSize.height,
+        this.state.customSize.crop ? 'fill' : 'scale'
+      )
+      window.open(url)
+    }
   }
 
   makeDownloadForm (data) {
@@ -39,19 +57,25 @@ export default class Viewer extends React.Component {
     const options = data.sizes.all.map(size => (
       { label: size.label, value: size.size }
     ))
+    const optCustom = { label: 'Custom...', value: 'custom' }
 
     // Return actions area
     return (
       <div className={styles.actions}>
-        {
-          data.sizes.all.length > 1 &&
-          <Select
-            options={options}
-            value={this.state.downloadSize}
-            onChange={downloadSize => this.setState({ downloadSize })} />
-        }
-        <Button invert icon="cloud-download-alt" text={this.props.width > this.breakpoint ? 'Download' : ''}
+        <Select
+          options={[ ...options, optCustom ]}
+          value={this.state.downloadSize}
+          onChange={downloadSize => this.setState({ downloadSize })} />
+        <Button invert icon="cloud-download-alt"
+          text={this.props.width > this.breakpoint ? 'Download' : ''}
           onClick={this.handleDownloadClick} />
+        {
+          this.state.downloadSize === 'custom' && (
+            <CustomImageForm
+              data={this.state.customSize}
+              onChange={customSize => this.setState({ customSize })} />
+          )
+        }
       </div>
     )
   }

@@ -8,7 +8,7 @@
 
 .optionBase {
   height: 2.25em;
-  line-height: 2.25em;
+  line-height: calc(2.25em - 2px);
   cursor: default;
   white-space: nowrap;
   overflow: hidden;
@@ -68,8 +68,8 @@
   position: absolute;
   width: 1em;
   height: 1em;
-  top: .55em;
-  right: .65em;
+  top: .5em;
+  right: .6em;
   transform: rotate(45deg);
 }
 .tick:before, .tick:after {

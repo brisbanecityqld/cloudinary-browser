@@ -132,6 +132,12 @@ function parseResource (data, thumbWidth = 240, thumbHeight = 180) {
   }
 }
 
+// Get a URL for downloading an image at any arbitrary size
+function getDownloadUrl (publicId, width, height, crop) {
+  return Cloudinary.url(publicId, { width, height, crop, flags: 'attachment' })
+}
+
 export default {
-  parseResource
+  parseResource,
+  getDownloadUrl
 }
