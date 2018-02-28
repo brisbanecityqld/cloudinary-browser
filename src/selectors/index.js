@@ -9,10 +9,19 @@ const getFavouritePaths = state => state.favourites
 const getLoadedRoutes = state => state.loadedRoutes
 const getChecked = state => state.checked
 
+// Sort two resources based on their public_ids
+function cloudinarySort (a, b) {
+  return a.public_id === b.public_id
+    ? 0
+    : a.public_id < b.public_id
+    ? -1
+    : 1
+}
+
 // Get all files in current folder
 export const getCurrentFiles = createSelector(
   [ getCurrentRoute, getResources ],
-  (path, files) => files.filter(f => f.folder === path)
+  (path, files) => files.filter(f => f.folder === path).sort(cloudinarySort)
 )
 
 // Get all subfolders in current folder
