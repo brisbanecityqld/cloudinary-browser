@@ -289,7 +289,6 @@ export default class App extends React.Component {
           console.warn('No search term specified.')
           props.history.replace('/browse')
         } else {
-          console.log(route)
           props.setSearch(query)
         }
         break

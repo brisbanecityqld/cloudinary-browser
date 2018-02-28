@@ -1,5 +1,7 @@
 // Abstracted file browser API
 
+import { searchbuilder } from '../lib'
+
 import request from 'request-promise-native'
 
 const SERVER_URL = window.location.hostname
@@ -16,6 +18,7 @@ function URL (endpoint, params = null) {
 // Create query string from params object
 const QS = params => '?' + Object.keys(params).map(k => `${k}=${params[k]}`).join('&')
 
+// Parse JSON response
 const parseJSON = data => {
   // Handle already-parsed data
   if (typeof data === 'object') {
@@ -73,7 +76,7 @@ function getResources (path, nextCursor = null) {
 
 // Endpoint: perform a search
 function search (query, nextCursor = null) {
-  const options = { q: query, max_results: MAX_RESULTS }
+  const options = { q: searchbuilder.createExpression(query), max_results: MAX_RESULTS }
   if (nextCursor) {
     options.next_cursor = nextCursor
   }
