@@ -9,13 +9,28 @@ const getFavouritePaths = state => state.favourites
 const getLoadedRoutes = state => state.loadedRoutes
 const getChecked = state => state.checked
 
+// Helpers
+
 // Sort two resources based on their public_ids
-function cloudinarySort (a, b) {
+function cloudinarySort (a, b, key) {
   return a.public_id === b.public_id
     ? 0
     : a.public_id < b.public_id
     ? -1
     : 1
+}
+
+// Folder sort
+function folderSort (a, b) {
+  return a.name.localeCompare(b.name)
+}
+
+// Extracts a folder's name from its path
+function getFolderName (path) {
+  const sepIndex = path.lastIndexOf('/')
+  return sepIndex > -1
+    ? path.slice(sepIndex + 1)
+    : path
 }
 
 // Get all files in current folder
@@ -34,8 +49,8 @@ export const getCurrentFolders = createSelector(
 
 // Get favourite folders
 export const getFavourites = createSelector(
-  [ getFolders, getFavouritePaths ],
-  (folders, paths) => folders.filter(f => paths.indexOf(f.path) > -1)
+  [ getFavouritePaths ],
+  paths => paths.map(path => ({ path, name: getFolderName(path) })).sort(folderSort)
 )
 
 export const getNextCursor = createSelector(
