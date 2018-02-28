@@ -6,6 +6,7 @@ import Button from './button'
 import Tag from './tag'
 import Select from './select'
 import CustomImageForm from './customimageform'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 
 // Libraries
 import { fileparser, location } from '../lib'
@@ -114,10 +115,12 @@ export default class Viewer extends React.Component {
     return (
       <div className={styles.main}>
         <div className={styles.image}>
-          {
-            data && img
-          }
+          {data && img}
           {this.state.imageState === 'loading' && <Spinner />}
+          {
+            this.state.imageState === 'loaded' && data && data.type === 'video' &&
+            <div className={styles.play}><FontAwesomeIcon icon="play-circle" /></div>
+          }
         </div>
         <div className={styles.details}>
           <div className={styles.header}>
@@ -141,9 +144,9 @@ export default class Viewer extends React.Component {
             )
           }
           {/* Download buttons */}
-          {data && this.makeDownloadForm(data)}
+          {data && data.type === 'image' && this.makeDownloadForm(data)}
           {/* Tags */}
-          {data && <h3>Tags</h3>}
+          {data && data.tags.length > 0 && <h3>Tags</h3>}
           <div className={styles.tags}>
             {data && data.tags.map(tag => <Tag text={tag} key={tag} />)}
           </div>

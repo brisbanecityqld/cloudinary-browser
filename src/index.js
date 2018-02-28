@@ -32,7 +32,8 @@ import {
   faArrowLeft,
   faCrop,
   faExpandArrowsAlt,
-  faInfoCircle
+  faInfoCircle,
+  faPlayCircle
 } from '@fortawesome/fontawesome-free-solid'
 
 // Regular icons
@@ -53,6 +54,7 @@ fontawesome.library.add(
   faCrop,
   faExpandArrowsAlt,
   faInfoCircle,
+  faPlayCircle,
   farStar
 )
 

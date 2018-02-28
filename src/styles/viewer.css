@@ -37,17 +37,33 @@
   composes: bgLightGrey from './shared/_style.css';
 }
 
-.image img {
-  max-width: 100%;
-  max-height: 100%;
+.image img, .play {
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
-  margin: auto auto;
+  margin: auto;
   cursor: pointer;
 }
+
+.image img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Play button for videos */
+
+.play {
+  max-width: 6em;
+  max-height: 6em;
+  color: white;
+  cursor: pointer;
+  opacity: .8;
+  pointer-events: none;
+}
+
+/* Resource details */
 
 .details {
   padding: .5em 1em;

@@ -277,7 +277,6 @@ export default class App extends React.Component {
           props.history.replace('/browse')
         } else {
           // Resource hasn't been downloaded yet, so download it
-          console.log(publicId)
           this.loadResource(publicId)
         }
         break

@@ -92,13 +92,11 @@ function parseResource (data, thumbWidth = 240, thumbHeight = 180) {
     return undefined
   }
 
+  const type = data.resource_type
+
   // Create filename
   const filename = data.filename + '.' + data.format
-
-  // Generate file size URLs
-  const sizes = new ImageSizes(data)
-  const thumbnail = Cloudinary.url(data.public_id, { width: thumbWidth, height: thumbHeight, crop: 'fill' })
-  const viewUrl = Cloudinary.url(data.public_id)
+  const viewUrl = Cloudinary.url(data.public_id, { resource_type: type })
 
   const [,year,month,day,time] = DATE_REGEX.exec(data.uploaded_at)
   const uploaded = `${day}/${month}/${year} ${time}`
@@ -120,16 +118,37 @@ function parseResource (data, thumbWidth = 240, thumbHeight = 180) {
   // Round size to 2 decimal places
   const filesize = Math.floor(bytes * 100) / 100 + ' ' + byteSizes[thisSize]
 
-  return {
+  // Base thumbnail options
+  const thumbOpts = { width: thumbWidth, height: thumbHeight, crop: 'fill' }
+
+  // Generic base info, used for all file types
+  const output = {
+    type,
     filename,
-    sizes,
-    thumbnail,
     viewUrl,
     uploaded,
     tags: data.tags,
     filesize,
     resolution
   }
+
+  // Type-specific info
+  switch (type) {
+    // Image file type; requires thumbnail and multiple sizes for downloading
+    case 'image':
+      output.sizes = new ImageSizes(data)
+      output.thumbnail = Cloudinary.url(data.public_id, thumbOpts)
+      break
+    // Video file type; requires full-size preview and thumbnail
+    case 'video':
+      output.sizes = { original: Cloudinary.url(data.public_id + '.jpg', { resource_type: 'video' }) }
+      output.thumbnail = Cloudinary.url(data.public_id + '.jpg', Object.assign(thumbOpts, { resource_type: 'video' }))
+      break
+    default:
+      break
+  }
+
+  return output
 }
 
 // Get a URL for downloading an image at any arbitrary size
