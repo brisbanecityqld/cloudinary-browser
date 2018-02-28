@@ -17,7 +17,7 @@ const IMAGE_SIZES = [
 const _makeResolution = (w, h) => `${w} x ${h}px`
 
 // Merge default and custom image options for URL generation
-const _getImageOptions = opts => ({ flags: 'attachment', ...opts })
+const _getImageOptions = (data, opts) => ({ flags: 'attachment', resource_type: data.resource_type, ...opts })
 
 // Capitalisation
 const _capitalise = str => str.charAt(0).toUpperCase() + str.slice(1)
@@ -36,7 +36,7 @@ class ImageSizes {
       {
         size: 'original',
         label: `Original (${_makeResolution(data.width, data.height)})`,
-        url: Cloudinary.url(data.public_id, _getImageOptions())
+        url: Cloudinary.url(data.public_id, _getImageOptions(data))
       }
     ]
 
@@ -48,7 +48,7 @@ class ImageSizes {
         this._sizes.push({
           size: size.name,
           label: `${_capitalise(size.name)} (${_makeResolution(width, height)})`,
-          url: Cloudinary.url(data.public_id, _getImageOptions({ [longSide]: size.length, crop: 'scale' }))
+          url: Cloudinary.url(data.public_id, _getImageOptions(data, { [longSide]: size.length, crop: 'scale' }))
         })
       }
     }
@@ -96,7 +96,6 @@ function parseResource (data, thumbWidth = 240, thumbHeight = 180) {
 
   // Create filename
   const filename = data.filename + '.' + data.format
-  const viewUrl = Cloudinary.url(data.public_id, { resource_type: type })
 
   const [,year,month,day,time] = DATE_REGEX.exec(data.uploaded_at)
   const uploaded = `${day}/${month}/${year} ${time}`
@@ -125,8 +124,8 @@ function parseResource (data, thumbWidth = 240, thumbHeight = 180) {
   const output = {
     type,
     filename,
-    viewUrl,
     uploaded,
+    url: data.url,
     tags: data.tags,
     filesize,
     resolution
@@ -141,7 +140,11 @@ function parseResource (data, thumbWidth = 240, thumbHeight = 180) {
       break
     // Video file type; requires full-size preview and thumbnail
     case 'video':
-      output.sizes = { original: Cloudinary.url(data.public_id + '.jpg', { resource_type: 'video' }) }
+      output.duration = 0
+      output.sizes = {
+        original: Cloudinary.url(data.public_id, { resource_type: 'video', flags: 'attachment' }),
+        large: Cloudinary.url(data.public_id + '.jpg', { resource_type: 'video' })
+      }
       output.thumbnail = Cloudinary.url(data.public_id + '.jpg', Object.assign(thumbOpts, { resource_type: 'video' }))
       break
     default:

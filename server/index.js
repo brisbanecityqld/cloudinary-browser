@@ -71,7 +71,7 @@ app.get('/resources', (req, res) => {
     .expression(expression)
     .max_results(max_results)
     .sort_by('filename', 'asc') //TODO: custom sorting
-    .with_field('tags');
+    .with_field('tags')
 
   // For requesting next page of results
   if (next_cursor) {

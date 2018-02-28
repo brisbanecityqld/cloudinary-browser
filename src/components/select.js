@@ -73,7 +73,8 @@ export default class Select extends React.Component {
     const optionsVisible = (<div className={styles.optionsVisible} style={style}>{options}</div>)
     const optionsDropdown = (<div className={styles.optionsDropdown}>{clickableOptions}</div>)
 
-    const selectStyle = styles[this.state.showOptions ? 'selectOpen' : 'select']
+    let selectStyle = styles[this.state.showOptions ? 'selectOpen' : 'select']
+    if (this.props.className) { selectStyle += ' ' + this.props.className }
 
     return (
       <div className={selectStyle} onClick={this.showOptions} ref={div => this.select = div}>

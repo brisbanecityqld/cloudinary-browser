@@ -14,8 +14,6 @@ import {
   clearAllChecked
 } from '../actions'
 
-import { location } from '../lib'
-
 const mapStateToProps = state => {
   return {
     viewmode: state.viewmode,
@@ -35,7 +33,7 @@ const mapDispatchToProps = dispatch => {
     markAsLoaded: (path, nextCursor) => dispatch(markAsLoaded(path, nextCursor)),
     addResources: files => dispatch(addResources(files)),
     addFolders: folders => dispatch(addFolders(folders)),
-    unloadFolder: route => dispatch(unloadFolder(location.getAPIPath(route))),
+    unloadFolder: route => dispatch(unloadFolder(route)),
     setSearch: search => dispatch(setSearch(search)),
     refreshSearch: () => dispatch(setSearchPending(true)),
     clearAllChecked: () => dispatch(clearAllChecked())

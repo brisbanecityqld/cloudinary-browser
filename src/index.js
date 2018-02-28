@@ -20,6 +20,7 @@ import fontawesome from '@fortawesome/fontawesome'
 // Solid icons
 import {
   faImage,
+  faFilm,
   faList,
   faSyncAlt,
   faCloudDownloadAlt,
@@ -41,6 +42,7 @@ import farStar from '@fortawesome/fontawesome-free-regular/faStar'
 
 fontawesome.library.add(
   faImage,
+  faFilm,
   faList,
   faCog,
   faStar,

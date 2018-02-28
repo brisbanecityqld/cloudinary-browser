@@ -59,6 +59,7 @@ export default class Viewer extends React.Component {
     return (
       <div className={styles.actions}>
         <Select
+          className={styles.select}
           options={[ ...options, optCustom ]}
           value={this.state.downloadSize}
           onChange={downloadSize => this.setState({ downloadSize })} />
@@ -108,7 +109,7 @@ export default class Viewer extends React.Component {
             alt={data.filename}
             onLoad={() => this.setState({ imageState: 'loaded' })}
             onError={() => this.setState({ imageState: 'error' })}
-            onClick={() => window.open(data.viewUrl)} />
+            onClick={() => window.open(data.url)} />
         )
       : undefined
 
@@ -140,11 +141,23 @@ export default class Viewer extends React.Component {
                 {/* File size */}
                 <div className={styles.row3 + ' ' + styles.key}>File size</div>
                 <div className={styles.row3 + ' ' + styles.value}>{data.filesize}</div>
+                {/* Video duration */}
               </div>
             )
           }
           {/* Download buttons */}
-          {data && data.type === 'image' && this.makeDownloadForm(data)}
+          {
+            data && (
+              data.type === 'image'
+                ? this.makeDownloadForm(data)
+                : (
+                    <div className={styles.actions}>
+                      <Button invert icon="cloud-download-alt" text="Download"
+                          onClick={this.handleDownloadClick} />
+                    </div>
+                  )
+            )
+          }
           {/* Tags */}
           {data && data.tags.length > 0 && <h3>Tags</h3>}
           <div className={styles.tags}>

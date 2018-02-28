@@ -84,7 +84,7 @@ export default class CustomImageForm extends React.Component {
             onClick={this.handleCropClick} />
           <Tooltip>{
             this.props.data.crop
-              ? 'Crop mode: image maintains aspect ratio and fills area, but edges may be cut off.'
+              ? 'Crop mode: image maintains aspect ratio, but edges may be cut off.'
               : 'Stretch mode: image is stretched to requested size but may appear distorted.'
           }</Tooltip>
         </div>

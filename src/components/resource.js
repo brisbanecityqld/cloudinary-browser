@@ -50,7 +50,7 @@ export default class File extends React.Component {
       ? (this.props.viewmode === VIEW_MODES.GRID ? styles.gridImage : undefined)
       : styles.imageHidden
 
-    const { filename, sizes, thumbnail, uploaded, tags } = fileparser.parseResource(this.props.data)
+    const { type, filename, sizes, thumbnail, uploaded, tags } = fileparser.parseResource(this.props.data)
     const viewUrl = '/view/' + encodeURIComponent(this.props.data.public_id)
 
     // this.props.history.push('/view/' + publicId, { canGoBack: true })
@@ -65,7 +65,7 @@ export default class File extends React.Component {
             onLoad={this.handleImageLoaded}
             src={thumbnail}
             alt={filename} />
-          <FontAwesomeIcon icon="image" />
+          <FontAwesomeIcon icon={type === 'video' ? 'film' : 'image'} />
         </div>
         {}
         <div className={styles.title}>{filename}</div>
