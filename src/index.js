@@ -92,6 +92,7 @@ persist(store)
 // Configure Cloudinary
 Cloudinary.config({ cloud_name: 'rosies' })
 
+// Create app
 const RoutedApp = withRouter(props => <App {...props} />)
 
 ReactDOM.render(

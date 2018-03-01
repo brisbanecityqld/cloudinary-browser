@@ -10,7 +10,7 @@
   /* background-color: #3FADFE; */
   background-image: linear-gradient(to right, #179CFE 0%, col-primary);
 
-  composes: noFlex flexCenter from './shared/_style.css';
+  composes: noFocus noFlex flexCenter from './shared/_style.css';
 }
 
 .main:after {

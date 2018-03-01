@@ -13,6 +13,8 @@
   border-radius: .2em;
   cursor: pointer;
   overflow: hidden;
+
+  composes: noFocus from './shared/_style.css';
 }
 
 .inner:before {

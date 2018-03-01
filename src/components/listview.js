@@ -144,7 +144,7 @@ export default class ListView extends React.Component {
       : (<div className={styles.empty}>{emptyText}</div>)
 
     return (
-      <div className={mainClass}>
+      <div className={mainClass} aria-label="Resource browser" tabIndex="0">
         <FileHeader
           viewmode={this.props.viewmode}
           showListDetails={this.showListDetails}
@@ -155,10 +155,9 @@ export default class ListView extends React.Component {
           onClearChecked={this.props.clearAllChecked}
           downloadSelected={this.downloadSelected} />
         <div
-          tabIndex="0" role="list" aria-label="Resources"
           ref={div => this.scrollableArea = div}
           className={isList ? styles.listWrap : styles.gridWrap}>
-          <div className={styles.scrollArea}>
+          <div className={styles.scrollArea} aria-label="Resources" role="list" tabIndex="0">
             {inner}
           </div>
           {

@@ -48,10 +48,8 @@ export default class File extends React.Component {
     const { type, filename, sizes, thumbnail, uploaded, tags } = fileparser.parseResource(this.props.data)
     const viewUrl = '/view/' + encodeURIComponent(this.props.data.public_id)
 
-    // this.props.history.push('/view/' + publicId, { canGoBack: true })
-
     return (
-      <div className={mainStyle}>
+      <div className={mainStyle} aria-label={'Resource: ' + filename} role="listitem link" tabIndex="0" onKeyDown={this.handleKeyDown}>
         <Link to={{ pathname: viewUrl, state: { canGoBack: true } }} />
         <Checkbox className={styles.checkbox} value={this.props.checked} onToggle={this.props.onCheckboxToggle} label={'Select resource'} />
         <div className={styles.image}>

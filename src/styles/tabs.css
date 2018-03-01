@@ -17,7 +17,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 
-  composes: flexItem from './shared/_style.css';
+  composes: noFocus flexItem from './shared/_style.css';
 }
 
 .activeTab {

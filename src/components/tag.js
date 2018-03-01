@@ -10,7 +10,7 @@ export default function Tag (props) {
     : props.text
 
   return (
-    <Link to={'/search/' + link}>
+    <Link to={'/search/' + link} tabIndex="-1">
       <span className={styles.tag}>{props.text}</span>
     </Link>
   )

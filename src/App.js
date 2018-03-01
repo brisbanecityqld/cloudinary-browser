@@ -15,6 +15,7 @@ import { api, location } from './lib'
 
 // Styles
 import styles from './App.css'
+import shared from './styles/shared/_style.css'
 
 export default class App extends React.Component {
   constructor (props) {
@@ -29,7 +30,9 @@ export default class App extends React.Component {
       folderTreeWidth: 300,
 
       windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight
+      windowHeight: window.innerHeight,
+
+      hideFocus: true
     }
 
     // Cloudinary cloud name
@@ -69,10 +72,32 @@ export default class App extends React.Component {
 
     // Mobile breakpoint
     this.BREAKPOINT = 800
+
+    // Accessibility focus ring toggle
+    this.addFocusRing = this.addFocusRing.bind(this)
+    this.removeFocusRing = this.removeFocusRing.bind(this)
+
+    window.addEventListener('keydown', this.addFocusRing)
   }
 
   get isMobile () {
     return this.state.windowWidth < this.BREAKPOINT;
+  }
+
+  // Handle focus ring
+  removeFocusRing () {
+    this.setState({ hideFocus: true })
+    window.removeEventListener('mousedown', this.removeFocusRing)
+    window.removeEventListener('touchstart', this.removeFocusRing)
+    window.addEventListener('keydown', this.addFocusRing)
+  }
+  addFocusRing (event) {
+    if (event.key === 'Tab') {
+      this.setState({ hideFocus: false })
+      window.addEventListener('mousedown', this.removeFocusRing)
+      window.addEventListener('touchstart', this.removeFocusRing)
+      window.removeEventListener('keydown', this.addFocusRing)
+    }
   }
 
   // Save a specific app key
@@ -368,7 +393,7 @@ export default class App extends React.Component {
 
     // Folders loaded
     return (
-      <div className={styles.main}>
+      <div className={styles.main + (this.state.hideFocus ? ' ' + shared.hideFocus : '')}>
         <DocumentTitle title={title} />
         <Header
           { ...this.props }

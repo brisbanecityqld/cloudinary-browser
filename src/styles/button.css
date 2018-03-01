@@ -4,7 +4,7 @@
   width: 2.25em;
   height: 2.25em;
 
-  composes: noFlex corners fast from './shared/_style.css';
+  composes: noFocus noFlex corners fast from './shared/_style.css';
 }
 .base:hover {
   transform: scale(1.1);

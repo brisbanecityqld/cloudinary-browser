@@ -112,3 +112,10 @@
 .shadow {
   box-shadow: 4px 0 30px 5px rgba(0, 0, 0, .3);
 }
+
+.hideFocus .noFocus {
+  outline: none;
+  outline-style: none;
+  box-shadow: none;
+  border-color: transparent;
+}

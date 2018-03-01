@@ -1,6 +1,5 @@
 .base {
-  composes: bgLightGrey from './shared/_style.css';
-  composes: noFlex flexColumn from './shared/_style.css';
+  composes: noFlex flexColumn bgLightGrey from './shared/_style.css';
 }
 
 .main {
@@ -11,7 +10,7 @@
   box-shadow: 0 0 2.5em .5em rgba(0, 0, 0, .4);
 
   composes: base;
-  composes: slow from './shared/_style.css';
+  composes: noFocus slow from './shared/_style.css';
 }
 
 .hidden {

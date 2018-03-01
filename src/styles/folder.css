@@ -6,8 +6,7 @@
   cursor: pointer;
   overflow: hidden;
 
-  composes: textGrey from './shared/_style.css';
-  composes: flexCenter from './shared/_style.css';
+  composes: textGrey flexCenter from './shared/_style.css';
 }
 
 .main:hover {

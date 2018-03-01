@@ -36,11 +36,11 @@ export default function Folder (props) {
   }
 
   return (
-    <Link to={route} tabIndex="-1" aria-label={'Folder: ' + props.name} role="listitem link checkbox" aria-checked={(!!props.isFavourite).toString()} onKeyDown={event => handleKeyDown(event, props)}>
-      <div className={styles.main} tabIndex="-1" >
+    <Link to={route} aria-label={'Folder: ' + props.name} role="listitem link checkbox" aria-checked={(!!props.isFavourite).toString()} onKeyDown={event => handleKeyDown(event, props)}>
+      <div className={styles.main}>
         <div className={styles.folder}><FontAwesomeIcon icon={iconLeft} /></div>
         <div className={styles.label} aria-hidden="true">{props.name}</div>
-        {!props.linkOnly && <Button clear className={css} icon={iconRight} onClick={props.onClick} label="Toggle favourite" tabIndex="-1" />}
+        {!props.linkOnly && <Button clear className={css} icon={iconRight} onClick={props.onClick} label="Toggle favourite" />}
       </div>
     </Link>
   )

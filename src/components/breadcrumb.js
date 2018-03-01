@@ -16,7 +16,7 @@ const BROWSE_BASE_NAME = 'Brisbane City Council'
 // Functions
 function makeTrailCrumb (name, route, isLink) {
   if (!isLink) {
-    return <span tabIndex="0" aria-label={'Current folder: ' + name} key={route}>{name}</span>
+    return <span aria-label={'Current folder: ' + name} key={route}>{name}</span>
   }
   return <Link key={route} to={route}><span className={styles.crumb}>{name}</span></Link>
 }
