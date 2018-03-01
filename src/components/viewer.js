@@ -7,6 +7,7 @@ import Tag from './tag'
 import Select from './select'
 import CustomImageForm from './customimageform'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import { Link } from 'react-router-dom'
 
 // Libraries
 import { fileparser, location } from '../lib'
@@ -97,6 +98,11 @@ export default class Viewer extends React.Component {
   }
 
   render () {
+    const containingFolder = location.getRouteFromPublicId(this.props.publicId)
+    const containingFolderName = location.getAPIPath(containingFolder) !== ''
+      ? location.getAPIPath(containingFolder)
+      : 'Root folder'
+
     const data = fileparser.parseResource(this.props.resource)
 
     // Parse resource into displayable data
@@ -142,7 +148,9 @@ export default class Viewer extends React.Component {
                 {/* File size */}
                 <div className={styles.row3 + ' ' + styles.key}>File size</div>
                 <div className={styles.row3 + ' ' + styles.value}>{data.filesize}</div>
-                {/* Video duration */}
+                {/* Containing folder */}
+                <div className={styles.row4 + ' ' + styles.key}>Folder</div>
+                <div className={styles.row4 + ' ' + styles.value}><Link to={containingFolder}>{containingFolderName}</Link></div>
               </div>
             )
           }

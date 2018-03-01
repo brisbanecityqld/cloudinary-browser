@@ -1,3 +1,5 @@
+@value col-primary, col-visited from "./shared/_style.css";
+
 .main {
   position: relative;
   display: grid; display: -ms-grid;
@@ -91,9 +93,20 @@
   font-weight: bold;
 }
 
+.fileInfo a {
+  color: col-primary;
+}
+.fileInfo a:hover {
+  text-decoration: underline;
+}
+.fileInfo a:visited {
+  color: col-visited;
+}
+
 .fileInfo .row1 { -ms-grid-row: 1; }
 .fileInfo .row2 { -ms-grid-row: 2; }
 .fileInfo .row3 { -ms-grid-row: 3; }
+.fileInfo .row4 { -ms-grid-row: 4; }
 
 .actions {
   padding: 1em 0 .75em 0;
@@ -142,8 +155,7 @@
 
 /* Media queries */
 
-@value bp-mobile from "./shared/_style.css";
-@value bp-tablet from "./shared/_style.css";
+@value bp-mobile, bp-tablet from "./shared/_style.css";
 
 @media screen and (min-width: bp-mobile) {
   .actions > .select {

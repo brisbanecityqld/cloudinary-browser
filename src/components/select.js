@@ -118,7 +118,7 @@ export default class Select extends React.Component {
 
     return (
       <div
-        className={selectStyle} onFocus={this.showOptions} onBlur={this.hideOptions} ref={div => this.select = div} onKeyDown={this.handleKeyDown} tabIndex="0"
+        className={selectStyle} onClick={this.showOptions} onFocus={this.showOptions} onBlur={this.hideOptions} ref={div => this.select = div} onKeyDown={this.handleKeyDown} tabIndex="0"
         aria-label={this.props.label} aria-activedescendant={'select-option-' + this.props.value} aria-haspopup="true" aria-labelledby="select-label" aria-owns="select-dropdown" aria-expanded={this.state.showOptions.toString()}>
         {/* Dropdown icon */}
         <div className={styles.arrow}><FontAwesomeIcon icon="chevron-down" /></div>

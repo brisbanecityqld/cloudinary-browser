@@ -54,6 +54,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: .9em;
+  text-decoration: none;
 
   composes: flexItem from './shared/_style.css';
 }

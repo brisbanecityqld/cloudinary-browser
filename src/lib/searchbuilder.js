@@ -2,6 +2,7 @@
 const CH_QUOTE = '"'
 const CH_SPACE = ' '
 const JOIN_OR = ' OR '
+const JOIN_AND = ' AND '
 
 // Removes unnecessary quotes from around a string
 // Then adds quotes if the string contains spaces
@@ -19,7 +20,7 @@ function splitQuery (query) {
 }
 
 function makeTagSearch (terms) {
-  return terms.map(term => `tags=${term}`).join(JOIN_OR)
+  return terms.map(term => `tags=${term}`).join(JOIN_AND)
 }
 
 function makeFilenameSearch (terms) {
@@ -34,7 +35,7 @@ function createExpression (query) {
   const tagSearch = makeTagSearch(terms)
   const filenameSearch = makeFilenameSearch(terms)
 
-  const expression = tagSearch + JOIN_OR + filenameSearch
+  const expression = '(' + tagSearch + ')' + JOIN_OR + '(' + filenameSearch + ')'
   console.log(expression)
   return expression
 }
