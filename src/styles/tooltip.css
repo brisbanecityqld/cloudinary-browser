@@ -36,6 +36,6 @@
   border-bottom: .5em solid col-grey;
 }
 
-.main:hover .popup {
+.main:hover .popup, .main:focus .popup {
   opacity: 1;
 }

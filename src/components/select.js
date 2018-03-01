@@ -77,6 +77,8 @@ export default class Select extends React.Component {
       } else if (gotoNext && curIndex < this.props.options.length - 1) {
         this.props.onChange(this.props.options[curIndex + 1].value)
       }
+    } else if (event.key === 'Enter') {
+      this.hideOptions()
     }
   }
 
