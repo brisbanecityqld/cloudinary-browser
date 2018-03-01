@@ -89,8 +89,8 @@ export default class Search extends React.Component {
   }
 
   render () {
-    let mainStyle = this.props.isMobile ? styles.mobile : styles.main
-    if (this.state.focused) {
+    let mainStyle = styles[this.props.isMobile ? 'mobile' : 'main']
+    if (this.state.focused && this.props.isMobile) {
       mainStyle += ' ' + styles.focused
     }
 
@@ -106,10 +106,10 @@ export default class Search extends React.Component {
           onKeyDown={this.handleKeyDown}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur} />
-        <Button icon="search" className={styles.buttonNoBg} onMouseDown={this._submit} />
+        <Button clear icon="search" className={styles.button} onMouseDown={this._submit} label={'Search' + (this.state.value !== '' ? ' for ' + this.state.value : '')} />
         {
           (this.props.isMobile && !this.state.focused) &&
-          <Button icon="search" className={styles.button} onClick={this._manualFocus} />
+          <Button icon="search" className={styles.button} onClick={this._manualFocus} label="Show search bar" />
         }
       </div>
     )

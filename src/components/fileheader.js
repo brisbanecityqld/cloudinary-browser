@@ -13,7 +13,7 @@ export default function FileHeader (props) {
     css += ' ' + styles.showListDetails
   }
   return <div className={css}>
-    <Checkbox className={styles.checkbox} value={props.checked} onToggle={props.onCheckboxToggle} />
+    <Checkbox className={styles.checkbox} value={props.checked} onToggle={props.onCheckboxToggle} label={'Select all'} />
     <div className={styles.image}></div>
     <div className={styles.title}>Name</div>
     <div className={styles.upload}>Uploaded at</div>
@@ -24,11 +24,11 @@ export default function FileHeader (props) {
           <Button clear
             onClick={props.onClearChecked}
             icon="times"
-            text="Clear checked" />
+            label="Clear checked" showLabel />
           <Button clear
             onClick={props.downloadSelected}
             icon="cloud-download-alt"
-            text={'Download' + (props.checkedFiles.length > 1 ? ' .zip' : '')} />
+            label={'Download' + (props.checkedFiles.length > 1 ? ' .zip' : '')} showLabel />
         </div>
       )
     }

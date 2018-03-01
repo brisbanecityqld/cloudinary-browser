@@ -29,6 +29,12 @@
   )
 }
 
+.mobile {
+  composes: main;
+
+  font-size: 1em;
+}
+
 .icon {
   width: 3em;
   height: 3em;
@@ -53,4 +59,14 @@
 
 .buttonRight {
   margin-right: .875em;
+}
+
+/* Media queries */
+
+@value bp-mobile from "./shared/_style.css";
+
+@media screen and (min-width: bp-mobile) {
+  .mobile {
+    font-size: 1.2em;
+  }
 }

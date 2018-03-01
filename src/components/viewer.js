@@ -59,12 +59,13 @@ export default class Viewer extends React.Component {
     return (
       <div className={styles.actions}>
         <Select
+          label="Select a download resolution"
           className={styles.select}
           options={[ ...options, optCustom ]}
           value={this.state.downloadSize}
           onChange={downloadSize => this.setState({ downloadSize })} />
         <Button invert icon="cloud-download-alt"
-          text={this.props.width > this.breakpoint ? 'Download' : ''}
+          label="Download" showLabel={this.props.width > this.breakpoint}
           onClick={this.handleDownloadClick} />
         {
           this.state.downloadSize === 'custom' && (
@@ -126,7 +127,7 @@ export default class Viewer extends React.Component {
         <div className={styles.details}>
           <div className={styles.header}>
             <h1 className={styles.title}>{filename}</h1>
-            <Button className={styles.closeButton} onClick={this.handleClose} icon="times" />
+            <Button className={styles.closeButton} onClick={this.handleClose} icon="times" label="Close" />
           </div>
           {/* File information */}
           {
@@ -152,8 +153,8 @@ export default class Viewer extends React.Component {
                 ? this.makeDownloadForm(data)
                 : (
                     <div className={styles.actions}>
-                      <Button invert icon="cloud-download-alt" text="Download"
-                          onClick={this.handleDownloadClick} />
+                      <Button invert icon="cloud-download-alt" label="Download"
+                        onClick={this.handleDownloadClick} />
                     </div>
                   )
             )

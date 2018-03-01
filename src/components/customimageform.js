@@ -80,12 +80,12 @@ export default class CustomImageForm extends React.Component {
           <span className={styles.label}>Crop mode</span>
           <Button clear className={styles.cropButton}
             icon={this.props.data.crop ? 'crop' : 'expand-arrows-alt'}
-            text={this.props.data.crop ? 'Crop' : 'Stretch'}
+            label={this.props.data.crop ? 'Fill' : 'Stretch'} showLabel
             onClick={this.handleCropClick} />
           <Tooltip>{
             this.props.data.crop
-              ? 'Crop mode: image maintains aspect ratio, but edges may be cut off.'
-              : 'Stretch mode: image is stretched to requested size but may appear distorted.'
+              ? 'Fill mode: image maintains aspect ratio, but edges may be cut off.'
+              : 'Stretch mode: image is stretched to exact size but may appear distorted.'
           }</Tooltip>
         </div>
       </div>

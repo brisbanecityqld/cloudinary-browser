@@ -5,6 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import DocumentTitle from 'react-document-title'
 
 import Header from './components/header'
+import Breadcrumb from './components/breadcrumb'
 import Browser from './containers/browser'
 import Viewer from './containers/viewer'
 import Search from './containers/search'
@@ -375,6 +376,12 @@ export default class App extends React.Component {
           reload={this.handleReload}
           onSearchSubmit={this.handleSearch}
           onToggleFolderTree={this.toggleFolderTree} />
+        {/* Mobile breadcrumb trail */}
+        {
+          this.isMobile && this.props.appView === 'browse' &&
+          <div className={styles.breadcrumb}><Breadcrumb route={this.props.location.pathname} /></div>
+        }
+        {/* App routes */}
         <Switch>
           <Route path="/browse" render={() => <Browser key="ui_browser" { ...browserProps } />} />
           <Route path="/view/:public_id" render={props => <Viewer width={this.state.windowWidth} height={this.state.windowHeight} {...props} />} />

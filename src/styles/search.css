@@ -6,8 +6,7 @@
 
 .main {
   flex-grow: 2;
-  max-width: 16em;
-  transition: max-width .3s ease;
+  max-width: 20em;
 
   composes: base;
 }
@@ -17,8 +16,7 @@
 }
 
 .mobile {
-  flex-grow: 1000;
-  max-width: 2.25em;
+  width: 2.25em;
 
   composes: base;
 }
@@ -33,7 +31,7 @@
 }
 
 .focused {
-  max-width: 28em;
+  flex-grow: 1;
 
   composes: base;
 }
@@ -59,10 +57,4 @@
   position: absolute;
   top: 0;
   right: 0;
-}
-
-.buttonNoBg {
-  background: none !important;
-
-  composes: button;
 }

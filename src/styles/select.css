@@ -11,7 +11,6 @@
   line-height: calc(2.25em - 2px);
   cursor: default;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -55,6 +54,12 @@
 
   composes: optionBase;
   composes: textGrey from './shared/_style.css';
+}
+
+.stackedOption {
+  height: 0;
+
+  composes: option;
 }
 
 /* Dropdown icons */

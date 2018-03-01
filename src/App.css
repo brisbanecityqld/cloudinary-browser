@@ -1,12 +1,25 @@
+@value col-secondary from "./styles/shared/_style.css";
+
 .main {
   width: 100vw;
   height: 100vh;
 
-  composes: flexColumn from './styles/shared/layout.css';
+  composes: flexColumn from './styles/shared/_style.css';
+}
+
+.breadcrumb {
+  font-size: .8em;
+  line-height: 2.5em;
+  padding-left: 1em;
+  background-color: col-secondary;
+}
+
+.breadcrumb span {
+  color: black !important;
 }
 
 .content {
   position: relative;
   overflow: hidden;
-  composes: flexItem flexRow from './styles/shared/layout.css';
+  composes: flexItem flexRow from './styles/shared/_style.css';
 }

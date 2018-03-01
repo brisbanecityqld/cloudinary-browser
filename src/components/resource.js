@@ -25,11 +25,6 @@ export default class File extends React.Component {
     }
 
     this.handleImageLoaded = this.handleImageLoaded.bind(this)
-    this.handleClick = this.handleClick.bind(this)
-  }
-
-  handleClick () {
-
   }
 
   handleImageLoaded () {
@@ -56,9 +51,9 @@ export default class File extends React.Component {
     // this.props.history.push('/view/' + publicId, { canGoBack: true })
 
     return (
-      <div className={mainStyle} onClick={this.handleClick}>
+      <div className={mainStyle}>
         <Link to={{ pathname: viewUrl, state: { canGoBack: true } }} />
-        <Checkbox className={styles.checkbox} value={this.props.checked} onToggle={this.props.onCheckboxToggle} />
+        <Checkbox className={styles.checkbox} value={this.props.checked} onToggle={this.props.onCheckboxToggle} label={'Select resource'} />
         <div className={styles.image}>
           <img
             className={imgStyle}
@@ -70,13 +65,13 @@ export default class File extends React.Component {
         {}
         <div className={styles.title}>{filename}</div>
         <div className={styles.upload}>{uploaded}</div>
-        <div className={styles.tags}>
+        <div className={styles.tags} aria-hidden="true">
           {tags.map(tag => <Tag text={tag} key={tag} />)}
         </div>
         <div className={styles.actions}>
-          <Button
-            invert
+          <Button invert
             icon="cloud-download-alt"
+            label="Download resource"
             onClick={() => window.open(sizes.original)} />
         </div>
       </div>

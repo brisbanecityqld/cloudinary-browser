@@ -155,6 +155,7 @@ export default class ListView extends React.Component {
           onClearChecked={this.props.clearAllChecked}
           downloadSelected={this.downloadSelected} />
         <div
+          tabIndex="0" role="list" aria-label="Resources"
           ref={div => this.scrollableArea = div}
           className={isList ? styles.listWrap : styles.gridWrap}>
           <div className={styles.scrollArea}>
@@ -163,7 +164,7 @@ export default class ListView extends React.Component {
           {
             this.canLoadMore && (
               <div className={styles.loadMore}>
-                <span onClick={this.props.onScrollToBottom}>Load more...</span>
+                <span onClick={this.props.onScrollToBottom} role="button" aria-label="Load more">Load more...</span>
               </div>
             )
           }

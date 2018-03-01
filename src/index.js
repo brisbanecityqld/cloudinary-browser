@@ -21,6 +21,7 @@ import fontawesome from '@fortawesome/fontawesome'
 import {
   faImage,
   faFilm,
+  faTh,
   faList,
   faSyncAlt,
   faCloudDownloadAlt,
@@ -43,6 +44,7 @@ import farStar from '@fortawesome/fontawesome-free-regular/faStar'
 fontawesome.library.add(
   faImage,
   faFilm,
+  faTh,
   faList,
   faCog,
   faStar,

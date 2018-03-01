@@ -44,51 +44,58 @@ export default class Header extends React.Component {
     this.setState({ searchFocused: false })
   }
   render () {
-    const vmIcon = (this.props.viewmode === VIEW_MODES.LIST) ? 'image' : 'list'
-    const vmNext = (this.props.viewmode === VIEW_MODES.LIST) ? VIEW_MODES.GRID : VIEW_MODES.LIST
+    const isListView = this.props.viewmode === VIEW_MODES.LIST
+    const vmIcon = (isListView) ? 'th' : 'list'
+    const vmNext = (isListView) ? VIEW_MODES.GRID : VIEW_MODES.LIST
 
-    const buttonVisibility = !(this.state.searchFocused && this.props.isMobile)
-    const initialSearch = this.props.appView === 'search'
-      ? this.props.currentSearch
-      : undefined
+    // Constants for conditional rendering
+    const isBrowser = this.props.appView === 'browse'
+    const isViewer = this.props.appView === 'view'
+    const isSearch = this.props.appView === 'search'
+    const isMobile = this.props.isMobile
+    const searchFocused = this.state.searchFocused
 
     return (
-      <header className={styles.main}>
+      <header className={styles[isMobile ? 'mobile' : 'main']}>
         <div className={styles.icon}>
           <Link to="/browse"><img src={BCC_logo} alt="logo" /></Link>
         </div>
         {/* Breadcrumb trail */}
         {
-          !this.props.isMobile
-            ? (<Breadcrumb route={this.props.location.pathname} />)
-            : (<div className={styles.spacer}></div>)
+          !isMobile &&
+          <Breadcrumb route={this.props.location.pathname} />
+        }
+        {/* Mobile UI spacer */}
+        {
+          isMobile && !searchFocused &&
+          <div className={styles.spacer}></div>
         }
         {/* Folder toggle button */}
         {
-          this.props.appView === 'browse' && this.props.isMobile && !this.state.searchFocused &&
-          <Button icon="folder" className={styles.buttonRight} onClick={this.props.onToggleFolderTree} />
+          isBrowser && isMobile && !searchFocused &&
+          <Button icon="folder" className={styles.buttonRight} onClick={this.props.onToggleFolderTree} label="Toggle folder tree" />
         }
         {/* Search area */}
         <Search
-          initial={initialSearch}
+          initial={isSearch && this.props.currentSearch}
           isMobile={this.props.isMobile}
           onFocus={this.handleSearchFocus}
           onBlur={this.handleSearchBlur}
           onSubmit={this.props.onSearchSubmit} />
         {/* View mode switcher */}
         {
-          this.props.appView !== 'view' && buttonVisibility &&
-          <Button icon={vmIcon} className={styles.button} onClick={() => this.props.setViewMode(vmNext)} />
+          !isViewer && !(isMobile && searchFocused) &&
+          <Button icon={vmIcon} className={styles.button} onClick={() => this.props.setViewMode(vmNext)} label={'Switch to ' + (isListView ? 'grid' : 'list') + ' view'} />
         }
         {/* Force refresh button */}
         {
-          this.props.appView !== 'view' && buttonVisibility &&
-          <Button icon="sync-alt" className={styles.button} onClick={this.props.reload} />
+          !isViewer && !(isMobile && searchFocused) &&
+          <Button icon="sync-alt" className={styles.button} onClick={this.props.reload} label="Force refresh" />
         }
         {/* Mobile viewer close button */}
         {
-          this.props.appView === 'view' && this.props.isMobile &&
-          <Button icon="times" className={styles.button} onClick={this.handleViewerClose} />
+          isViewer && isMobile &&
+          <Button icon="times" className={styles.button} onClick={this.handleViewerClose} label="Close" />
         }
       </header>
     )

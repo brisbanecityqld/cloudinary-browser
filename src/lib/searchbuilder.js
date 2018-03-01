@@ -1,4 +1,5 @@
 // Constants
+const CH_QUOTE = '"'
 const CH_SPACE = ' '
 const JOIN_OR = ' OR '
 
@@ -22,7 +23,7 @@ function makeTagSearch (terms) {
 }
 
 function makeFilenameSearch (terms) {
-  return terms.map(term => `filename:${term}`).join(JOIN_OR)
+  return terms.map(term => `filename${term.indexOf(CH_QUOTE) > -1 ? '=' : ':'}${term}`).join(JOIN_OR)
 }
 
 // Takes a search query and creates a
@@ -34,6 +35,7 @@ function createExpression (query) {
   const filenameSearch = makeFilenameSearch(terms)
 
   const expression = tagSearch + JOIN_OR + filenameSearch
+  console.log(expression)
   return expression
 }
 

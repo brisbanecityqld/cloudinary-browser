@@ -25,6 +25,12 @@ function handleMouseDown (event, props) {
   }
 }
 
+function handleKeyDown (event, props) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    props.onClick(event)
+  }
+}
+
 // Functional component
 export default function Button (props) {
   let css = props.invert
@@ -44,8 +50,8 @@ export default function Button (props) {
   }
 
   let text
-  if (props.text) {
-    text = <span className={styles.label}>{props.text}</span>
+  if (props.showLabel) {
+    text = <span className={styles.label}>{props.label}</span>
     css += ' ' + styles.text
   }
 
@@ -56,10 +62,12 @@ export default function Button (props) {
 
   return (
     <div
+      tabIndex={props.tabIndex || "0"}
+      role="button"
+      aria-label={props.label}
       className={css}
       onClick={event => handleClick(event, props)}
-      onMouseDown={event => handleMouseDown(event, props)}>
-      {icon}{text}
-    </div>
+      onKeyDown={event => handleKeyDown(event, props)}
+      onMouseDown={event => handleMouseDown(event, props)}>{icon}{text}</div>
   )
 }

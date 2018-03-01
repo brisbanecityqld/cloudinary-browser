@@ -11,6 +11,14 @@ import { location } from '../lib'
 // Styles
 import styles from '../styles/folder.css'
 
+function handleKeyDown (event, props) {
+  if (event.key === ' ' && props.onClick) {
+    event.preventDefault()
+    event.stopPropagation()
+    props.onClick()
+  }
+}
+
 export default function Folder (props) {
   const route = location.APIToRoute(props.path)
   let iconLeft
@@ -28,11 +36,11 @@ export default function Folder (props) {
   }
 
   return (
-    <Link to={route}>
-      <div className={styles.main}>
+    <Link to={route} tabIndex="-1" aria-label={'Folder: ' + props.name} role="listitem link checkbox" aria-checked={(!!props.isFavourite).toString()} onKeyDown={event => handleKeyDown(event, props)}>
+      <div className={styles.main} tabIndex="-1" >
         <div className={styles.folder}><FontAwesomeIcon icon={iconLeft} /></div>
-        <div className={styles.label}>{props.name}</div>
-        {!props.linkOnly && <Button className={css} icon={iconRight} onClick={props.onClick} />}
+        <div className={styles.label} aria-hidden="true">{props.name}</div>
+        {!props.linkOnly && <Button clear className={css} icon={iconRight} onClick={props.onClick} label="Toggle favourite" tabIndex="-1" />}
       </div>
     </Link>
   )
