@@ -24,7 +24,10 @@ function makeTagSearch (terms) {
 }
 
 function makeFilenameSearch (terms) {
-  return terms.map(term => `filename${term.indexOf(CH_QUOTE) > -1 ? '=' : ':'}${term}`).join(JOIN_OR)
+  // return terms.map(term => `filename${term.indexOf(CH_QUOTE) > -1 ? '=' : ':'}${term}`).join(JOIN_AND)
+  return terms.length === 1
+    ? `filename${terms[0].indexOf(CH_QUOTE) > -1 ? '=' : ':'}${terms[0]}`
+    : ''
 }
 
 // Takes a search query and creates a
@@ -35,8 +38,11 @@ function createExpression (query) {
   const tagSearch = makeTagSearch(terms)
   const filenameSearch = makeFilenameSearch(terms)
 
-  const expression = '(' + tagSearch + ')' + JOIN_OR + '(' + filenameSearch + ')'
-  console.log(expression)
+  const expression = terms.length === 1
+    ? tagSearch + JOIN_OR + filenameSearch
+    : tagSearch
+
+  // console.log(expression)
   return expression
 }
 

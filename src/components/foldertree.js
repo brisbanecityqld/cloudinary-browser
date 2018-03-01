@@ -68,7 +68,7 @@ export default class FolderTree extends React.Component {
         <Folder
           key={this.props.parentFolder}
           path={this.props.parentFolder}
-          name="Go back"
+          name="Up one folder"
           linkOnly />
       )
     }

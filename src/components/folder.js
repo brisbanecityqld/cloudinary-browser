@@ -30,7 +30,7 @@ export default function Folder (props) {
     iconRight = 'times'
     css = styles.delete
   } else {
-    iconLeft = (props.linkOnly ? 'arrow-left' : 'folder')
+    iconLeft = (props.linkOnly ? 'level-up-alt' : 'folder')
     iconRight = (props.isFavourite ? 'star' : ['far', 'star'])
     css = (props.isFavourite ? styles.starSelected : styles.star)
   }
