@@ -40,7 +40,7 @@ export default function Folder (props) {
       <div className={styles.main}>
         <div className={styles.folder}><FontAwesomeIcon icon={iconLeft} /></div>
         <div className={styles.label} aria-hidden="true">{props.name}</div>
-        {!props.linkOnly && <Button clear className={css} icon={iconRight} onClick={props.onClick} label="Toggle favourite" />}
+        {!props.linkOnly && <Button clear className={css} icon={iconRight} onClick={props.onClick} label="Toggle favourite" tabIndex="-1" />}
       </div>
     </Link>
   )

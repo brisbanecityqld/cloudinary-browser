@@ -16,6 +16,11 @@ import { fileparser } from '../lib'
 // Styles
 import styles from '../styles/resource.css'
 
+function _stop (event) {
+  event.preventDefault()
+  event.stopPropagation()
+}
+
 export default class File extends React.Component {
   constructor (props) {
     super(props)
@@ -24,7 +29,16 @@ export default class File extends React.Component {
       imageLoaded: false
     }
 
+    this.link = null
+    this.handleKeyDown = this.handleKeyDown.bind(this)
     this.handleImageLoaded = this.handleImageLoaded.bind(this)
+  }
+
+  handleKeyDown (event) {
+    if (event.key === ' ' && this.props.onCheckboxToggle) {
+      _stop(event)
+      this.props.onCheckboxToggle(!this.props.checked)
+    }
   }
 
   handleImageLoaded () {
@@ -49,9 +63,9 @@ export default class File extends React.Component {
     const viewUrl = '/view/' + encodeURIComponent(this.props.data.public_id)
 
     return (
-      <div className={mainStyle} aria-label={'Resource: ' + filename} role="listitem link" tabIndex="0" onKeyDown={this.handleKeyDown}>
-        <Link to={{ pathname: viewUrl, state: { canGoBack: true } }} />
-        <Checkbox className={styles.checkbox} value={this.props.checked} onToggle={this.props.onCheckboxToggle} label={'Select resource'} />
+      <div className={mainStyle} aria-label={'Resource: ' + filename} role="listitem">
+        <Link ref={a => this.link = a} to={{ pathname: viewUrl, state: { canGoBack: true } }} role="link checkbox" aria-checked={this.props.checked.toString()} onKeyDown={this.handleKeyDown} />
+        <Checkbox className={styles.checkbox} value={this.props.checked} onToggle={this.props.onCheckboxToggle} label={'Select resource'} tabIndex="-1" />
         <div className={styles.image}>
           <img
             className={imgStyle}

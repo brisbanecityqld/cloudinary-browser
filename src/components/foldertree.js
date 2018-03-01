@@ -134,7 +134,7 @@ export default class FolderTree extends React.Component {
       : ''
 
     return (
-      <aside className={mainStyle} style={inline} ref={elem => this.elem = elem} aria-label="Folder list" tabIndex="0">
+      <aside className={mainStyle} style={inline} ref={elem => this.elem = elem} aria-label="Folder list">
         <Tabs tabs={this.state.tabs} onChange={tab => this.handleTabChange(tab)}/>
         <div className={styles.scrolling} aria-label="Folder tree" role="list">{tabContent}</div>
         <Draggable onDrag={this.onDrag} onDragEnd={this.onDragEnd} />

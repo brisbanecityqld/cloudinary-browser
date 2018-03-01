@@ -56,7 +56,7 @@ export default class Header extends React.Component {
     const searchFocused = this.state.searchFocused
 
     return (
-      <header className={styles[isMobile ? 'mobile' : 'main']} aria-label="Header and controls" tabIndex="0">
+      <header className={styles[isMobile ? 'mobile' : 'main']} aria-label="Header and controls">
         <div className={styles.icon}>
           <Link to="/browse"><img src={BCC_logo} alt="logo" /></Link>
         </div>

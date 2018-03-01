@@ -25,7 +25,7 @@ export default function Checkbox (props) {
     <div
       className={css} onClick={event => handleClick(event, props)} onKeyDown={event => handleKeyDown(event, props)}
       role="checkbox" aria-label={props.label} aria-checked={props.value.toString()}>
-      <div tabIndex="0" className={props.value ? styles.innerChecked : styles.inner}></div>
+      <div tabIndex={props.tabIndex || "0"} className={props.value ? styles.innerChecked : styles.inner}></div>
     </div>
   )
 }
