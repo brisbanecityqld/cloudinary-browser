@@ -90,16 +90,16 @@ const history = createHistory()
 analytics.init('UA-114973376-2', process.env.NODE_ENV === 'development')
 
 // Track page switches using history
+const VALID_BASES = ['browse', 'view', 'search']
+
 function trackPageLoad ({ pathname }) {
   const base = location.getRouteBase(pathname)
   const endpoint = (base === 'search' ? '' : '/') + decodeURIComponent(location.getAPIPath(pathname))
   const viewmode = (base === 'browse' ? store.getState().viewmode : undefined)
 
-  analytics.visitedPage(
-    pathname,
-    base.charAt(0).toUpperCase() + base.slice(1) + ' - ' + endpoint,
-    viewmode
-  )
+  if (VALID_BASES.indexOf(base) > -1) {
+    analytics.visitedPage(pathname, endpoint, viewmode)
+  }
 }
 
 // Track initial and all subsequent page loads

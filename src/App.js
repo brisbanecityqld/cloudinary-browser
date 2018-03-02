@@ -160,12 +160,20 @@ export default class App extends React.Component {
 
   // Load the data for resource given a public ID
   async loadResource (publicId) {
-    const data = await api.getResource(publicId)
+    try {
+      analytics.startTimer()
+      const data = await api.getResource(publicId)
+      analytics.recordTiming('Load single resource')
 
-    if (data.hasOwnProperty('resources') && data.resources.length > 0) {
-      this.props.addResources(data)
-    } else {
-      console.warn('Requested resource does not exist.')
+      if (data.hasOwnProperty('resources') && data.resources.length > 0) {
+        this.props.addResources(data)
+      } else {
+        console.warn('Requested resource does not exist.')
+        this.props.history.replace('/browse')
+      }
+    } catch (e) {
+      // Loading file failed
+      console.warn('Error loading resource:', e)
       this.props.history.replace('/browse')
     }
   }
@@ -186,10 +194,13 @@ export default class App extends React.Component {
       this.setLoading()
 
       try {
+        // Time folder load operation
+        analytics.startTimer()
         const [ resources, folders ] = await Promise.all([
           api.getResources(route),
           api.getFolders(route)
         ])
+        analytics.recordTiming('Load folder content')
 
         // Handle failed response from server
         if (resources.errno || folders.errno) {
@@ -223,7 +234,9 @@ export default class App extends React.Component {
       this.setLoading()
 
       try {
+        analytics.startTimer()
         const resources = await api.getResources(path, thisRoute.nextCursor)
+        analytics.recordTiming('Load next page')
 
         // Handle failed response from server
         if (resources.errno) {
@@ -305,7 +318,7 @@ export default class App extends React.Component {
           // A resource wasn't actually requested
           console.warn('No resource requested to view.')
           props.history.replace('/browse')
-        } else {
+        } else if (!props.currentFileLoaded) {
           // Resource hasn't been downloaded yet, so download it
           this.loadResource(publicId)
         }
@@ -323,7 +336,7 @@ export default class App extends React.Component {
         break
 
       default:
-        console.warn('Unhandled URL:', route)
+        console.warn('Invalid URL:', route)
         break
     }
   }

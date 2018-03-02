@@ -1,7 +1,8 @@
 import GA from 'react-ga'
 
 const CATEGORIES = {
-  USER: 'User'
+  USER: 'User',
+  CONTENT: 'Cloudinary content'
 }
 
 const ACTIONS = {
@@ -86,6 +87,19 @@ function userDownloadedZip (publicIds) {
   })
 }
 
+/**
+ * TIMING
+ */
+
+let timer = 0
+function startTimer () {
+  timer = Date.now()
+}
+function recordTiming (label) {
+  const elapsed = Date.now() - timer
+  GA.timing({ category: CATEGORIES.CONTENT, variable: 'load', label, value: elapsed })
+}
+
 export default {
   init,
   visitedPage,
@@ -95,5 +109,8 @@ export default {
   userRefreshedSearch,
   userChangedViewmode,
   userDownloadedResource,
-  userDownloadedZip
+  userDownloadedZip,
+
+  startTimer,
+  recordTiming
 }
