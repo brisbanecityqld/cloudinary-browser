@@ -87,7 +87,7 @@ persist(store)
  */
 
 const history = createHistory()
-analytics.init('UA-114973376-2', true)
+analytics.init('UA-114973376-2', process.env.NODE_ENV === 'development')
 
 // Track page switches using history
 function trackPageLoad ({ pathname }) {
