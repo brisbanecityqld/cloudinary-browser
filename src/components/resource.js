@@ -11,7 +11,7 @@ import Checkbox from './checkbox'
 import { VIEW_MODES } from '../actions'
 
 // Libraries
-import { fileparser } from '../lib'
+import { fileparser, analytics } from '../lib'
 
 // Styles
 import styles from '../styles/resource.css'
@@ -84,7 +84,11 @@ export default class File extends React.Component {
           <Button invert
             icon="cloud-download-alt"
             label="Download resource"
-            onClick={() => window.open(sizes.original)} />
+            onClick={() => {
+              window.open(sizes.original)
+              // Track download click
+              analytics.userDownloadedResource(this.props.data.public_id)
+            }} />
         </div>
       </div>
     )

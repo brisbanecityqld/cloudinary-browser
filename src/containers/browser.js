@@ -17,6 +17,9 @@ import {
 // Styles
 import styles from '../App.css'
 
+// Tracking
+import { analytics } from '../lib'
+
 const mapStateToProps = (state) => {
   return {
     viewmode: state.viewmode,
@@ -31,8 +34,18 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    addFavourite: path => dispatch(updateFavourite(path)),
-    removeFavourite: path => dispatch(updateFavourite(path, false)),
+    addFavourite: path => {
+      // Track event
+      analytics.userFavouritedFolder(path)
+      // Dispatch event
+      dispatch(updateFavourite(path))
+    },
+    removeFavourite: path => {
+      // Track event
+      analytics.userUnfavouritedFolder(path)
+      // Dispatch event
+      dispatch(updateFavourite(path, false))
+    },
     updateChecked: (path, newVal) => dispatch(updateChecked(path, newVal)),
     clearAllChecked: () => dispatch(clearAllChecked())
   }

@@ -1,8 +1,9 @@
 import { connect } from 'react-redux'
 import App from '../App'
+import { analytics } from '../lib'
 
 import {
-  setViewMode,
+  setViewmode,
   setAppView,
   setCurrentRoute,
   markAsLoaded,
@@ -27,7 +28,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setViewMode: mode => dispatch(setViewMode(mode)),
+    setViewmode: mode => {
+      dispatch(setViewmode(mode))
+      // Tracking
+      analytics.userChangedViewmode(mode)
+    },
     setAppView: view => dispatch(setAppView(view)),
     updateRoute: route => dispatch(setCurrentRoute(route)),
     markAsLoaded: (path, nextCursor) => dispatch(markAsLoaded(path, nextCursor)),

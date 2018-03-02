@@ -2,8 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './containers/app'
-import { BrowserRouter as Router, withRouter } from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker'
+
+import { Router, withRouter } from 'react-router-dom'
+import createHistory from 'history/createBrowserHistory'
+import { location, analytics } from './lib'
 
 // Redux
 import { Provider } from 'react-redux'
@@ -62,43 +65,57 @@ fontawesome.library.add(
   farStar
 )
 
-// Redux store
+/**
+ * Configure Cloudinary
+ */
 
-// Load favourites from localStorage
-const KEY_FAVOURITES = 'persisted_favourites'
-const persistedState = {}
+Cloudinary.config({ cloud_name: 'rosies' })
 
-try {
-  const storedFavourites = localStorage.getItem(KEY_FAVOURITES)
-  if (storedFavourites) {
-    const persistedFavourites = JSON.parse(storedFavourites)
-    persistedState.favourites = persistedFavourites
-  }
-} catch (e) {
-  console.warn(`Corrupt localStorage key ${KEY_FAVOURITES}, deleting...`)
-  localStorage.removeItem(KEY_FAVOURITES)
-}
+/**
+ * Create Redux store
+ */
 
-// Create the store
 const store = createStore(
   FileBrowser,
   getDefaultState(),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
-
-// Make certain store keys persistent
 persist(store)
 
-// Configure Cloudinary
-Cloudinary.config({ cloud_name: 'rosies' })
+/**
+ * Set up Google Analytics
+ */
 
-// Create app
+const history = createHistory()
+analytics.init('UA-114973376-2', true)
+
+// Track page switches using history
+function trackPageLoad ({ pathname }) {
+  const base = location.getRouteBase(pathname)
+  const endpoint = (base === 'search' ? '' : '/') + decodeURIComponent(location.getAPIPath(pathname))
+  const viewmode = (base === 'browse' ? store.getState().viewmode : undefined)
+
+  analytics.visitedPage(
+    pathname,
+    base.charAt(0).toUpperCase() + base.slice(1) + ' - ' + endpoint,
+    viewmode
+  )
+}
+
+// Track initial and all subsequent page loads
+trackPageLoad(history.location)
+history.listen(trackPageLoad)
+
+/**
+ * CREATE APP
+ */
+
 const RoutedApp = withRouter(props => <App {...props} />)
 
 ReactDOM.render(
   (
     <Provider store={store}>
-      <Router>
+      <Router history={history}>
         <RoutedApp />
       </Router>
     </Provider>

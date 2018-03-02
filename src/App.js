@@ -11,7 +11,7 @@ import Viewer from './containers/viewer'
 import Search from './containers/search'
 
 // Libraries
-import { api, location } from './lib'
+import { api, location, analytics } from './lib'
 
 // Styles
 import styles from './App.css'
@@ -248,10 +248,14 @@ export default class App extends React.Component {
   handleReload () {
     switch (this.props.appView) {
       case 'browse':
-        this.loadFolder(location.getAPIPath(this.props.location.pathname), true)
+        this.loadFolder(this.props.route, true)
+        // Tracking
+        analytics.userRefreshedFolder(this.props.route)
         break
       case 'search':
         this.props.refreshSearch()
+        // Tracking
+        analytics.userRefreshedSearch(this.props.currentSearch)
         break
       default:
         break

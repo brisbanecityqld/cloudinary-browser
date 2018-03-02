@@ -8,7 +8,7 @@ import Resource from './resource'
 import { VIEW_MODES } from '../actions'
 
 // Lib
-import { fileparser, api } from '../lib'
+import { fileparser, api, analytics } from '../lib'
 
 // Styles
 import styles from '../styles/listview.css'
@@ -84,8 +84,13 @@ export default class ListView extends React.Component {
       // Download a single file - no need to zip
       const public_id = this.props.checkedFiles[0]
       const file = this.props.files.find(f => f.public_id === public_id)
-      const { sizes } = fileparser.parseResource(file)
-      window.open(sizes.original)
+      if (file) {
+        const { sizes } = fileparser.parseResource(file)
+        window.open(sizes.original)
+
+        // Track single resource download
+        analytics.userDownloadedResource(file.public_id)
+      }
     } else {
       // Create a zip and download it
       api.downloadZip(this.props.checkedFiles).then(data => {
@@ -94,9 +99,13 @@ export default class ListView extends React.Component {
           ? window.open(data.download_url)
           : console.error(data)
       })
+
+      // Track zip download
+      analytics.userDownloadedZip(this.props.checkedFiles)
     }
   }
 
+  // Create resource components to populate list view with
   generateResourceComponents () {
     if (!this.props.files || this.props.files.length === 0) {
       return []

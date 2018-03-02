@@ -31,7 +31,7 @@ export const VIEW_MODES = {
  * Action creators
  */
 
-export const setViewMode      = viewmode => ({ type: SET_VIEW_MODE, viewmode })
+export const setViewmode      = viewmode => ({ type: SET_VIEW_MODE, viewmode })
 export const setAppView       = view => ({ type: SET_APP_VIEW, view })
 export const setCurrentRoute  = route => ({ type: SET_CURRENT_ROUTE, route })
 export const addResources     = payload => ({ type: ADD_RESOURCES, payload })

@@ -25,13 +25,14 @@ const DEFAULT_STATE = {
   }
 }
 
+// State properties to persist
 const PERSIST_KEYS = [
   'viewmode',
   'favourites',
   'customFileSize'
 ]
 
-function getPersistKeys () {
+function getPersistedState () {
   const vals = {}
 
   for (let k of PERSIST_KEYS) {
@@ -53,7 +54,7 @@ function getPersistKeys () {
 }
 
 export function getDefaultState () {
-  const persistedState = getPersistKeys()
+  const persistedState = getPersistedState()
   return Object.assign(DEFAULT_STATE, persistedState)
 }
 

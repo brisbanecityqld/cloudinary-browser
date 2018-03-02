@@ -10,7 +10,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 
 // Libraries
-import { fileparser, location } from '../lib'
+import { fileparser, location, analytics } from '../lib'
 
 // Styles
 import styles from '../styles/viewer.css'
@@ -45,6 +45,9 @@ export default class Viewer extends React.Component {
       )
       window.open(url)
     }
+
+    // Track download
+    analytics.userDownloadedResource(this.props.resource.public_id)
   }
 
   makeDownloadForm (data) {

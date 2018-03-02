@@ -85,7 +85,7 @@ export default class Header extends React.Component {
         {/* View mode switcher */}
         {
           !isViewer && !(isMobile && searchFocused) &&
-          <Button icon={vmIcon} className={styles.button} onClick={() => this.props.setViewMode(vmNext)} label={'Switch to ' + (isListView ? 'grid' : 'list') + ' view'} />
+          <Button icon={vmIcon} className={styles.button} onClick={() => this.props.setViewmode(vmNext)} label={'Switch to ' + (isListView ? 'grid' : 'list') + ' view'} />
         }
         {/* Force refresh button */}
         {
