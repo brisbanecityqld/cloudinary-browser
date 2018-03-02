@@ -60,6 +60,7 @@ export default class App extends React.Component {
     this.makePageTitle = this.makePageTitle.bind(this)
 
     // Resource loading
+    this.resourceLoaded = this.resourceLoaded.bind(this)
     this.loadResource = this.loadResource.bind(this)
     this.handleReload = this.handleReload.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -133,6 +134,12 @@ export default class App extends React.Component {
     this.setState({ loading })
   }
 
+  // Checks if a resource is loaded
+  resourceLoaded (publicId) {
+    return this.props.files.findIndex(f=> f.public_id === publicId) > -1
+  }
+
+  // Gets a loaded route object
   getRouteObject (path) {
     return this.props.loadedRoutes.find(item => item.path === path)
   }
@@ -160,21 +167,23 @@ export default class App extends React.Component {
 
   // Load the data for resource given a public ID
   async loadResource (publicId) {
-    try {
-      analytics.startTimer()
-      const data = await api.getResource(publicId)
-      analytics.recordTiming('Load single resource')
+    if (!this.resourceLoaded(publicId)) {
+      try {
+        analytics.startTimer()
+        const data = await api.getResource(publicId)
+        analytics.recordTiming('Load single resource')
 
-      if (data.hasOwnProperty('resources') && data.resources.length > 0) {
-        this.props.addResources(data)
-      } else {
-        console.warn('Requested resource does not exist.')
+        if (data.hasOwnProperty('resources') && data.resources.length > 0) {
+          this.props.addResources(data)
+        } else {
+          console.warn('Requested resource does not exist.')
+          this.props.history.replace('/browse')
+        }
+      } catch (e) {
+        // Loading file failed
+        console.warn('Error loading resource:', e)
         this.props.history.replace('/browse')
       }
-    } catch (e) {
-      // Loading file failed
-      console.warn('Error loading resource:', e)
-      this.props.history.replace('/browse')
     }
   }
 
@@ -318,7 +327,7 @@ export default class App extends React.Component {
           // A resource wasn't actually requested
           console.warn('No resource requested to view.')
           props.history.replace('/browse')
-        } else if (!props.currentFileLoaded) {
+        } else {
           // Resource hasn't been downloaded yet, so download it
           this.loadResource(publicId)
         }

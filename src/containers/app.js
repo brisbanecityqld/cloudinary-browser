@@ -23,7 +23,7 @@ const mapStateToProps = state => {
     loadedRoutes: state.loadedRoutes,
     currentSearch: state.search,
     currentFile: state.currentFile,
-    currentFileLoaded: state.files.findIndex(f => `${f.public_id}.${f.format}` === state.currentFile) > -1
+    files: state.files
   }
 }
 
