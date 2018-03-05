@@ -20,7 +20,7 @@ function splitQuery (query) {
 }
 
 function makeTagSearch (terms) {
-  return terms.map(term => `tags=${term}`).join(JOIN_AND)
+  return terms.map(term => `tags:${term}`).join(JOIN_AND)
 }
 
 function makeFilenameSearch (terms) {
@@ -32,7 +32,7 @@ function makeFilenameSearch (terms) {
 
 // Takes a search query and creates a
 function createExpression (query) {
-  const terms = splitQuery(query)
+  const terms = splitQuery(query.toLowerCase())
 
   // Search tags and filenames
   const tagSearch = makeTagSearch(terms)

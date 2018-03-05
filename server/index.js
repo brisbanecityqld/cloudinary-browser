@@ -102,7 +102,7 @@ app.get('/search', (req, res) => {
     ? req.query.next_cursor
     : null
 
-  log(`User searched for "${query}"`)
+  log(`User ${next_cursor ? 'loaded more results' : 'searched'} for \`${query}\``)
 
   // Build search query
   const search = new Cloudinary.v2.search()
