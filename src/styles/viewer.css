@@ -119,8 +119,11 @@
   margin-bottom: 1em;
 }
 
+.actions > *:nth-child(n+2) {
+  margin-left: 1em;
+}
+
 .actions > .select {
-  margin-right: 1em;
   flex-grow: 1;
 }
 
@@ -151,6 +154,14 @@
 
 .customForm {
   width: 100%;
+}
+
+.hiddenInput {
+  position: fixed;
+  pointer-events: none;
+  top: -100%;
+  left: -100%;
+  opacity: 0;
 }
 
 /* Media queries */

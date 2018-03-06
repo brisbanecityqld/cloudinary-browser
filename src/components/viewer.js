@@ -21,33 +21,64 @@ export default class Viewer extends React.Component {
 
     this.state = {
       imageState: 'loading',
-      downloadSize: 'original'
+      downloadSize: 'original',
+      showLinkCopySuccess: false
     }
 
     this.breakpoint = 420
+    this.getDownloadUrl = this.getDownloadUrl.bind(this)
     this.handleDownloadClick = this.handleDownloadClick.bind(this)
+    this.handleEmbedClick = this.handleEmbedClick.bind(this)
     this.handleClose = this.handleClose.bind(this)
+
+    this.clipboardInput = null
+    this.canCopy = document.queryCommandSupported('copy')
   }
 
-  // Opens URL for selected download size
-  handleDownloadClick () {
+  getDownloadUrl () {
     if (this.state.downloadSize !== 'custom') {
       // Download a preset image size
       const { sizes } = fileparser.parseResource(this.props.resource)
-      window.open(sizes[this.state.downloadSize])
+      return sizes[this.state.downloadSize]
     } else {
       // Download a custom size
-      const url = fileparser.getDownloadUrl(
+      return fileparser.getDownloadUrl(
         this.props.resource.public_id,
         this.props.customFileSize.width,
         this.props.customFileSize.height,
         this.props.customFileSize.crop ? 'fill' : 'scale'
       )
-      window.open(url)
     }
+  }
+
+  // Opens URL for selected download size
+  handleDownloadClick () {
+    window.open(this.getDownloadUrl())
 
     // Track download
     analytics.userDownloadedResource(this.props.resource.public_id)
+  }
+
+  // Copies a direct link to a resource to clipboard
+  handleEmbedClick () {
+    if (this.clipboardInput) {
+      // Get download URL
+      let url = this.getDownloadUrl()
+
+      // Remove the attachment flag
+      url = url
+        .replace('fl_attachment', '')
+        .replace(/,,/g, ',')
+        .replace(/([^:])\/\//g, '$1/')
+        .replace(/(\/,|,\/)/g, '/')
+
+      // Focus input, then copy
+      this.clipboardInput.value = url
+      this.clipboardInput.select()
+      if (document.execCommand('copy')) {
+        this.setState({ showLinkCopySuccess: true })
+      }
+    }
   }
 
   makeDownloadForm (data) {
@@ -67,10 +98,20 @@ export default class Viewer extends React.Component {
           className={styles.select}
           options={[ ...options, optCustom ]}
           value={this.state.downloadSize}
-          onChange={downloadSize => this.setState({ downloadSize })} />
+          onChange={downloadSize => this.setState({ downloadSize, showLinkCopySuccess: false })} />
         <Button invert icon="cloud-download-alt"
           label="Download" showLabel={this.props.width > this.breakpoint}
           onClick={this.handleDownloadClick} />
+        {
+          this.canCopy &&
+          <Button invert icon="link"
+            label={this.state.showLinkCopySuccess ? 'Copied!' : 'Copy link'} showLabel={this.props.width > this.breakpoint}
+            onClick={this.handleEmbedClick} />
+        }
+        {
+          this.canCopy &&
+          <input type="text" className={styles.hiddenInput} ref={input => this.clipboardInput = input} />
+        }
         {
           this.state.downloadSize === 'custom' && (
             <CustomImageForm
