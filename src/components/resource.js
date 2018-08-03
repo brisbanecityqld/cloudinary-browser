@@ -2,6 +2,7 @@ import React from 'react'
 
 // Components
 import { Link } from 'react-router-dom'
+import Observer from 'react-intersection-observer'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import Button from './button'
 import Tag from './tag'
@@ -24,14 +25,25 @@ function _stop (event) {
 export default class File extends React.Component {
   constructor (props) {
     super(props)
+    const { type, filename, sizes, thumbnail, uploaded, tags } = fileparser.parseResource(this.props.data)
 
     this.state = {
-      imageLoaded: false
+      loaded: false,
+      visible: false,
+      type,
+      filename,
+      sizes,
+      thumbnail,
+      uploaded,
+      tags,
+
+      // Set this once thumbnail is in view
+      src: ''
     }
 
-    this.link = null
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.handleImageLoaded = this.handleImageLoaded.bind(this)
+    this.handleInViewChange = this.handleInViewChange.bind(this)
   }
 
   handleKeyDown (event) {
@@ -43,8 +55,16 @@ export default class File extends React.Component {
 
   handleImageLoaded () {
     this.setState({
-      imageLoaded: true
+      loaded: true
     })
+  }
+
+  handleInViewChange (inView) {
+    if (inView && this.state.src === '') {
+      this.setState({
+        src: this.state.thumbnail
+      })
+    }
   }
 
   render () {
@@ -55,42 +75,40 @@ export default class File extends React.Component {
       mainStyle += ' ' + styles.showListDetails
     }
 
-    const imgStyle = this.state.imageLoaded
+    const imgStyle = this.state.loaded
       ? (this.props.viewmode === VIEW_MODES.GRID ? styles.gridImage : undefined)
       : styles.imageHidden
 
-    const { type, filename, sizes, thumbnail, uploaded, tags } = fileparser.parseResource(this.props.data)
     const viewUrl = '/view/' + encodeURIComponent(this.props.data.public_id)
 
     return (
-      <div className={mainStyle} aria-label={'Resource: ' + filename} role="listitem">
-        <Link ref={a => this.link = a} to={{ pathname: viewUrl, state: { canGoBack: true } }} role="link checkbox" aria-checked={this.props.checked.toString()} onKeyDown={this.handleKeyDown} />
+      <Observer tag="div" className={mainStyle} aria-label={'Resource: ' + this.state.filename} role="listitem" onChange={this.handleInViewChange}>
+        <Link to={{ pathname: viewUrl, state: { canGoBack: true } }} role="link checkbox" aria-checked={this.props.checked.toString()} onKeyDown={this.handleKeyDown} />
         <Checkbox className={styles.checkbox} value={this.props.checked} onToggle={this.props.onCheckboxToggle} label={'Select resource'} tabIndex="-1" />
         <div className={styles.image}>
           <img
             className={imgStyle}
             onLoad={this.handleImageLoaded}
-            src={thumbnail}
-            alt={filename} />
-          <FontAwesomeIcon icon={type === 'video' ? 'film' : 'image'} />
+            src={this.state.src}
+            alt={this.state.filename} />
+          <FontAwesomeIcon icon={this.state.type === 'video' ? 'film' : 'image'} />
         </div>
-        {}
-        <div className={styles.title}>{filename}</div>
-        <div className={styles.upload}>{uploaded}</div>
+        <div className={styles.title}>{this.state.filename}</div>
+        <div className={styles.upload}>{this.state.uploaded}</div>
         <div className={styles.tags} aria-hidden="true">
-          {tags.map(tag => <Tag text={tag} key={tag} />)}
+          {this.state.tags.map(tag => <Tag text={tag} key={tag} />)}
         </div>
         <div className={styles.actions}>
           <Button invert
             icon="cloud-download-alt"
             label="Download resource"
             onClick={() => {
-              window.open(sizes.original)
+              window.open(this.state.sizes.original)
               // Track download click
               analytics.userDownloadedResource(this.props.data.public_id)
             }} />
         </div>
-      </div>
+      </Observer>
     )
   }
 }
