@@ -118,7 +118,12 @@ function parseResource (data, thumbWidth = 240, thumbHeight = 180) {
   const filesize = Math.floor(bytes * 100) / 100 + ' ' + byteSizes[thisSize]
 
   // Base thumbnail options
-  const thumbOpts = { width: thumbWidth, height: thumbHeight, crop: 'fill' }
+  const thumbOpts = { crop: 'scale' }
+  if (data.width > data.height) {
+    thumbOpts['height'] = thumbHeight
+  } else {
+    thumbOpts['width'] = thumbWidth
+  }
 
   // Generic base info, used for all file types
   const output = {

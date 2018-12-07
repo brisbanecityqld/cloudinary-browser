@@ -38,7 +38,7 @@ function getPersistedState () {
   for (let k of PERSIST_KEYS) {
     // Get value of key from localStorage
     const val = localStorage.getItem(k)
-    if (k && JSON.parse(val)) {
+    if (k) {
       try {
         // Try and parse value
         vals[k] = JSON.parse(val)

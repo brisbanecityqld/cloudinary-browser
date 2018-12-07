@@ -18,6 +18,18 @@ import { VIEW_MODES } from '../actions'
 // Styles
 import styles from '../styles/header.css'
 
+// View modes
+const viewModes = [
+  VIEW_MODES.LIST,
+  VIEW_MODES.GRID,
+  VIEW_MODES.FLEX
+]
+const viewModeIcons = {
+  [VIEW_MODES.LIST]: 'list',
+  [VIEW_MODES.GRID]: 'th',
+  [VIEW_MODES.FLEX]: 'stream'
+}
+
 // Functional component
 export default class Header extends React.Component {
   constructor (props) {
@@ -30,6 +42,7 @@ export default class Header extends React.Component {
     this.handleViewerClose = this.handleViewerClose.bind(this)
     this.handleSearchFocus = this.handleSearchFocus.bind(this)
     this.handleSearchBlur = this.handleSearchBlur.bind(this)
+    this.nextViewMode = this.nextViewMode.bind(this)
   }
 
   handleViewerClose () {
@@ -43,10 +56,15 @@ export default class Header extends React.Component {
   handleSearchBlur () {
     this.setState({ searchFocused: false })
   }
+
+  nextViewMode () {
+    let vmIndex = (viewModes.indexOf(this.props.viewmode) + 1) % viewModes.length
+    console.log(`switching from ${this.props.viewmode} to ${viewModes[vmIndex]} view`)
+    this.props.setViewmode(viewModes[vmIndex])
+  }
+
   render () {
     const isListView = this.props.viewmode === VIEW_MODES.LIST
-    const vmIcon = (isListView) ? 'th' : 'list'
-    const vmNext = (isListView) ? VIEW_MODES.GRID : VIEW_MODES.LIST
 
     // Constants for conditional rendering
     const isBrowser = this.props.appView === 'browse'
@@ -85,7 +103,7 @@ export default class Header extends React.Component {
         {/* View mode switcher */}
         {
           !isViewer && !(isMobile && searchFocused) &&
-          <Button icon={vmIcon} className={styles.button} onClick={() => this.props.setViewmode(vmNext)} label={'Switch to ' + (isListView ? 'grid' : 'list') + ' view'} />
+          <Button icon={viewModeIcons[this.props.viewmode]} className={styles.button} onClick={this.nextViewMode} label={'Switch to ' + (isListView ? 'grid' : 'list') + ' view'} />
         }
         {/* Force refresh button */}
         {

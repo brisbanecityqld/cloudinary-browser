@@ -137,7 +137,7 @@ export default class ListView extends React.Component {
     const resources = this.generateResourceComponents()
     const isList = this.props.viewmode === VIEW_MODES.LIST
 
-    let mainClass = isList ? styles.list : styles.grid
+    let mainClass = styles[this.props.viewmode]
     if (this.showListDetails) {
       mainClass += ' ' + styles.showListDetails
     }

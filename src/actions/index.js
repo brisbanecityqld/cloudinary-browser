@@ -24,7 +24,8 @@ export const SET_CUSTOM_SIZE    = 'set_custom_size'
 
 export const VIEW_MODES = {
   LIST: 'list',
-  GRID: 'grid'
+  GRID: 'grid',
+  FLEX: 'flex'
 }
 
 /**

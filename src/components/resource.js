@@ -27,6 +27,9 @@ export default class File extends React.Component {
     super(props)
     const { type, filename, sizes, thumbnail, uploaded, tags } = fileparser.parseResource(this.props.data)
 
+    // Set thumbnails straight away if we can't use IntersectionObserver
+    const src = ("IntersectionObserver" in window) ? '' : thumbnail
+
     this.state = {
       loaded: false,
       visible: false,
@@ -36,9 +39,7 @@ export default class File extends React.Component {
       thumbnail,
       uploaded,
       tags,
-
-      // Set this once thumbnail is in view
-      src: ''
+      src
     }
 
     this.handleKeyDown = this.handleKeyDown.bind(this)
@@ -68,9 +69,7 @@ export default class File extends React.Component {
   }
 
   render () {
-    let mainStyle = this.props.viewmode === VIEW_MODES.LIST
-      ? styles.list
-      : styles.grid
+    let mainStyle = styles[this.props.viewmode]
     if (this.props.showListDetails) {
       mainStyle += ' ' + styles.showListDetails
     }

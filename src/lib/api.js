@@ -4,15 +4,16 @@ import { searchbuilder } from '../lib'
 
 import request from 'request-promise-native'
 
-const SERVER_URL = window.location.hostname
+const SERVER_URL = 'localhost'
 const SERVER_PORT = 8000
+const API_BASE = ''
 const MAX_RESULTS = 50
 
 // Create API URL from endpoint and params object
 function URL (endpoint, params = null) {
   let qs = ''
   if (params !== null) { qs = QS(params) }
-  return `http://${SERVER_URL}:${SERVER_PORT}${endpoint}${qs}`
+  return `http://${SERVER_URL}:${SERVER_PORT}${API_BASE}${endpoint}${qs}`
 }
 
 // Create query string from params object
@@ -76,7 +77,7 @@ function getResources (path, nextCursor = null) {
 
 // Endpoint: perform a search
 function search (query, nextCursor = null) {
-  const options = { q: searchbuilder.createExpression(query), max_results: MAX_RESULTS }
+  const options = { query: searchbuilder.createExpression(query), max_results: MAX_RESULTS }
   if (nextCursor) {
     options.next_cursor = nextCursor
   }

@@ -1,3 +1,5 @@
+/* List view */
+
 .list {
   position: relative;
   height: 4em;
@@ -63,10 +65,9 @@
 }
 
 .image img {
-  position: absolute;
   z-index: 1;
-  width: 100%;
 }
+
 
 .image svg {
   position: absolute;
@@ -76,6 +77,14 @@
 .list .image {
   width: 3em;
   height: 2.25em;
+}
+
+.list .image img,
+.grid .image img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
 }
 
 .list .imageHidden {
@@ -116,7 +125,7 @@
 }
 
 .grid:hover .gridImage {
-  transform: scale(1.05);
+  transform: translate3d(-50%, -50%, 0) scale(1.05);
 }
 
 .grid .image {
@@ -142,14 +151,16 @@
   padding: 0 .8em;
 }
 
-.grid .checkbox {
+.grid .checkbox,
+.flex .checkbox {
   position: absolute;
   top: -.3em;
   right: -.3em;
   transform: scale(1.1);
 }
 
-.grid .checkbox:before {
+.grid .checkbox:before,
+.flex .checkbox:before {
   content: '';
   position: absolute;
   width: 1em;
@@ -190,6 +201,27 @@
 
 .list.showListDetails:hover .actions {
   display: block;
+}
+
+/* Flex view */
+
+.flex {
+  position: relative;
+}
+
+.flex .image {
+  width: auto;
+}
+
+.flex .image img {
+  position: relative;
+}
+
+.flex .title,
+.flex .upload,
+.flex .tags,
+.flex .actions {
+  display: none;
 }
 
 /* Media queries */
